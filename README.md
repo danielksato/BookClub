@@ -1,3 +1,9 @@
+## Book Club
+
+This is a web app for managing a book club. It uses Create React App, eventually on top of a Node/Express/MySQL backend. This is very much a work in progress, begun 20 March 2018.
+
+### Create React App boilerplate follows
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
