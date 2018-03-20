@@ -1,0 +1,8 @@
+.container {
+    background: black;
+    color: white;
+    display: flex;
+    font-size: 20px;
+    justify-content: space-between;
+    padding: 5px 10px;
+}

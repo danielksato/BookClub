@@ -1,0 +1,32 @@
+{
+  "name": "bookclub",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "immutable": "FormAPI/immutable-js#v3.8.1-flow-fix",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.2.0",
+    "react-scripts-cssmodules": "^1.0.171",
+    "redux": "^3.7.2",
+    "redux-actions": "^2.3.0",
+    "redux-create-reducer": "^1.1.1",
+    "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.2",
+    "eslint": "^4.19.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
+    "flow-bin": "^0.68.0",
+    "prettier": "^1.11.1"
+  }
+}
