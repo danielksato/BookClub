@@ -6,7 +6,8 @@ import thunk from 'redux-thunk';
 import rootReducer from './reducers';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
-import Main from './components/Main';
+// import Main from './components/Main';
+import Login from './components/Login';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -20,7 +21,7 @@ class App extends PureComponent<*> {
 				<Fragment>
 					<Header />
 					<Navigation />
-					<Main />
+					<Login />
 				</Fragment>
 			</Provider>
 		);
