@@ -5,7 +5,8 @@ Promise.all([User, Club, Membership, Book, Selection, Vote].map((Model) => Model
 		User.create({
 			firstName: 'Daniel',
 			lastName: 'Sato',
-			email: 'dksato.com',
+			email: 'dksato@gmail.com',
+			password: 'asdf',
 		}),
 		Club.create({
 			name: 'Bear Club',

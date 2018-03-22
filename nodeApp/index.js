@@ -31,8 +31,7 @@ app.get('/user/:id', (req, res) => {
 			res.json(user);
 		},
 		(error) => {
-			res.status(404);
-			res.send();
+			res.sendStatus(404);
 		}
 	);
 });
@@ -46,20 +45,22 @@ app.get('/club/:id', (req, res) => {
 			res.json(club);
 		},
 		(err) => {
-			res.error(err);
+			res.sendStatus(404);
 		}
 	);
 });
 
-app.post('/:model', (req, res) => {
-	const { model } = req.params;
-	const data = req.data;
-	const Model = models[model];
-	Model.create(data).then(
-		(modelData) => res.json(modelData),
+app.post('/user', ({ body }, res) => {
+	User.findOrCreate({ where: { email: body.email } }).then(
+		(user) => {
+			if (body.password === user[0].password) {
+				res.json(user[0]);
+			} else {
+				res.sendStatus(403);
+			}
+		},
 		(err) => {
-			res.status(400);
-			res.send(err);
+			res.sendStatus(500);
 		}
 	);
 });

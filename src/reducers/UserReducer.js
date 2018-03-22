@@ -1,7 +1,7 @@
 // @flow
 import { Record, List } from 'immutable';
 import { createReducer } from 'redux-create-reducer';
-import { LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILED } from '../constants/ActionConstants';
+import { LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILED, LOG_OUT } from '../constants/ActionConstants';
 import * as StatusConstants from '../constants/StatusConstants';
 import { INVITED } from '../constants/AppConstants';
 
@@ -63,5 +63,8 @@ export default createReducer((new UserRecord(): UserRecord), {
 	},
 	[LOAD_USER_FAILED]: function(state) {
 		return state.set('status', StatusConstants.ERROR);
+	},
+	[LOG_OUT]: function(state) {
+		return new UserRecord();
 	},
 });

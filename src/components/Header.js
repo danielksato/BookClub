@@ -1,8 +1,8 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import styles from '../styles/Header.module.css';
-import { loadUser } from '../actions/UserActions';
+import { loadUser, logout } from '../actions/UserActions';
 import { loadClub } from '../actions/ClubActions';
 
 import type { UserRecord } from '../reducers/UserReducer';
@@ -12,6 +12,7 @@ const mapStateToProps = ({ user, club }) => ({ user, club });
 const mapDispatchToProps = (dispatch) => ({
 	loadUser: (...args) => dispatch(loadUser(...args)),
 	loadClub: (...args) => dispatch(loadClub(...args)),
+	logout: (...args) => dispatch(logout(...args)),
 });
 
 type Props = {
@@ -19,22 +20,29 @@ type Props = {
 	club: ClubRecord,
 	loadUser: (id: number) => void,
 	loadClub: (id: number) => void,
+	logout: () => void,
 };
 
 export class Header extends PureComponent<Props> {
-	componentDidMount() {
-		this.props.loadUser(1);
-		this.props.loadClub(1);
+	componentDidMount(): void {
+		// this.props.loadUser(1);
+		// this.props.loadClub(1);
 	}
 
-	render() {
-		const { user: { firstName, lastName }, club: { name } } = this.props;
+	renderLogout(): Node {
+		const { id } = this.props.user;
+		return id ? <span onClick={this.props.logout}>Log Out</span> : null;
+	}
+
+	render(): Node {
+		const { user: { firstName, lastName, id }, club: { name } } = this.props;
 		const clubName = name || 'Book Club';
-		const userName = firstName ? `${firstName} ${lastName}` : 'Log jn';
+		const userName = id ? `${firstName} ${lastName}` : 'Log in';
 		return (
 			<div className={styles.container}>
 				<span>{clubName}</span>
 				<span>{userName}</span>
+				{this.renderLogout()}
 			</div>
 		);
 	}

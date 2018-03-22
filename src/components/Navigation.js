@@ -17,9 +17,10 @@ const mapDispatchToProps = (dispatch) => ({
 	selectTab: (...args) => dispatch(selectTab(...args)),
 });
 
-const mapStateToProps = ({ app: { tabIndex } }) => ({ tabIndex });
+const mapStateToProps = ({ app: { tabIndex }, user: { id } }) => ({ tabIndex, loggedIn: !!id });
 
 type Props = {
+	loggedIn: boolean,
 	selectTab: (PureComponent<*>) => void,
 	tabIndex: PureComponent<*>,
 };
@@ -42,7 +43,7 @@ export class Navigation extends PureComponent<Props> {
 	}
 
 	render(): Node {
-		return <div className={styles.container}>{this.renderTabs()}</div>;
+		return this.props.loggedIn && <div className={styles.container}>{this.renderTabs()}</div>;
 	}
 }
 
