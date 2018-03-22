@@ -17,14 +17,14 @@ const mapDispatchToProps = (dispatch) => ({
 type Props = {
 	user: UserRecord,
 	club: ClubRecord,
-	loadUser: () => void,
-	loadClub: () => void,
+	loadUser: (id: number) => void,
+	loadClub: (id: number) => void,
 };
 
 export class Header extends PureComponent<Props> {
 	componentDidMount() {
-		this.props.loadUser();
-		this.props.loadClub();
+		this.props.loadUser(1);
+		this.props.loadClub(1);
 	}
 
 	render() {

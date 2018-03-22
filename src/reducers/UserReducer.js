@@ -3,12 +3,22 @@ import { Record, List } from 'immutable';
 import { createReducer } from 'redux-create-reducer';
 import { LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILED } from '../constants/ActionConstants';
 import * as StatusConstants from '../constants/StatusConstants';
+import { INVITED } from '../constants/AppConstants';
+
+export class MembershipRecord extends Record({
+	id: null,
+	role: 'invited',
+}) {
+	id: ?number;
+	role: string;
+}
 
 type ConstructorArgs = {
 	id?: number,
 	firstName?: string,
 	lastName?: string,
 	email?: string,
+	membership?: { id: number, role: string },
 	clubs?: Array<number>,
 };
 
@@ -18,6 +28,7 @@ export class UserRecord extends Record({
 	lastName: '',
 	email: '',
 	clubs: new List(),
+	role: INVITED,
 	status: StatusConstants.INITIAL,
 }) {
 	id: number;
@@ -25,18 +36,20 @@ export class UserRecord extends Record({
 	lastName: string;
 	email: string;
 	clubs: List<number>;
+	role: string;
 	status: $Keys<typeof StatusConstants>;
 
-	constructor({ id, clubs, ...rest }: ConstructorArgs = {}) {
+	constructor({ id, clubs, membership, ...rest }: ConstructorArgs = {}) {
 		if (id) {
 			super({
 				id,
-				clubs: List(clubs || []),
+				clubs: List(clubs ? clubs.map((club) => new MembershipRecord(club)) : []),
+				role: membership ? membership.role : INVITED,
 				status: StatusConstants.DONE,
 				...rest,
 			});
 		} else {
-			super(...arguments);
+			super();
 		}
 	}
 }

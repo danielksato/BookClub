@@ -1,6 +1,20 @@
 .container {
+    cursor: pointer;
     display: flex;
+    margin: 5px;
+    border: 1px solid grey;
+    justify-content: space-between;
+}
 
+.container > div {
+    padding: 5px;
+    border-right: 1px solid grey;
+    text-align: center;
+    flex-basis: 100%;
+}
+
+.container > div:last-child {
+    border: none;
 }
 
 .selected {

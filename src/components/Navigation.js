@@ -7,10 +7,11 @@ import ScheduleMeeting from './ScheduleMeeting';
 import JoinClub from './JoinClub';
 import CreateClub from './CreateClub';
 import { selectTab } from '../actions/AppActions';
+import Home from './Home';
 
 import styles from '../styles/Navigation.module.css';
 
-export const navTabs = [PickBooks, VoteOnBook, ScheduleMeeting, JoinClub, CreateClub];
+export const navTabs = [Home, PickBooks, VoteOnBook, ScheduleMeeting, JoinClub, CreateClub];
 
 const mapDispatchToProps = (dispatch) => ({
 	selectTab: (...args) => dispatch(selectTab(...args)),
