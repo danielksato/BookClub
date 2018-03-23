@@ -10,19 +10,23 @@ const models = {
 	vote: Vote,
 };
 
+const passport = require('./auth');
+
 app.use(express.static('public'));
 app.use(require('cookie-parser')());
 app.use(require('body-parser')());
 app.use(express.json());
-app.use(require('express-session')({ secret: 'potato wizard' }));
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(require('express-session')({ secret: 'potato' }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // app.get('/logout', (req, res) => {
 // 	req.logout();
 // 	res.status(200);
 // 	res.send();
 // });
+app.get('/oauth2', passport.authenticate('google', { scope: ['profile'] }));
+app.get('/oauth2/callback', passport.authenticate('google', { failureRedirect: '/' }));
 
 app.get('/user/:id', (req, res) => {
 	const { id } = req.params;

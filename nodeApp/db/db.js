@@ -9,6 +9,7 @@ const User = sequelize.define('user', {
 	lastName: { type: Sequelize.STRING },
 	email: { type: Sequelize.STRING },
 	password: { type: Sequelize.STRING },
+	googleId: { type: Sequelize.STRING },
 });
 
 User.getMembershipsById = function(id) {

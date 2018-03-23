@@ -97,6 +97,12 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		});
 	};
 
+	loginWithGoogle = () => {
+		fetch('/oauth2')
+			.then((res) => res.text())
+			.then((res) => console.log(res));
+	};
+
 	renderFormField = (fieldName: string): Node => {
 		const type = fieldName.indexOf('PASSWORD') < 0 ? 'text' : 'password';
 		const prettyName = prettyPrint(fieldName);
@@ -149,6 +155,9 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 			<div>
 				{this.renderLogin()}
 				{this.renderCreateAccount()}
+				<hr />
+				<button onClick={this.loginWithGoogle}>Login with Google</button>
+				<a href="/oauth2">Login with Google</a>
 			</div>
 		);
 	}

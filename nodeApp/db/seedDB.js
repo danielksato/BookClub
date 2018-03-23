@@ -7,6 +7,7 @@ Promise.all([User, Club, Membership, Book, Selection, Vote].map((Model) => Model
 			lastName: 'Sato',
 			email: 'dksato@gmail.com',
 			password: 'asdf',
+			googleId: '114424838772956984190',
 		}),
 		Club.create({
 			name: 'Bear Club',
