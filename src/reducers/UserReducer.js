@@ -1,16 +1,24 @@
 // @flow
 import { Record, List } from 'immutable';
 import { createReducer } from 'redux-create-reducer';
-import { LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILED, LOG_OUT } from '../constants/ActionConstants';
+import {
+	LOAD_USER,
+	LOAD_USER_SUCCESS,
+	LOAD_USER_FAILED,
+	LOG_OUT,
+	CREATE_CLUB_SUCCESS,
+} from '../constants/ActionConstants';
 import * as StatusConstants from '../constants/StatusConstants';
 import { INVITED } from '../constants/AppConstants';
 
 export class MembershipRecord extends Record({
-	id: null,
+	id: 0,
 	role: 'invited',
+	name: '',
 }) {
-	id: ?number;
+	id: number;
 	role: string;
+	name: string;
 }
 
 type ConstructorArgs = {
@@ -66,5 +74,8 @@ export default createReducer((new UserRecord(): UserRecord), {
 	},
 	[LOG_OUT]: function(state) {
 		return new UserRecord();
+	},
+	[CREATE_CLUB_SUCCESS]: function(state, action) {
+		return state.update('clubs', (clubs) => clubs.push(new MembershipRecord(action.payload)));
 	},
 });

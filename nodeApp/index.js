@@ -83,6 +83,22 @@ app.post('/user', ({ body }, res) => {
 	);
 });
 
+app.post('/club', ({ body, user }, res) => {
+	Club.create({ name: body.name }).then(
+		(club) =>
+			club
+				.addUser(user)
+				.then(() =>
+					// this is slow. Maybe do this optimistically?
+					club.reload({
+						include: [{ model: Book }, { model: User }],
+					})
+				)
+				.then((club) => res.json(club)),
+		(err) => res.sendStatus(500)
+	);
+});
+
 app.put('/logout', (req, res) => {
 	req.logout();
 	res.sendStatus(200);

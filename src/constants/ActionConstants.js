@@ -11,3 +11,7 @@ export const LOAD_CLUB_FAILED = 'LOAD_CLUB_FAILED';
 export const SELECT_TAB = 'SELECT_TAB';
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
+
+export const CREATE_CLUB = 'CREATE_CLUB';
+export const CREATE_CLUB_SUCCESS = 'CREATE_CLUB_SUCCESS';
+export const CREATE_CLUB_FAILED = 'CREATE_CLUB_FAILED';

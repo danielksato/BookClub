@@ -27,7 +27,7 @@ export class ClubRecord extends Record({
 	status: $Keys<typeof StatusConstants>;
 
 	constructor({ users, books, ...rest }: ConstructorArgs = {}) {
-		if (rest.id) {
+		if (rest.name) {
 			super({
 				users: List(users ? users.map((user) => new UserRecord(user)) : []),
 				books: fromJS(books ? books.map((book) => new BookRecord(book)) : []),
