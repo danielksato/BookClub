@@ -20,13 +20,27 @@ app.use(require('express-session')({ secret: 'potato' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.get('/logout', (req, res) => {
-// 	req.logout();
-// 	res.status(200);
-// 	res.send();
-// });
 app.get('/oauth2', passport.authenticate('google', { scope: ['profile'] }));
-app.get('/oauth2/callback', passport.authenticate('google', { failureRedirect: '/' }));
+app.get(
+	'/oauth2/callback',
+	passport.authenticate('google', {
+		failureRedirect: '/',
+		successRedirect: '/user',
+	})
+);
+
+app.get('/user', (req, res) => {
+	if (req.user) {
+		User.getMembershipsById(req.user.id).then(
+			(user) => {
+				res.json(user);
+			},
+			() => res.redirect('/')
+		);
+	} else {
+		res.sendStatus(401);
+	}
+});
 
 app.get('/user/:id', (req, res) => {
 	const { id } = req.params;
@@ -67,6 +81,11 @@ app.post('/user', ({ body }, res) => {
 			res.sendStatus(500);
 		}
 	);
+});
+
+app.put('/logout', (req, res) => {
+	req.logout();
+	res.sendStatus(200);
 });
 
 app.all('/*', require('http-proxy-middleware')({ target: 'http://localhost:3000', changeOrigin: true, ws: true }));

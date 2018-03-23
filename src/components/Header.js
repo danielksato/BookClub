@@ -2,7 +2,7 @@
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import styles from '../styles/Header.module.css';
-import { loadUser, logout } from '../actions/UserActions';
+import { loadUser, logout, authUser } from '../actions/UserActions';
 import { loadClub } from '../actions/ClubActions';
 
 import type { UserRecord } from '../reducers/UserReducer';
@@ -13,6 +13,7 @@ const mapDispatchToProps = (dispatch) => ({
 	loadUser: (...args) => dispatch(loadUser(...args)),
 	loadClub: (...args) => dispatch(loadClub(...args)),
 	logout: (...args) => dispatch(logout(...args)),
+	authUser: () => dispatch(authUser()),
 });
 
 type Props = {
@@ -21,12 +22,19 @@ type Props = {
 	loadUser: (id: number) => void,
 	loadClub: (id: number) => void,
 	logout: () => void,
+	authUser: () => void,
 };
 
 export class Header extends PureComponent<Props> {
-	componentDidMount(): void {
-		// this.props.loadUser(1);
-		// this.props.loadClub(1);
+	componentDidMount() {
+		this.props.authUser();
+	}
+
+	componentDidUpdate(oldProps: Props): void {
+		const { id } = this.props.user;
+		if (id && id !== oldProps.user.id) {
+			this.props.loadClub(id);
+		}
 	}
 
 	renderLogout(): Node {

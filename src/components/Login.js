@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import { login, createUser } from '../actions/UserActions';
+import { login, createUser, loginWithGoogle } from '../actions/UserActions';
 
 type Props = {
 	login: (Object) => void,
@@ -11,23 +11,20 @@ type Props = {
 const mapDispatchToProps = (dispatch: Function): Props => {
 	return {
 		login: (...args) => dispatch(login(...args)),
+		loginWithGoogle: (...args) => dispatch(loginWithGoogle(...args)),
 		createUser: (...args) => dispatch(createUser(...args)),
 	};
 };
 
 const fieldNames = {
-	LOGIN_PASSWORD: 'LOGIN_PASSWORD',
 	LOGIN_EMAIL: 'LOGIN_EMAIL',
-	CREATE_PASSWORD: 'CREATE_PASSWORD',
 	CREATE_LAST_NAME: 'CREATE_LAST_NAME',
 	CREATE_FIRST_NAME: 'CREATE_FIRST_NAME',
 	CREATE_EMAIL: 'CREATE_EMAIL',
 };
 
 type State = {
-	LOGIN_PASSWORD: string,
 	LOGIN_EMAIL: string,
-	CREATE_PASSWORD: string,
 	CREATE_LAST_NAME: string,
 	CREATE_FIRST_NAME: string,
 	CREATE_EMAIL: string,
@@ -49,24 +46,15 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		[fieldNames.CREATE_EMAIL]: '',
 		[fieldNames.CREATE_FIRST_NAME]: '',
 		[fieldNames.CREATE_LAST_NAME]: '',
-		[fieldNames.CREATE_PASSWORD]: '',
 		[fieldNames.LOGIN_EMAIL]: '',
-		[fieldNames.LOGIN_PASSWORD]: '',
 		canCreate: false,
 		canLogin: false,
 	};
 
 	componentDidUpdate(): void {
-		const {
-			CREATE_EMAIL,
-			CREATE_FIRST_NAME,
-			CREATE_LAST_NAME,
-			CREATE_PASSWORD,
-			LOGIN_EMAIL,
-			LOGIN_PASSWORD,
-		} = fieldNames;
-		const canLogin = [LOGIN_PASSWORD, LOGIN_EMAIL].map((fieldName) => this.state[fieldName]).every((val) => val);
-		const canCreate = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, CREATE_PASSWORD]
+		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, LOGIN_EMAIL } = fieldNames;
+		const canLogin = !!this.state[LOGIN_EMAIL];
+		const canCreate = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME]
 			.map((fieldName) => this.state[fieldName])
 			.every((val) => val);
 		this.setState({ canLogin, canCreate });
@@ -80,41 +68,26 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 	};
 
 	login = (): void => {
-		const { LOGIN_EMAIL, LOGIN_PASSWORD } = this.state;
+		const { LOGIN_EMAIL } = this.state;
 		this.props.login({
 			email: LOGIN_EMAIL,
-			password: LOGIN_PASSWORD,
 		});
 	};
 
 	create = (): void => {
-		const { CREATE_EMAIL, CREATE_PASSWORD, CREATE_FIRST_NAME, CREATE_LAST_NAME } = this.state;
+		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME } = this.state;
 		this.props.createUser({
 			email: CREATE_EMAIL,
-			password: CREATE_PASSWORD,
 			firstName: CREATE_FIRST_NAME,
 			lasName: CREATE_LAST_NAME,
 		});
 	};
 
-	loginWithGoogle = () => {
-		fetch('/oauth2')
-			.then((res) => res.text())
-			.then((res) => console.log(res));
-	};
-
 	renderFormField = (fieldName: string): Node => {
-		const type = fieldName.indexOf('PASSWORD') < 0 ? 'text' : 'password';
 		const prettyName = prettyPrint(fieldName);
 		return (
 			<div key={fieldName}>
-				<input
-					data-fieldname={fieldName}
-					id={fieldName}
-					onChange={this.onChange}
-					type={type}
-					value={this.state[fieldName]}
-				/>
+				<input data-fieldname={fieldName} id={fieldName} onChange={this.onChange} value={this.state[fieldName]} />
 				<label htmlFor={fieldName}>{prettyName}</label>
 			</div>
 		);
@@ -122,12 +95,11 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 
 	renderLogin() {
 		const { canLogin } = this.state;
-		const { LOGIN_EMAIL, LOGIN_PASSWORD } = fieldNames;
-		const loginFields = [LOGIN_EMAIL, LOGIN_PASSWORD].map(this.renderFormField);
+		const { LOGIN_EMAIL } = fieldNames;
 		return (
 			<div>
 				<p>Log In</p>
-				{loginFields}
+				{this.renderFormField(LOGIN_EMAIL)}
 				<button disabled={!canLogin} onClick={this.login}>
 					Log In
 				</button>
@@ -137,8 +109,8 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 
 	renderCreateAccount() {
 		const { canCreate } = this.state;
-		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, CREATE_PASSWORD } = fieldNames;
-		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, CREATE_PASSWORD].map(this.renderFormField);
+		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME } = fieldNames;
+		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME].map(this.renderFormField);
 		return (
 			<div>
 				<p>Create an Account</p>
@@ -155,9 +127,7 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 			<div>
 				{this.renderLogin()}
 				{this.renderCreateAccount()}
-				<hr />
-				<button onClick={this.loginWithGoogle}>Login with Google</button>
-				<a href="/oauth2">Login with Google</a>
+				<button onClick={this.props.loginWithGoogle}>Login with Google</button>
 			</div>
 		);
 	}
