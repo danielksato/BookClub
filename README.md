@@ -1,6 +1,15 @@
 ## Book Club
 
-This is a web app for managing a book club. It uses Create React App, eventually on top of a Node/Express/MySQL backend. This is very much a work in progress, begun 20 March 2018.
+This is a web app for managing a book club. It uses Create React App, eventually on top of a Node/Express/Sqlite backend. This is very much a work in progress, begun 20 March 2018.
+
+### Running the project
+
+1. Ensure `create-react-app` is installed globally (`yarn global add create-react-app`).
+2. Run `yarn` in the base directory.
+3. Run `yarn` again from the `db` directory.
+4. Ensure the database file `db/data/db.sqlite` exists (`touch db/data/db.sqlite`).
+5. Run `db/index.js`, e.g. with `nodemon`. The backend server runs on port 8080.
+6. Start the UI server on port 3000 with `yarn start`.
 
 ### Create React App boilerplate follows
 
