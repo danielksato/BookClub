@@ -7,6 +7,7 @@ import rootReducer from './reducers';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import Main from './components/Main';
+import Growler from './components/Growler';
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -18,6 +19,7 @@ class App extends PureComponent<*> {
 		return (
 			<Provider store={store}>
 				<Fragment>
+					<Growler />
 					<Header />
 					<Navigation />
 					<Main />

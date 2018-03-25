@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Fragment, type Node } from 'react';
 import { connect } from 'react-redux';
 import { ClubRecord } from '../reducers/ClubReducer';
 import { UserRecord } from '../reducers/UserReducer';
@@ -14,7 +14,7 @@ const mapStateToProps = ({ user, club }) => ({ user, club });
 
 export class Home extends PureComponent<Props> {
 	static navString = 'Home';
-	renderHeading() {
+	renderHeading(): Node {
 		const { firstName, lastName } = this.props.user;
 		return (
 			<div>
@@ -22,11 +22,18 @@ export class Home extends PureComponent<Props> {
 			</div>
 		);
 	}
-	render() {
+
+	renderCurrentClub(): Node {
+		const { club, club: { id } } = this.props;
+		if (id) {
+			return <CurrentClub club={club} />;
+		}
+	}
+	render(): Node {
 		return (
 			<Fragment>
 				{this.renderHeading()}
-				<CurrentClub club={this.props.club} />
+				{this.renderCurrentClub()}
 			</Fragment>
 		);
 	}

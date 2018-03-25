@@ -15,3 +15,5 @@ export const LOG_OUT = 'LOG_OUT';
 export const CREATE_CLUB = 'CREATE_CLUB';
 export const CREATE_CLUB_SUCCESS = 'CREATE_CLUB_SUCCESS';
 export const CREATE_CLUB_FAILED = 'CREATE_CLUB_FAILED';
+
+export const SET_GROWLER = 'SET_GROWLER';

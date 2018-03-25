@@ -31,9 +31,10 @@ export class Header extends PureComponent<Props> {
 	}
 
 	componentDidUpdate(oldProps: Props): void {
-		const { id } = this.props.user;
-		if (id && id !== oldProps.user.id) {
-			this.props.loadClub(id);
+		const { user: { clubs }, club: { id } } = this.props;
+		const firstClubId = clubs.getIn([0, 'id']);
+		if (firstClubId && !id) {
+			this.props.loadClub(firstClubId);
 		}
 	}
 

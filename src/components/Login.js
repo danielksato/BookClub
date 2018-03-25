@@ -5,13 +5,14 @@ import { login, createUser, loginWithGoogle } from '../actions/UserActions';
 
 type Props = {
 	login: (Object) => void,
+	loginWithGoogle: () => void,
 	createUser: (Object) => void,
 };
 
 const mapDispatchToProps = (dispatch: Function): Props => {
 	return {
 		login: (...args) => dispatch(login(...args)),
-		loginWithGoogle: (...args) => dispatch(loginWithGoogle(...args)),
+		loginWithGoogle: () => dispatch(loginWithGoogle()),
 		createUser: (...args) => dispatch(createUser(...args)),
 	};
 };

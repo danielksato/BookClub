@@ -1,0 +1,12 @@
+@keyframes growlerFade {
+    0% {visibility: visible;}
+}
+
+.growler {
+    animation: growlerFade 1 5s;
+    background: white;
+    position: absolute;
+    right: 0;
+    top: 0;
+    visibility: hidden;
+}

@@ -5,23 +5,30 @@ const { User } = require('../db/db');
 passport.use(
 	new GoogleStrategy(
 		{
-			clientID: process.env.GOOGLE_CID,
-			clientSecret: process.env.GOOGLE_CS,
-			callbackURL: 'http://bookclub-dev.dksato.com:8080/oauth2/callback',
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: 'http://bookclub-dev.dksato.com:3000/oauth2/callback',
 		},
 		function(accessToken, refreshToken, profile, cb) {
 			const { id, name: { familyName, givenName }, photos, emails } = profile;
-			const where = {
-				firstName: givenName,
-				lastName: familyName,
-				googleId: id,
-			};
-			if (emails) {
-				Object.assign(search, { email: emails[0].value });
-			}
-			User.findOrCreate({ where }).then(
-				([user]) => {
-					return cb(null, user);
+
+			const where = emails ? { email: emails[0].value } : { googleId: id };
+			User.findOne({ where }).then(
+				(user) => {
+					if (user) {
+						cb(null, user);
+					} else {
+						User.create(
+							Object.assign(
+								{
+									firstName: givenName,
+									lastName: familyName,
+									googleId: id,
+								},
+								where
+							)
+						).then((newUser) => cb(null, newUser), (err) => cb(err, null));
+					}
 				},
 				(err) => {
 					return cb(err, null);

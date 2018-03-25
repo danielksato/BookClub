@@ -104,6 +104,4 @@ app.put('/logout', (req, res) => {
 	res.sendStatus(200);
 });
 
-app.all('/*', require('http-proxy-middleware')({ target: 'http://localhost:3000', changeOrigin: true, ws: true }));
-
 app.listen(8080);
