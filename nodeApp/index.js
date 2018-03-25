@@ -11,6 +11,7 @@ const models = {
 };
 
 const passport = require('./auth');
+const search = require('./search');
 
 app.use(express.static('public'));
 app.use(require('cookie-parser')());
@@ -103,5 +104,7 @@ app.put('/logout', (req, res) => {
 	req.logout();
 	res.sendStatus(200);
 });
+
+search(app);
 
 app.listen(8080);

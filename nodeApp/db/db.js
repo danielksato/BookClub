@@ -22,10 +22,15 @@ const Club = sequelize.define('club', {
 });
 
 const Book = sequelize.define('book', {
-	title: { type: Sequelize.STRING },
 	author: { type: Sequelize.STRING },
+	image: { type: Sequelize.STRING },
 	isbn: { type: Sequelize.STRING },
+	length: { type: Sequelize.INTEGER },
+	link: { type: Sequelize.STRING },
+	thumbnail: { type: Sequelize.STRING },
+	title: { type: Sequelize.STRING },
 });
+
 const Vote = sequelize.define('vote', {
 	for: { type: Sequelize.BOOLEAN },
 });
