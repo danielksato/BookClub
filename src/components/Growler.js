@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 
-import styles from '../styles/Growler.module.css';
+import styles from 'styles/Growler.module.css';
 
 const mapStateToProps = ({ app }) => ({ error: app.error });
 

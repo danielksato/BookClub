@@ -1,6 +1,6 @@
 // @flow
 import { Record } from 'immutable';
-import { PROPOSED } from '../constants/AppConstants';
+import { PROPOSED } from 'constants/AppConstants';
 
 type ConstructorArgs = {
 	selection: { status: string },

@@ -1,7 +1,7 @@
 // @flow
 import { sendJSON } from './ApiUtils';
 
-import type { UserRecord } from '../reducers/UserReducer';
+import type { UserRecord } from 'reducers/UserReducer';
 
 type UserData = $FlowFixMe;
 

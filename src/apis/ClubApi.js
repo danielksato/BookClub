@@ -1,6 +1,6 @@
 // @flow
 import { sendJSON } from './ApiUtils';
-import type { ClubRecord } from '../reducers/ClubReducer';
+import type { ClubRecord } from 'reducers/ClubReducer';
 
 type ClubData = $FlowFixMe;
 

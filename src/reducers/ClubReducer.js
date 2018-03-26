@@ -2,14 +2,9 @@
 import { Record, List, fromJS } from 'immutable';
 import { createReducer } from 'redux-create-reducer';
 import { UserRecord } from './UserReducer';
-import * as StatusConstants from '../constants/StatusConstants';
-import {
-	LOAD_CLUB,
-	LOAD_CLUB_SUCCESS,
-	LOAD_CLUB_FAILED,
-	LOG_OUT,
-} from '../constants/ActionConstants';
-import BookRecord from '../records/BookRecord';
+import * as StatusConstants from 'constants/StatusConstants';
+import { LOAD_CLUB, LOAD_CLUB_SUCCESS, LOAD_CLUB_FAILED, LOG_OUT } from 'constants/ActionConstants';
+import BookRecord from 'records/BookRecord';
 
 type ConstructorArgs = {
 	id?: number,

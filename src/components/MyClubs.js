@@ -1,11 +1,11 @@
 // @flow
 import React, { PureComponent, Fragment, type Node } from 'react';
 import { connect } from 'react-redux';
-import { loadClub, createClub } from '../actions/ClubActions';
+import { loadClub, createClub } from 'actions/ClubActions';
 
-import type { MembershipRecord } from '../reducers/UserReducer';
+import type { MembershipRecord } from 'reducers/UserReducer';
 import type { List } from 'immutable';
-import { ClubRecord } from '../reducers/ClubReducer';
+import { ClubRecord } from 'reducers/ClubReducer';
 
 type Props = {
 	currentClub: ClubRecord,

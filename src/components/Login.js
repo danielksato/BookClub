@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import { login, createUser, loginWithGoogle } from '../actions/UserActions';
+import { login, createUser, loginWithGoogle } from 'actions/UserActions';
 
 type Props = {
 	login: (Object) => void,

@@ -2,7 +2,7 @@ const { Book, Club, User } = require('../models');
 
 Book.createByISBN = function(newBook) {
 	const { isbn } = newBook;
-	Book.findOne({ where: { isbn } }).then((book) => {
+	return Book.findOne({ where: { isbn } }).then((book) => {
 		if (book) {
 			return Promise.resolve(book);
 		} else {
@@ -63,14 +63,16 @@ module.exports = function(app) {
 		Promise.all([Club.findById(clubId), Book.createByISBN(body)])
 			.then(([club, book]) => {
 				return Promise.all([
-					User.findById(1).then((user) => user.addBook(book)),
+					User.findById(1).then((user) =>
+						user.addBook(book).then(() => user.reload({ include: [{ model: Book }] }))
+					),
 					club
 						.addBook(book)
 						.then(() => club.reload({ include: [{ model: Book }, { model: User }] })),
 				]);
 			})
 			.then(([user, club]) => {
-				res.json(club);
+				res.json({ user, club });
 			});
 	});
 };

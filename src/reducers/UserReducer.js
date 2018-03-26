@@ -7,9 +7,9 @@ import {
 	LOAD_USER_FAILED,
 	LOG_OUT,
 	CREATE_CLUB_SUCCESS,
-} from '../constants/ActionConstants';
-import * as StatusConstants from '../constants/StatusConstants';
-import { INVITED } from '../constants/AppConstants';
+} from 'constants/ActionConstants';
+import * as StatusConstants from 'constants/StatusConstants';
+import { INVITED } from 'constants/AppConstants';
 
 export class MembershipRecord extends Record({
 	id: 0,

@@ -1,16 +1,15 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import styles from '../styles/Header.module.css';
-import { loadUser, logout, authUser } from '../actions/UserActions';
-import { loadClub } from '../actions/ClubActions';
+import styles from 'styles/Header.module.css';
+import { logout, authUser } from 'actions/UserActions';
+import { loadClub } from 'actions/ClubActions';
 
-import type { UserRecord } from '../reducers/UserReducer';
-import type { ClubRecord } from '../reducers/ClubReducer';
+import type { UserRecord } from 'reducers/UserReducer';
+import type { ClubRecord } from 'reducers/ClubReducer';
 
 const mapStateToProps = ({ user, club }) => ({ user, club });
 const mapDispatchToProps = (dispatch) => ({
-	loadUser: (...args) => dispatch(loadUser(...args)),
 	loadClub: (...args) => dispatch(loadClub(...args)),
 	logout: (...args) => dispatch(logout(...args)),
 	authUser: () => dispatch(authUser()),
@@ -19,7 +18,6 @@ const mapDispatchToProps = (dispatch) => ({
 type Props = {
 	user: UserRecord,
 	club: ClubRecord,
-	loadUser: (id: number) => void,
 	loadClub: (id: number) => void,
 	logout: () => void,
 	authUser: () => void,

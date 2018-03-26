@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
-import type { ClubRecord } from '../reducers/ClubReducer';
-import { PROPOSED, ACTIVE } from '../constants/AppConstants';
+import type { ClubRecord } from 'reducers/ClubReducer';
+import { PROPOSED, ACTIVE } from 'constants/AppConstants';
 import Book from './Book';
 
 type Props = { club: ClubRecord };

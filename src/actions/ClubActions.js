@@ -7,12 +7,12 @@ import {
 	LOAD_CLUB,
 	LOAD_CLUB_SUCCESS,
 	LOAD_CLUB_FAILED,
-} from '../constants/ActionConstants';
-import { getClub, createClub as createClubApi } from '../apis/ClubApi';
-import type { ClubRecord } from '../reducers/ClubReducer';
+} from 'constants/ActionConstants';
+import { getClub, createClub as createClubApi } from 'apis/ClubApi';
+import type { ClubRecord } from 'reducers/ClubReducer';
 
 const _loadClub = createAction(LOAD_CLUB);
-const _loadClubSuccess = createAction(LOAD_CLUB_SUCCESS);
+export const loadClubSuccess = createAction(LOAD_CLUB_SUCCESS);
 const _loadClubFailed = createAction(LOAD_CLUB_FAILED);
 
 const _createClub = createAction(CREATE_CLUB);
@@ -23,7 +23,7 @@ export const loadClub = (id: number) => {
 	return (dispatch: Function) => {
 		dispatch(_loadClub());
 		getClub(id).then(
-			(res) => dispatch(_loadClubSuccess(res)),
+			(res) => dispatch(loadClubSuccess(res)),
 			(err) => dispatch(_loadClubFailed(err))
 		);
 	};
@@ -34,7 +34,7 @@ export const createClub = (club: ClubRecord) => {
 		dispatch(_createClub());
 		createClubApi(club).then(
 			(res) => {
-				dispatch(_loadClubSuccess(res));
+				dispatch(loadClubSuccess(res));
 				dispatch(_createClubSuccess(res));
 			},
 			(err) => dispatch(_createClubFailed(err))

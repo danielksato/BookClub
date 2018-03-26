@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize('database', 'user', 'password', {
 	dialect: 'sqlite',
 	storage: 'db/data.sqlite',
+	logging: false,
 });
 
 const User = sequelize.define('user', {
@@ -26,14 +27,14 @@ const Book = sequelize.define('book', {
 });
 
 const Vote = sequelize.define('vote', {
-	for: { type: Sequelize.BOOLEAN },
+	for: { type: Sequelize.BOOLEAN, defaultValue: true },
 });
 
 const Membership = sequelize.define('membership', {
-	role: { type: Sequelize.ENUM('invited', 'active', 'admin') },
+	role: { type: Sequelize.ENUM('invited', 'active', 'admin'), defaultValue: 'active' },
 });
 const Selection = sequelize.define('selection', {
-	status: { type: Sequelize.ENUM('proposed', 'selected', 'archived') },
+	status: { type: Sequelize.ENUM('proposed', 'selected', 'archived'), defaultValue: 'proposed' },
 });
 
 User.belongsToMany(Club, { through: Membership });

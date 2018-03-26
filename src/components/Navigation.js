@@ -6,10 +6,10 @@ import VoteOnBook from './VoteOnBook';
 import ScheduleMeeting from './ScheduleMeeting';
 import JoinClub from './JoinClub';
 import MyClubs from './MyClubs';
-import { selectTab } from '../actions/AppActions';
+import { selectTab } from 'actions/AppActions';
 import Home from './Home';
 
-import styles from '../styles/Navigation.module.css';
+import styles from 'styles/Navigation.module.css';
 
 export const navTabs = [Home, SuggestBook, VoteOnBook, ScheduleMeeting, JoinClub, MyClubs];
 

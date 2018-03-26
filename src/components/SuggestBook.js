@@ -1,20 +1,25 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import { searchBook } from '../actions/BookActions';
+import { searchBook, suggestBook } from 'actions/BookActions';
 import debounce from 'lodash.debounce';
+import Book from 'components/Book';
 
-import type BookRecord from '../records/BookRecord';
+import type BookRecord from 'records/BookRecord';
 import type { List } from 'immutable';
+import type { ClubRecord } from 'reducers/ClubReducer';
 
-const mapStateToProps = ({ app: { books } }) => ({ books });
+const mapStateToProps = ({ app: { books }, club }) => ({ books, club });
 const mapDispatchToProps = (dispatch: Function) => ({
 	searchBook: (search: string) => dispatch(searchBook(search)),
+	suggestBook: ({ book, club }) => dispatch(suggestBook({ book, club })),
 });
 
 type Props = {
 	books: List<BookRecord>,
-	searchBook: (string) => void,
+	club: ClubRecord,
+	searchBook: (search: string) => void,
+	suggestBook: ({ book: BookRecord, club: ClubRecord }) => void,
 };
 
 type State = {
@@ -27,10 +32,15 @@ export class SuggestBook extends PureComponent<Props, State> {
 
 	constructor(): void {
 		super();
-		this.searchBook = debounce(this.searchBook, 1000);
+		this.searchBook = (debounce(this.searchBook, 1000): (string) => void);
 	}
 
-	searchBook = (search: string): void => {
+	suggestBook = (book: BookRecord) => {
+		const { club } = this.props;
+		this.props.suggestBook({ club, book });
+	};
+
+	searchBook: searchBook = (search: string): void => {
 		search && this.props.searchBook(search);
 	};
 
@@ -38,21 +48,21 @@ export class SuggestBook extends PureComponent<Props, State> {
 		// $FlowFixMe
 		const { target: { value } } = e;
 		this.setState({ search: value });
+		// $FlowFixMe
 		this.searchBook(value);
 	};
 
 	renderResults(): Array<Node> {
 		return this.props.books
-			.map((book) => (
-				<div key={`book-isbn-${book.isbn}`}>
-					<a href={book.link} target="_blank">
-						<img src={book.thumbnail} />
-						<p>{book.title}</p>
-						<p>{book.author}</p>
-						<p>{book.length} pages</p>
-					</a>
-				</div>
-			))
+			.map((book) => {
+				const onClick = () => this.suggestBook(book);
+				return (
+					<div key={`book-isbn-${book.isbn}`}>
+						<Book {...{ book }} />
+						<button onClick={onClick}>Suggest This Book</button>
+					</div>
+				);
+			})
 			.toArray();
 	}
 

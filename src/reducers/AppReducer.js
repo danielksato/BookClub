@@ -1,8 +1,8 @@
 // @flow
 import { Record, List } from 'immutable';
-import { SELECT_TAB, SET_GROWLER, SEARCH_BOOK_SUCCESS } from '../constants/ActionConstants';
+import { SELECT_TAB, SET_GROWLER, SEARCH_BOOK_SUCCESS } from 'constants/ActionConstants';
 import { createReducer } from 'redux-create-reducer';
-import BookRecord from '../records/BookRecord';
+import BookRecord from 'records/BookRecord';
 
 export class AppStateRecord extends Record({
 	error: 'Growler',

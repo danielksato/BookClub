@@ -19,7 +19,7 @@ module.exports = function(app) {
 		Club.create({ name: body.name }).then(
 			(club) =>
 				club
-					.addUser(user)
+					.addUser(user, { through: { role: 'admin' } })
 					.then(() =>
 						// this is slow. Maybe do this optimistically?
 						club.reload({
