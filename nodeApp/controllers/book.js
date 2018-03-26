@@ -1,4 +1,16 @@
-const { Book, Club, User } = require('../db/db.js');
+const { Book, Club, User } = require('../models');
+
+Book.createByISBN = function(newBook) {
+	const { isbn } = newBook;
+	Book.findOne({ where: { isbn } }).then((book) => {
+		if (book) {
+			return Promise.resolve(book);
+		} else {
+			return Book.create(newBook);
+		}
+	});
+};
+
 const amazon = require('amazon-product-api');
 const {
 	AMAZON_PRODUCT_ADVERTISING_ACCESS_KEY,
@@ -26,9 +38,14 @@ module.exports = function(app) {
 					res.json(
 						books
 							.map(({ DetailPageURL, ItemAttributes }) => {
-								const { Author, NumberOfPages, ISBN, Title, SmallImage, MediumImage } = ItemAttributes
-									? ItemAttributes[0]
-									: {};
+								const {
+									Author,
+									NumberOfPages,
+									ISBN,
+									Title,
+									SmallImage,
+									MediumImage,
+								} = ItemAttributes ? ItemAttributes[0] : {};
 								return {
 									author: Author && Author[0],
 									image: MediumImage && MediumImage[0].URL[0],
@@ -52,7 +69,9 @@ module.exports = function(app) {
 			.then(([club, book]) => {
 				return Promise.all([
 					User.findById(1).then((user) => user.addBook(book)),
-					club.addBook(book).then(() => club.reload({ include: [{ model: Book }, { model: User }] })),
+					club
+						.addBook(book)
+						.then(() => club.reload({ include: [{ model: Book }, { model: User }] })),
 				]);
 			})
 			.then(([user, club]) => {

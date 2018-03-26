@@ -1,6 +1,6 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const { User } = require('../db/db');
+const { User } = require('../models');
 
 passport.use(
 	new GoogleStrategy(
@@ -46,4 +46,21 @@ passport.deserializeUser(function(id, done) {
 	User.findById(id).then((user) => done(null, user), (err) => done(err, null));
 });
 
-module.exports = passport;
+module.exports = function(app) {
+	app.use(passport.initialize());
+	app.use(passport.session());
+
+	app.get('/oauth2', passport.authenticate('google', { scope: ['profile'] }));
+	app.get(
+		'/oauth2/callback',
+		passport.authenticate('google', {
+			failureRedirect: '/',
+			successRedirect: '/user',
+		})
+	);
+
+	app.put('/logout', (req, res) => {
+		req.logout();
+		res.sendStatus(200);
+	});
+};
