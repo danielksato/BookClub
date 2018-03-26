@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "immutable": "FormAPI/immutable-js#v3.8.1-flow-fix",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.7",

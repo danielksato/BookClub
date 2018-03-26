@@ -8,16 +8,24 @@ type ConstructorArgs = {
 };
 
 export default class BookRecord extends Record({
-	id: 0,
-	title: '',
 	author: '',
+	id: 0,
+	image: '',
 	isbn: '',
+	length: 0,
+	link: '',
+	thumbnail: '',
+	title: '',
 	status: PROPOSED,
 }) {
-	id: number;
-	title: string;
 	author: string;
+	id: number;
+	image: string;
 	isbn: string;
+	length: number;
+	link: string;
+	thumbnail: string;
+	title: string;
 	status: string;
 
 	constructor({ selection, ...rest }: ConstructorArgs = {}) {

@@ -37,15 +37,10 @@ module.exports = function(app) {
 				(books) => {
 					res.json(
 						books
-							.map(({ DetailPageURL, ItemAttributes }) => {
-								const {
-									Author,
-									NumberOfPages,
-									ISBN,
-									Title,
-									SmallImage,
-									MediumImage,
-								} = ItemAttributes ? ItemAttributes[0] : {};
+							.map(({ DetailPageURL, ItemAttributes, SmallImage, MediumImage }) => {
+								const { Author, NumberOfPages, ISBN, Title } = ItemAttributes
+									? ItemAttributes[0]
+									: {};
 								return {
 									author: Author && Author[0],
 									image: MediumImage && MediumImage[0].URL[0],

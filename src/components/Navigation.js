@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import PickBooks from './PickBooks';
+import SuggestBook from './SuggestBook';
 import VoteOnBook from './VoteOnBook';
 import ScheduleMeeting from './ScheduleMeeting';
 import JoinClub from './JoinClub';
@@ -11,7 +11,7 @@ import Home from './Home';
 
 import styles from '../styles/Navigation.module.css';
 
-export const navTabs = [Home, PickBooks, VoteOnBook, ScheduleMeeting, JoinClub, MyClubs];
+export const navTabs = [Home, SuggestBook, VoteOnBook, ScheduleMeeting, JoinClub, MyClubs];
 
 const mapDispatchToProps = (dispatch) => ({
 	selectTab: (...args) => dispatch(selectTab(...args)),
@@ -35,7 +35,12 @@ export class Navigation extends PureComponent<Props> {
 		return navTabs.map(({ navString }, index) => {
 			const className = index === this.props.tabIndex ? styles.selected : null;
 			return (
-				<div key={`${navString}-${index}`} data-tabindex={index} onClick={this.onClick} className={className}>
+				<div
+					key={`${navString}-${index}`}
+					data-tabindex={index}
+					onClick={this.onClick}
+					className={className}
+				>
 					{navString}
 				</div>
 			);
