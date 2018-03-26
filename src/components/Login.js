@@ -88,7 +88,12 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		const prettyName = prettyPrint(fieldName);
 		return (
 			<div key={fieldName}>
-				<input data-fieldname={fieldName} id={fieldName} onChange={this.onChange} value={this.state[fieldName]} />
+				<input
+					data-fieldname={fieldName}
+					id={fieldName}
+					onChange={this.onChange}
+					value={this.state[fieldName]}
+				/>
 				<label htmlFor={fieldName}>{prettyName}</label>
 			</div>
 		);
@@ -111,7 +116,9 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 	renderCreateAccount() {
 		const { canCreate } = this.state;
 		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME } = fieldNames;
-		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME].map(this.renderFormField);
+		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME].map(
+			this.renderFormField
+		);
 		return (
 			<div>
 				<p>Create an Account</p>

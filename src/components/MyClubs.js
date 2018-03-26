@@ -18,7 +18,10 @@ type State = { name: string };
 
 const mapStateToProps = ({ user, club }) => ({ currentClub: club, clubs: user.clubs });
 const mapDispatchToProps = (dispatch: Function) => {
-	return { loadClub: (...args) => dispatch(loadClub(...args)), createClub: (...args) => dispatch(createClub(...args)) };
+	return {
+		loadClub: (...args) => dispatch(loadClub(...args)),
+		createClub: (...args) => dispatch(createClub(...args)),
+	};
 };
 
 export class MyClubs extends PureComponent<Props, State> {

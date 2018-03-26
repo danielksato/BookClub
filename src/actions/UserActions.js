@@ -1,6 +1,11 @@
 // @flow
 import { createAction } from 'redux-actions';
-import { LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILED, LOG_OUT } from '../constants/ActionConstants';
+import {
+	LOAD_USER,
+	LOAD_USER_SUCCESS,
+	LOAD_USER_FAILED,
+	LOG_OUT,
+} from '../constants/ActionConstants';
 import {
 	getUser,
 	login as loginApi,
@@ -24,7 +29,10 @@ export const logout = () => {
 export const loadUser = (id: number) => {
 	return (dispatch: Function): Promise<$FlowFixMe> => {
 		dispatch(_loadUser());
-		return getUser(id).then((res) => dispatch(_loadUserSuccess(res)), (err) => dispatch(_loadUserFailed(err)));
+		return getUser(id).then(
+			(res) => dispatch(_loadUserSuccess(res)),
+			(err) => dispatch(_loadUserFailed(err))
+		);
 	};
 };
 

@@ -28,7 +28,9 @@ export const createUser = (body: $FlowFixMe): Promise<UserData> => {
 };
 
 export const loginWithGoogle = (): Promise<UserData> => {
-	return fetch('/oauth2', { mode: 'no-cors', credentials: 'include' }).then((res) => res.ok && res.json());
+	return fetch('/oauth2', { mode: 'no-cors', credentials: 'include' }).then(
+		(res) => res.ok && res.json()
+	);
 };
 
 export const authUser = (): Promise<UserData> => {

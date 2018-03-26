@@ -22,7 +22,10 @@ const _createClubFailed = createAction(CREATE_CLUB_FAILED);
 export const loadClub = (id: number) => {
 	return (dispatch: Function) => {
 		dispatch(_loadClub());
-		getClub(id).then((res) => dispatch(_loadClubSuccess(res)), (err) => dispatch(_loadClubFailed(err)));
+		getClub(id).then(
+			(res) => dispatch(_loadClubSuccess(res)),
+			(err) => dispatch(_loadClubFailed(err))
+		);
 	};
 };
 

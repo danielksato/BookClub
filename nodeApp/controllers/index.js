@@ -1,4 +1,3 @@
-const { User, Club, Membership, Book, Selection, Vote } = require('../models');
 const book = require('./book');
 const user = require('./user');
 const club = require('./club');
