@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('database', 'user', 'password', {
 	dialect: 'sqlite',
-	storage: './db/data/db.sqlite',
+	storage: './db/data.sqlite',
 });
 
 const User = sequelize.define('user', {
@@ -30,6 +30,17 @@ const Book = sequelize.define('book', {
 	thumbnail: { type: Sequelize.STRING },
 	title: { type: Sequelize.STRING },
 });
+
+Book.createByISBN = function(newBook) {
+	const { isbn } = newBook;
+	Book.findOne({ where: { isbn } }).then((book) => {
+		if (book) {
+			return Promise.resolve(book);
+		} else {
+			return Book.create(newBook);
+		}
+	});
+};
 
 const Vote = sequelize.define('vote', {
 	for: { type: Sequelize.BOOLEAN },
