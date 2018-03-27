@@ -1,9 +1,9 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import styles from 'styles/Header.module.css';
-import { logout, authUser } from 'actions/UserActions';
+import { authUser } from 'actions/UserActions';
 import { loadClub } from 'actions/ClubActions';
+import Navigation from 'components/Navigation';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -11,7 +11,6 @@ import type { ClubRecord } from 'reducers/ClubReducer';
 const mapStateToProps = ({ user, club }) => ({ user, club });
 const mapDispatchToProps = (dispatch) => ({
 	loadClub: (...args) => dispatch(loadClub(...args)),
-	logout: (...args) => dispatch(logout(...args)),
 	authUser: () => dispatch(authUser()),
 });
 
@@ -19,7 +18,6 @@ type Props = {
 	user: UserRecord,
 	club: ClubRecord,
 	loadClub: (id: number) => void,
-	logout: () => void,
 	authUser: () => void,
 };
 
@@ -36,20 +34,36 @@ export class Header extends PureComponent<Props> {
 		}
 	}
 
-	renderLogout(): Node {
+	renderNav(): Node {
 		const { id } = this.props.user;
-		return id ? <span onClick={this.props.logout}>Log Out</span> : null;
+
+		if (!id) {
+			return null;
+		}
+
+		return (
+			<div className="navbar-collapse">
+				<Navigation />;
+			</div>
+		);
+	}
+
+	renderUser(): Node {
+		const { user: { firstName, lastName, id } } = this.props;
+		const userName = id ? `${firstName} ${lastName}` : null;
+
+		return <span className="navbar-text">{userName || 'Log In'}</span>;
 	}
 
 	render(): Node {
-		const { user: { firstName, lastName, id }, club: { name } } = this.props;
+		const { club: { name } } = this.props;
 		const clubName = name || 'Book Club';
-		const userName = id ? `${firstName} ${lastName}` : 'Log in';
+
 		return (
-			<div className={styles.container}>
-				<span>{clubName}</span>
-				<span>{userName}</span>
-				{this.renderLogout()}
+			<div className="navbar navbar-dark navbar-expand-lg bg-dark d-flex justify-content-between">
+				<span className="navbar-brand">{clubName}</span>
+				{this.renderNav()}
+				{this.renderUser()}
 			</div>
 		);
 	}

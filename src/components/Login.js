@@ -88,13 +88,14 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		const prettyName = prettyPrint(fieldName);
 		return (
 			<div key={fieldName}>
+				<label htmlFor={fieldName}>{prettyName}</label>
 				<input
+					className="form-control"
 					data-fieldname={fieldName}
 					id={fieldName}
 					onChange={this.onChange}
 					value={this.state[fieldName]}
 				/>
-				<label htmlFor={fieldName}>{prettyName}</label>
 			</div>
 		);
 	};
@@ -103,10 +104,10 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		const { canLogin } = this.state;
 		const { LOGIN_EMAIL } = fieldNames;
 		return (
-			<div>
+			<div className="form-group">
 				<p>Log In</p>
 				{this.renderFormField(LOGIN_EMAIL)}
-				<button disabled={!canLogin} onClick={this.login}>
+				<button disabled={!canLogin} onClick={this.login} className="btn btn-primary">
 					Log In
 				</button>
 			</div>
@@ -120,10 +121,10 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 			this.renderFormField
 		);
 		return (
-			<div>
+			<div className="form-group">
 				<p>Create an Account</p>
 				{createFields}
-				<button disabled={!canCreate} onClick={this.create}>
+				<button disabled={!canCreate} onClick={this.create} className="btn btn-primary">
 					Create User
 				</button>
 			</div>
@@ -132,10 +133,12 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 
 	render(): Node {
 		return (
-			<div>
+			<div className="container">
 				{this.renderLogin()}
 				{this.renderCreateAccount()}
-				<button onClick={this.props.loginWithGoogle}>Login with Google</button>
+				<button onClick={this.props.loginWithGoogle} className="btn btn-primary">
+					Login with Google
+				</button>
 			</div>
 		);
 	}

@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bootstrap": "^4.0.0",
+    "classnames": "^2.2.5",
     "immutable": "FormAPI/immutable-js#v3.8.1-flow-fix",
     "lodash.debounce": "^4.0.8",
     "react": "^16.2.0",

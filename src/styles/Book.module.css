@@ -1,0 +1,14 @@
+.text {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+.link {
+    color: initial;
+    text-decoration: none;
+}
+
+.link:hover {
+    color: initial;
+    text-decoration: none;
+}

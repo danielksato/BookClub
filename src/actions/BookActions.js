@@ -3,13 +3,13 @@ import { createAction } from 'redux-actions';
 import {
 	SEARCH_BOOK_SUCCESS,
 	SEARCH_BOOK_FAILED,
-	DELETE_BOOK,
-	CONFIRM_BOOK,
+	// DELETE_BOOK,
+	// CONFIRM_BOOK,
 } from 'constants/ActionConstants';
 import { searchBook as searchBookApi, suggestBook as suggestBookApi } from 'apis/BookApi';
 import { loadClubSuccess } from 'actions/ClubActions';
 import { loadUserSuccess } from 'actions/UserActions';
-import { setGrowler } from 'actions/AppActions';
+import { setGrowler, selectTab } from 'actions/AppActions';
 
 import type BookRecord from 'records/BookRecord';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -34,6 +34,7 @@ export const suggestBook = ({ book, club }: { book: BookRecord, club: ClubRecord
 			({ club, user }) => {
 				dispatch(loadClubSuccess(club));
 				dispatch(loadUserSuccess(user));
+				dispatch(selectTab(0));
 			},
 			(err) => {
 				dispatch(setGrowler(err));

@@ -9,6 +9,7 @@ import {
 	authUser as authUserApi,
 	logout as logoutApi,
 } from 'apis/UserApi';
+import { selectTab } from 'actions/AppActions';
 
 const _loadUser = createAction(LOAD_USER);
 export const loadUserSuccess = createAction(LOAD_USER_SUCCESS);
@@ -17,7 +18,10 @@ const _loadUserFailed = createAction(LOAD_USER_FAILED);
 export const _logout = createAction(LOG_OUT);
 export const logout = () => {
 	return (dispatch: Function): Promise<> => {
-		return dispatch(logoutApi).then(() => dispatch(_logout()));
+		return dispatch(logoutApi).then(() => {
+			dispatch(selectTab(0));
+			dispatch(_logout());
+		});
 	};
 };
 

@@ -1,6 +1,8 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import type BookRecord from 'records/BookRecord';
+import styles from 'styles/Book.module.css';
+import classnames from 'classnames';
 
 type Props = {
 	book: BookRecord,
@@ -10,17 +12,23 @@ type Props = {
 export default class Book extends PureComponent<Props> {
 	renderThumb(): Node {
 		const { book: { thumbnail, image }, large } = this.props;
-		return <img src={large ? image : thumbnail} />;
+		return <img className="align-self-center" src={large ? image : thumbnail} />;
 	}
 
 	render(): Node {
 		const { title, author, link, length } = this.props.book;
 		return (
-			<a href={link} target="_blank">
+			<a
+				href={link}
+				target="_blank"
+				className={classnames('media p-1 w-25 border rounded bg-secondary', styles.link)}
+			>
 				{this.renderThumb()}
-				<p>{title}</p>
-				<p>{author}</p>
-				<p>{length} pages</p>
+				<div className={classnames('media-body p-1 font-size-small', styles.text)}>
+					<span>{title}</span>
+					<span>{author}</span>
+					<span>{length} pages</span>
+				</div>
 			</a>
 		);
 	}

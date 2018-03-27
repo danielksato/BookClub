@@ -1,27 +1,31 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
-import SuggestBook from './SuggestBook';
-import VoteOnBook from './VoteOnBook';
-import ScheduleMeeting from './ScheduleMeeting';
-import JoinClub from './JoinClub';
-import MyClubs from './MyClubs';
+import SuggestBook from 'components/SuggestBook';
+import VoteOnBook from 'components/VoteOnBook';
+import ScheduleMeeting from 'components/ScheduleMeeting';
+import JoinClub from 'components/JoinClub';
+import MyClubs from 'components/MyClubs';
 import { selectTab } from 'actions/AppActions';
-import Home from './Home';
+import Home from 'components/Home';
+import { logout } from 'actions/UserActions';
 
-import styles from 'styles/Navigation.module.css';
+// import styles from 'styles/Navigation.module.css';
 
 export const navTabs = [Home, SuggestBook, VoteOnBook, ScheduleMeeting, JoinClub, MyClubs];
 
 const mapDispatchToProps = (dispatch) => ({
 	selectTab: (...args) => dispatch(selectTab(...args)),
+	logout: () => dispatch(logout()),
 });
 
 const mapStateToProps = ({ app: { tabIndex }, user: { id } }) => ({ tabIndex, loggedIn: !!id });
 
 type Props = {
 	loggedIn: boolean,
-	selectTab: (PureComponent<*>) => void,
+	logout: () => void,
+	selectTab: (number) => void,
 	tabIndex: PureComponent<*>,
 };
 
@@ -33,22 +37,30 @@ export class Navigation extends PureComponent<Props> {
 
 	renderTabs(): Array<Node> {
 		return navTabs.map(({ navString }, index) => {
-			const className = index === this.props.tabIndex ? styles.selected : null;
+			const className = classnames(['nav-link', { active: index === this.props.tabIndex }]);
 			return (
-				<div
-					key={`${navString}-${index}`}
-					data-tabindex={index}
-					onClick={this.onClick}
-					className={className}
-				>
-					{navString}
-				</div>
+				<li key={`${navString}-${index}`} className="nav-item">
+					<a className={className} data-tabindex={index} onClick={this.onClick}>
+						{navString}
+					</a>
+				</li>
 			);
 		});
 	}
 
 	render(): Node {
-		return this.props.loggedIn && <div className={styles.container}>{this.renderTabs()}</div>;
+		return (
+			this.props.loggedIn && (
+				<ul className="navbar-nav">
+					{this.renderTabs()}
+					<li className="nav-item">
+						<a className="nav-link" onClick={this.props.logout}>
+							Log Out
+						</a>
+					</li>
+				</ul>
+			)
+		);
 	}
 }
 
