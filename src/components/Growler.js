@@ -6,7 +6,7 @@ import styles from 'styles/Growler.module.css';
 
 const mapStateToProps = ({ app }) => ({ error: app.error });
 
-type Props = { error: string };
+type Props = { error?: Error };
 
 export class Growler extends PureComponent<Props> {
 	render() {
@@ -17,7 +17,7 @@ export class Growler extends PureComponent<Props> {
 
 		return (
 			<div className={styles.growler}>
-				<span>{error}</span>
+				<span>{error.toString() || 'An unspecified error occurred'}</span>
 			</div>
 		);
 	}

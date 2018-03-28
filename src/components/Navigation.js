@@ -3,7 +3,6 @@ import React, { PureComponent, type Node } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import SuggestBook from 'components/SuggestBook';
-import VoteOnBook from 'components/VoteOnBook';
 import ScheduleMeeting from 'components/ScheduleMeeting';
 import JoinClub from 'components/JoinClub';
 import MyClubs from 'components/MyClubs';
@@ -11,9 +10,7 @@ import { selectTab } from 'actions/AppActions';
 import Home from 'components/Home';
 import { logout } from 'actions/UserActions';
 
-// import styles from 'styles/Navigation.module.css';
-
-export const navTabs = [Home, SuggestBook, VoteOnBook, ScheduleMeeting, JoinClub, MyClubs];
+export const navTabs = [Home, SuggestBook, ScheduleMeeting, JoinClub, MyClubs];
 
 const mapDispatchToProps = (dispatch) => ({
 	selectTab: (...args) => dispatch(selectTab(...args)),

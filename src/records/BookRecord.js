@@ -4,6 +4,7 @@ import { PROPOSED } from 'constants/AppConstants';
 
 type ConstructorArgs = {
 	selection: { status: string },
+	votes: Array<{ inFavor: boolean }>,
 	[string]: number | string,
 };
 
@@ -14,9 +15,11 @@ export default class BookRecord extends Record({
 	isbn: '',
 	length: 0,
 	link: '',
+	status: PROPOSED,
 	thumbnail: '',
 	title: '',
-	status: PROPOSED,
+	votesAgainst: 0,
+	votesFor: 0,
 }) {
 	author: string;
 	id: number;
@@ -24,14 +27,18 @@ export default class BookRecord extends Record({
 	isbn: string;
 	length: number;
 	link: string;
+	status: string;
 	thumbnail: string;
 	title: string;
-	status: string;
+	votesAgainst: 0;
+	votesFor: 0;
 
-	constructor({ selection, ...rest }: ConstructorArgs = {}) {
+	constructor({ selection, votes, ...rest }: ConstructorArgs = {}) {
 		super({
 			...rest,
 			status: selection ? selection.status : PROPOSED,
+			votesAgainst: votes ? votes.filter(({ inFavor }) => !inFavor).length : 0,
+			votesFor: votes ? votes.filter(({ inFavor }) => inFavor).length : 0,
 		});
 	}
 }

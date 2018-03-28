@@ -5,9 +5,8 @@ const auth = require('./auth');
 
 app.use(express.static('public'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser')());
 app.use(express.json());
-app.use(require('express-session')({ secret: 'potato' }));
+app.use(require('express-session')({ secret: 'potato', resave: false, saveUninitialized: false }));
 
 auth(app);
 controllers(app);

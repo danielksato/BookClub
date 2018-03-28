@@ -6,11 +6,11 @@ export const selectTab = createAction(SELECT_TAB);
 
 export const _setGrowler = createAction(SET_GROWLER);
 
-export const setGrowler = (error: string) => {
+export const setGrowler = (error: Error) => {
 	return (dispatch: Function) => {
 		dispatch(_setGrowler(error));
 		setTimeout(() => {
-			dispatch(_setGrowler(''));
+			dispatch(_setGrowler());
 		}, 5000);
 	};
 };

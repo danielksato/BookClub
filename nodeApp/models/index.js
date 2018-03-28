@@ -27,7 +27,7 @@ const Book = sequelize.define('book', {
 });
 
 const Vote = sequelize.define('vote', {
-	for: { type: Sequelize.BOOLEAN, defaultValue: true },
+	inFavor: { type: Sequelize.BOOLEAN, defaultValue: true },
 });
 
 const Membership = sequelize.define('membership', {
@@ -40,8 +40,14 @@ const Selection = sequelize.define('selection', {
 User.belongsToMany(Club, { through: Membership });
 Club.belongsToMany(User, { through: Membership });
 Club.belongsToMany(Book, { through: Selection });
-User.belongsToMany(Book, { through: Vote });
-Book.belongsToMany(User, { through: Vote });
+// Book.belongsToMany(Club, { through: Selection });
+
+Club.hasMany(Vote);
+Book.hasMany(Vote);
+User.hasMany(Vote);
+Vote.belongsTo(Club);
+Vote.belongsTo(Book);
+Vote.belongsTo(User);
 
 module.exports = {
 	User,

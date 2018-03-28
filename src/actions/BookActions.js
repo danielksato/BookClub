@@ -2,20 +2,21 @@
 import { createAction } from 'redux-actions';
 import {
 	SEARCH_BOOK_SUCCESS,
-	SEARCH_BOOK_FAILED,
 	// DELETE_BOOK,
 	// CONFIRM_BOOK,
 } from 'constants/ActionConstants';
-import { searchBook as searchBookApi, suggestBook as suggestBookApi } from 'apis/BookApi';
+import {
+	searchBook as searchBookApi,
+	suggestBook as suggestBookApi,
+	vote as voteApi,
+} from 'apis/BookApi';
 import { loadClubSuccess } from 'actions/ClubActions';
-import { loadUserSuccess } from 'actions/UserActions';
 import { setGrowler, selectTab } from 'actions/AppActions';
 
 import type BookRecord from 'records/BookRecord';
 import type { ClubRecord } from 'reducers/ClubReducer';
 
 const _searchBookSuccess = createAction(SEARCH_BOOK_SUCCESS);
-const _searchBookFailed = createAction(SEARCH_BOOK_FAILED);
 
 export const searchBook = (search: string) => {
 	return function(dispatch: Function) {
@@ -23,7 +24,7 @@ export const searchBook = (search: string) => {
 			(results) => {
 				dispatch(_searchBookSuccess(results));
 			},
-			(err) => dispatch(_searchBookFailed(err))
+			(err) => dispatch(setGrowler(err))
 		);
 	};
 };
@@ -31,14 +32,28 @@ export const searchBook = (search: string) => {
 export const suggestBook = ({ book, club }: { book: BookRecord, club: ClubRecord }) => {
 	return function(dispatch: Function) {
 		suggestBookApi({ book, club }).then(
-			({ club, user }) => {
+			(club) => {
 				dispatch(loadClubSuccess(club));
-				dispatch(loadUserSuccess(user));
 				dispatch(selectTab(0));
 			},
-			(err) => {
-				dispatch(setGrowler(err));
-			}
+			(err) => dispatch(setGrowler(new Error(err)))
+		);
+	};
+};
+
+export const vote = ({
+	book,
+	club,
+	inFavor,
+}: {
+	book: BookRecord,
+	club: ClubRecord,
+	inFavor: boolean,
+}) => {
+	return function(dispatch: Function) {
+		voteApi({ book, club, inFavor }).then(
+			(club) => dispatch(loadClubSuccess(club)),
+			(err) => dispatch(setGrowler(new Error(err)))
 		);
 	};
 };

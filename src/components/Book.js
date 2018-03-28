@@ -16,7 +16,7 @@ export default class Book extends PureComponent<Props> {
 	}
 
 	render(): Node {
-		const { title, author, link, length } = this.props.book;
+		const { title, author, link, length, votesFor, votesAgainst } = this.props.book;
 		return (
 			<a
 				href={link}
@@ -28,6 +28,8 @@ export default class Book extends PureComponent<Props> {
 					<span>{title}</span>
 					<span>{author}</span>
 					<span>{length} pages</span>
+					<span>{votesFor} votes in favor</span>
+					<span>{votesAgainst} votes against</span>
 				</div>
 			</a>
 		);

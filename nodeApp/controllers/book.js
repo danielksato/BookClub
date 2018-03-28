@@ -1,4 +1,4 @@
-const { Book, Club, User } = require('../models');
+const { Book, Club, User, Vote, Selection } = require('../models');
 
 Book.createByISBN = function(newBook) {
 	const { isbn } = newBook;
@@ -62,17 +62,70 @@ module.exports = function(app) {
 		const { clubId } = params;
 		Promise.all([Club.findById(clubId), Book.createByISBN(body)])
 			.then(([club, book]) => {
-				return Promise.all([
-					User.findById(1).then((user) =>
-						user.addBook(book).then(() => user.reload({ include: [{ model: Book }] }))
-					),
-					club
-						.addBook(book)
-						.then(() => club.reload({ include: [{ model: Book }, { model: User }] })),
-				]);
+				return Promise.all([User.findById(user.id), club.addBookIfNotPresent(book)]).then(
+					([user, [selection]]) => {
+						return Vote.create({
+							bookId: book.id,
+							clubId: club.id,
+							inFavor: true,
+							selectionId: selection.id,
+							userId: user.id,
+						}).then(
+							(vote) => {
+								return club.reload({
+									include: [
+										{ model: User },
+										{
+											model: Book,
+											include: [{ model: Vote }],
+										},
+									],
+								});
+							},
+							(err) => console.log(err)
+						);
+					}
+				);
 			})
-			.then(([user, club]) => {
-				res.json({ user, club });
-			});
+			.then(
+				(club) => {
+					res.json(club);
+				},
+				(err) => console.log(err)
+			);
 	});
+
+	app.post(
+		'/club/:clubId/book/:bookId/vote',
+		({ user, body: { inFavor }, params: { clubId, bookId } }, res) => {
+			Selection.findOne({
+				where: {
+					bookId,
+					clubId,
+				},
+			}).then(
+				({ clubId, bookId }) => {
+					Vote.findOrCreate({
+						where: {
+							clubId,
+							bookId,
+							userId: user.id,
+						},
+						defaults: { inFavor },
+					}).then(() => {
+						return Club.findById(clubId, {
+							include: [
+								{ model: User },
+								{
+									model: Book,
+									include: [{ model: Vote }],
+								},
+							],
+						}).then((club) => res.json(club));
+					});
+				},
+				(err) => console.log(err)
+			);
+		}
+	);
 };

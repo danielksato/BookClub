@@ -1,12 +1,21 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import type { ClubRecord } from 'reducers/ClubReducer';
 import { PROPOSED, ACTIVE } from 'constants/AppConstants';
-import Book from './Book';
+import Book from 'components/Book';
+import { vote } from 'actions/BookActions';
 
-type Props = { club: ClubRecord };
+const mapStateToProps = ({ club }) => ({ club });
 
-export default class CurrentClub extends PureComponent<Props> {
+const mapDispatchToProps = (dispatch) => ({ vote: (...args) => dispatch(vote(...args)) });
+
+type Props = {
+	club: ClubRecord,
+	vote: (Object) => void,
+};
+
+export class CurrentClub extends PureComponent<Props> {
 	renderClubHeader() {
 		return <div>{this.props.club.name}</div>;
 	}
@@ -27,13 +36,30 @@ export default class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderVoting() {
-		const { books } = this.props.club;
+		const { club, club: { books } } = this.props;
 		const proposedBooks = books.filter(({ status }) => {
 			return status === PROPOSED;
 		});
 
 		const bookList = proposedBooks.map((book) => {
-			return <Book key={book.isbn} book={book} />;
+			const onClick = (e): void => {
+				const inFavor = !!e.target.getAttribute('data-for');
+				this.props.vote({
+					book,
+					club,
+					inFavor,
+				});
+			};
+
+			return (
+				<div key={book.isbn}>
+					<Book book={book} />
+					<button onClick={onClick} data-for="for">
+						Vote For This Book
+					</button>
+					<button onClick={onClick}>Vote Against This Book</button>
+				</div>
+			);
 		});
 
 		return (
@@ -71,3 +97,5 @@ export default class CurrentClub extends PureComponent<Props> {
 		);
 	}
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentClub);

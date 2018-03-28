@@ -3,7 +3,7 @@ import React, { PureComponent, Fragment, type Node } from 'react';
 import { connect } from 'react-redux';
 import { ClubRecord } from 'reducers/ClubReducer';
 import { UserRecord } from 'reducers/UserReducer';
-import CurrentClub from './CurrentClub';
+import CurrentClub from 'components/CurrentClub';
 
 type Props = {
 	user: UserRecord,
