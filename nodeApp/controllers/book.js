@@ -54,7 +54,7 @@ module.exports = function(app) {
 							.filter((book) => book.isbn)
 					);
 				},
-				(err) => res.sendStatus(404)
+				(err) => res.status(400).send(err)
 			);
 	});
 
@@ -70,20 +70,17 @@ module.exports = function(app) {
 							inFavor: true,
 							selectionId: selection.id,
 							userId: user.id,
-						}).then(
-							(vote) => {
-								return club.reload({
-									include: [
-										{ model: User },
-										{
-											model: Book,
-											include: [{ model: Vote }],
-										},
-									],
-								});
-							},
-							(err) => console.log(err)
-						);
+						}).then((vote) => {
+							return club.reload({
+								include: [
+									{ model: User },
+									{
+										model: Book,
+										include: [{ model: Vote }],
+									},
+								],
+							});
+						});
 					}
 				);
 			})
