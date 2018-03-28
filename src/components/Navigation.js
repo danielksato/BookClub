@@ -27,9 +27,8 @@ type Props = {
 };
 
 export class Navigation extends PureComponent<Props> {
-	onClick = (e: SyntheticEvent<>) => {
-		// $FlowFixMe getAttribute
-		this.props.selectTab(parseInt(e.target.getAttribute('data-tabindex'), 10));
+	onClick = (e: SyntheticEvent<HTMLElement>) => {
+		this.props.selectTab(parseInt(e.currentTarget.getAttribute('data-tabindex'), 10));
 	};
 
 	renderTabs(): Array<Node> {

@@ -29,14 +29,12 @@ export class MyClubs extends PureComponent<Props, State> {
 
 	state = { name: '' };
 
-	setName = (e: SyntheticEvent<$FlowFixMe>) => {
-		// $FlowFixMe
-		this.setState({ name: e.target.value });
+	setName = (e: SyntheticEvent<HTMLInputElement>) => {
+		this.setState({ name: e.currentTarget.value });
 	};
 
-	onSwitchClubs = (e: SyntheticEvent<$FlowFixMe>) => {
-		// $FlowFixMe
-		const id = parseInt(e.target.getAttribute('data-clubid'), 10);
+	onSwitchClubs = (e: SyntheticEvent<HTMLElement>) => {
+		const id = parseInt(e.currentTarget.getAttribute('data-clubid'), 10);
 		this.props.loadClub(id);
 	};
 

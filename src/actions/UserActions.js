@@ -11,6 +11,7 @@ import {
 } from 'apis/UserApi';
 import { selectTab } from 'actions/AppActions';
 import type { UserResponse } from 'apis/UserApi';
+import type { UserRecord } from 'reducers/UserReducer';
 
 const _loadUser: ActionCreator<null> = createAction(LOAD_USER);
 export const loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
@@ -47,7 +48,7 @@ export const login = (userData: UserResponse): ThunkAction => {
 	};
 };
 
-export const createUser = (userData: $FlowFixMe): ThunkAction => {
+export const createUser = (userData: UserRecord): ThunkAction => {
 	return (dispatch) => {
 		createUserApi(userData).then(
 			(user) => {

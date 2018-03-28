@@ -40,7 +40,7 @@ const prettyPrint = (fieldName: string) => {
 		});
 };
 
-export class Login extends PureComponent<$FlowFixMe, State> {
+export class Login extends PureComponent<Props, State> {
 	state = {
 		[fieldNames.CREATE_EMAIL]: '',
 		[fieldNames.CREATE_FIRST_NAME]: '',
@@ -48,11 +48,9 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		[fieldNames.LOGIN_EMAIL]: '',
 	};
 
-	onChange = (e: SyntheticEvent<*>): void => {
-		// $FlowFixMe
-		const fieldName = e.target.getAttribute('data-fieldname');
-		// $FlowFixMe
-		this.setState({ [fieldName]: e.target.value });
+	onChange = (e: SyntheticEvent<HTMLInputElement>): void => {
+		const fieldName = e.currentTarget.getAttribute('data-fieldname');
+		fieldName && this.setState({ [fieldName]: e.currentTarget.value });
 	};
 
 	login = (): void => {

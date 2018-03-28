@@ -1,12 +1,15 @@
 // @flow
 import { sendJSON } from './ApiUtils';
 import type { ClubRecord } from 'reducers/ClubReducer';
+import type { BookResponse } from 'apis/BookApi';
+import type { UserResponse } from 'apis/UserApi';
 
 export type ClubResponse = {
 	id?: number,
 	name?: string,
-	users?: Array<$FlowFixMe>,
-	books?: Array<$FlowFixMe>,
+	users?: Array<UserResponse>,
+	books?: Array<BookResponse>,
+	votes?: Array<{ inFavor: boolean }>,
 };
 
 export const getClub = (id: number): Promise<ClubResponse> => {

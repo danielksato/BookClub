@@ -40,15 +40,13 @@ export class SuggestBook extends PureComponent<Props, State> {
 		this.props.suggestBook({ club, book });
 	};
 
-	searchBook: searchBook = (search: string): void => {
+	searchBook = (search: string): void => {
 		search && this.props.searchBook(search);
 	};
 
-	onChange = (e: SyntheticEvent<$FlowFixMe>): void => {
-		// $FlowFixMe
-		const { target: { value } } = e;
+	onChange = (e: SyntheticEvent<HTMLInputElement>): void => {
+		const { currentTarget: { value } } = e;
 		this.setState({ search: value });
-		// $FlowFixMe
 		this.searchBook(value);
 	};
 

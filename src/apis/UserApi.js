@@ -30,7 +30,7 @@ export const login = (body: $FlowFixMe): Promise<UserResponse> => {
 	}).then((res) => res.json());
 };
 
-export const createUser = (body: $FlowFixMe): Promise<UserResponse> => {
+export const createUser = (body: UserRecord): Promise<UserResponse> => {
 	return sendJSON('/user', { body });
 };
 
