@@ -3,10 +3,17 @@ import { sendJSON } from './ApiUtils';
 
 import type BookRecord from 'records/BookRecord';
 import type { ClubRecord } from 'reducers/ClubReducer';
+import type { ClubResponse } from 'apis/ClubApi';
 
 // import mockBookSearch from 'mocks/BookSearch';
 
-export const searchBook = function({ search }: { search: string }): Promise<Array<Object>> {
+export type BookResponse = {
+	selection: { status: string },
+	votes: Array<{ inFavor: boolean }>,
+	[string]: number | string,
+};
+
+export const searchBook = function({ search }: { search: string }): Promise<Array<BookResponse>> {
 	return sendJSON('/book/search', { method: 'PUT', body: { search } });
 	// return Promise.resolve(mockBookSearch());
 };
@@ -17,7 +24,7 @@ export const suggestBook = function({
 }: {
 	book: BookRecord,
 	club: ClubRecord,
-}): Promise<$FlowFixMe> {
+}): Promise<ClubResponse> {
 	return sendJSON(`/club/${id}/book`, { method: 'POST', body: book });
 };
 
@@ -29,6 +36,6 @@ export const vote = function({
 	book: BookRecord,
 	club: ClubRecord,
 	inFavor: boolean,
-}): Promise<$FlowFixMe> {
+}): Promise<ClubResponse> {
 	return sendJSON(`/club/${club.id}/book/${book.id}/vote`, { method: 'POST', body: { inFavor } });
 };

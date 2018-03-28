@@ -29,8 +29,6 @@ type State = {
 	CREATE_LAST_NAME: string,
 	CREATE_FIRST_NAME: string,
 	CREATE_EMAIL: string,
-	canLogin: boolean,
-	canCreate: boolean,
 };
 
 const prettyPrint = (fieldName: string) => {
@@ -48,18 +46,7 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 		[fieldNames.CREATE_FIRST_NAME]: '',
 		[fieldNames.CREATE_LAST_NAME]: '',
 		[fieldNames.LOGIN_EMAIL]: '',
-		canCreate: false,
-		canLogin: false,
 	};
-
-	componentDidUpdate(): void {
-		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, LOGIN_EMAIL } = fieldNames;
-		const canLogin = !!this.state[LOGIN_EMAIL];
-		const canCreate = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME]
-			.map((fieldName) => this.state[fieldName])
-			.every((val) => val);
-		this.setState({ canLogin, canCreate });
-	}
 
 	onChange = (e: SyntheticEvent<*>): void => {
 		// $FlowFixMe
@@ -101,13 +88,12 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 	};
 
 	renderLogin() {
-		const { canLogin } = this.state;
 		const { LOGIN_EMAIL } = fieldNames;
 		return (
 			<div className="form-group">
 				<p>Log In</p>
 				{this.renderFormField(LOGIN_EMAIL)}
-				<button disabled={!canLogin} onClick={this.login} className="btn btn-primary">
+				<button onClick={this.login} className="btn btn-primary">
 					Log In
 				</button>
 			</div>
@@ -115,7 +101,6 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 	}
 
 	renderCreateAccount() {
-		const { canCreate } = this.state;
 		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME } = fieldNames;
 		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME].map(
 			this.renderFormField
@@ -124,7 +109,7 @@ export class Login extends PureComponent<$FlowFixMe, State> {
 			<div className="form-group">
 				<p>Create an Account</p>
 				{createFields}
-				<button disabled={!canCreate} onClick={this.create} className="btn btn-primary">
+				<button onClick={this.create} className="btn btn-primary">
 					Create User
 				</button>
 			</div>

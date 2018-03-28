@@ -9,6 +9,9 @@ node_modules/
 # production
 /build
 
+# sessions
+nodeApp/db/auth/*
+
 # misc
 .DS_Store
 .env.local

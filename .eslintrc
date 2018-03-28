@@ -15,6 +15,7 @@
         "react/jsx-indent-props": "off"
     },
     "globals": {
-        "fetch": false
+        "fetch": false,
+        "it": false
     }
 }

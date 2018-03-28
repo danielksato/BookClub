@@ -6,12 +6,8 @@ import * as StatusConstants from 'constants/StatusConstants';
 import { LOAD_CLUB, LOAD_CLUB_SUCCESS, LOAD_CLUB_FAILED, LOG_OUT } from 'constants/ActionConstants';
 import BookRecord from 'records/BookRecord';
 
-type ConstructorArgs = {
-	id?: number,
-	name?: string,
-	users?: Array<$FlowFixMe>,
-	books?: Array<$FlowFixMe>,
-};
+import type { ClubResponse } from 'apis/ClubApi';
+import type { Action } from 'actions';
 
 export class ClubRecord extends Record({
 	id: 0,
@@ -26,7 +22,7 @@ export class ClubRecord extends Record({
 	books: List<BookRecord>;
 	status: $Keys<typeof StatusConstants>;
 
-	constructor({ users, books, ...rest }: ConstructorArgs = {}) {
+	constructor({ users, books, ...rest }: ClubResponse = {}) {
 		if (rest.name) {
 			super({
 				users: List(users ? users.map((user) => new UserRecord(user)) : []),
@@ -44,7 +40,7 @@ export default createReducer(new ClubRecord(), {
 	[LOAD_CLUB]: function(state) {
 		return state.set('status', StatusConstants.IN_PROGRESS);
 	},
-	[LOAD_CLUB_SUCCESS]: function(state, { payload }) {
+	[LOAD_CLUB_SUCCESS]: function(state, { payload }: Action<ClubResponse>) {
 		return new ClubRecord(payload);
 	},
 	[LOAD_CLUB_FAILED]: function(state) {

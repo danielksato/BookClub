@@ -11,6 +11,8 @@ import {
 import * as StatusConstants from 'constants/StatusConstants';
 import { INVITED } from 'constants/AppConstants';
 
+import type { UserResponse } from 'apis/UserApi';
+
 export class MembershipRecord extends Record({
 	id: 0,
 	role: 'invited',
@@ -20,15 +22,6 @@ export class MembershipRecord extends Record({
 	role: string;
 	name: string;
 }
-
-type ConstructorArgs = {
-	id?: number,
-	firstName?: string,
-	lastName?: string,
-	email?: string,
-	membership?: { id: number, role: string },
-	clubs?: Array<number>,
-};
 
 export class UserRecord extends Record({
 	id: 0,
@@ -47,7 +40,7 @@ export class UserRecord extends Record({
 	role: string;
 	status: $Keys<typeof StatusConstants>;
 
-	constructor({ id, clubs, membership, ...rest }: ConstructorArgs = {}) {
+	constructor({ id, clubs, membership, ...rest }: UserResponse = {}) {
 		if (id) {
 			super({
 				id,

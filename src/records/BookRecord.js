@@ -1,12 +1,7 @@
 // @flow
 import { Record } from 'immutable';
 import { PROPOSED } from 'constants/AppConstants';
-
-type ConstructorArgs = {
-	selection: { status: string },
-	votes: Array<{ inFavor: boolean }>,
-	[string]: number | string,
-};
+import type { BookResponse } from 'apis/BookApi';
 
 export default class BookRecord extends Record({
 	author: '',
@@ -33,7 +28,7 @@ export default class BookRecord extends Record({
 	votesAgainst: 0;
 	votesFor: 0;
 
-	constructor({ selection, votes, ...rest }: ConstructorArgs = {}) {
+	constructor({ selection, votes, ...rest }: BookResponse = {}) {
 		super({
 			...rest,
 			status: selection ? selection.status : PROPOSED,
