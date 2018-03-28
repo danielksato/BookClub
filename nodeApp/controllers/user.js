@@ -1,4 +1,5 @@
 const { User, Club } = require('../models');
+const errorHandler = require('./errorHandler');
 
 User.getMembershipsById = function(id) {
 	return this.findById(id, {
@@ -22,28 +23,18 @@ module.exports = function(app) {
 
 	app.get('/user/:id', (req, res) => {
 		const { id } = req.params;
-		User.getMembershipsById(id).then(
-			(user) => {
-				res.json(user);
-			},
-			(error) => {
-				res.sendStatus(404);
-			}
-		);
+		User.getMembershipsById(id).then((user) => {
+			res.json(user);
+		}, errorHandler(res));
 	});
 
 	app.post('/user', ({ body }, res) => {
-		User.findOrCreate({ where: { email: body.email } }).then(
-			(user) => {
-				if (body.password === user[0].password) {
-					res.json(user[0]);
-				} else {
-					res.sendStatus(403);
-				}
-			},
-			(err) => {
-				res.sendStatus(500);
+		User.findOrCreate({ where: { email: body.email } }).then((user) => {
+			if (body.password === user[0].password) {
+				res.json(user[0]);
+			} else {
+				res.sendStatus(403);
 			}
-		);
+		}, errorHandler(res));
 	});
 };

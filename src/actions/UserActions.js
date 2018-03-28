@@ -70,6 +70,9 @@ export const loginWithGoogle = (): ThunkAction => {
 
 export const authUser = (): ThunkAction => {
 	return (dispatch) => {
-		authUserApi().then((user) => dispatch(loadUserSuccess(user)));
+		return authUserApi().then((user) => {
+			dispatch(loadUserSuccess(user));
+			return user;
+		});
 	};
 };

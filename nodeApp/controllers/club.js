@@ -1,4 +1,5 @@
 const { Club, Book, User, Selection, Vote } = require('../models');
+const errorHandler = require('./errorHandler');
 
 Club.prototype.addBookIfNotPresent = function(book) {
 	return this.hasBook(book).then((hasBook) => {
@@ -13,14 +14,9 @@ module.exports = function(app) {
 		const { id } = req.params;
 		Club.findById(id, {
 			include: [{ model: Book, include: { model: Vote } }, { model: User }],
-		}).then(
-			(club) => {
-				res.json(club);
-			},
-			(err) => {
-				res.sendStatus(404);
-			}
-		);
+		}).then((club) => {
+			res.json(club);
+		}, errorHandler(res));
 	});
 
 	app.post('/club', ({ body, user }, res) => {
@@ -31,11 +27,17 @@ module.exports = function(app) {
 					.then(() =>
 						// this is slow. Maybe do this optimistically?
 						club.reload({
-							include: [{ model: Book, include: { model: Vote } }, { model: User }],
+							include: [
+								{
+									model: Book,
+									include: { model: Vote },
+								},
+								{ model: User },
+							],
 						})
 					)
 					.then((club) => res.json(club)),
-			(err) => res.sendStatus(500)
+			errorHandler(res)
 		);
 	});
 };

@@ -1,39 +1,19 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import { authUser } from 'actions/UserActions';
-import { loadClub } from 'actions/ClubActions';
-import Navigation from 'components/Navigation';
+import Navigation from 'containers/Navigation';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
 
 const mapStateToProps = ({ user, club }) => ({ user, club });
-const mapDispatchToProps = (dispatch) => ({
-	loadClub: (...args) => dispatch(loadClub(...args)),
-	authUser: () => dispatch(authUser()),
-});
 
 type Props = {
 	user: UserRecord,
 	club: ClubRecord,
-	loadClub: (id: number) => void,
-	authUser: () => void,
 };
 
 export class Header extends PureComponent<Props> {
-	componentDidMount() {
-		this.props.authUser();
-	}
-
-	componentDidUpdate(oldProps: Props): void {
-		const { user: { clubs }, club: { id } } = this.props;
-		const firstClubId = clubs.getIn([0, 'id']);
-		if (firstClubId && !id) {
-			this.props.loadClub(firstClubId);
-		}
-	}
-
 	renderNav(): Node {
 		const { id } = this.props.user;
 
@@ -69,4 +49,4 @@ export class Header extends PureComponent<Props> {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps)(Header);

@@ -14,7 +14,7 @@ export default class Book extends PureComponent<Props> {
 		const { book: { thumbnail, image, title }, large } = this.props;
 		return (
 			<img
-				alt={`cover image for ${title}`}
+				alt={`cover for ${title}`}
 				className="align-self-center"
 				src={large ? image : thumbnail}
 			/>

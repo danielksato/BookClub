@@ -5,19 +5,24 @@ import type { ClubRecord } from 'reducers/ClubReducer';
 import { PROPOSED, ACTIVE } from 'constants/AppConstants';
 import Book from 'components/Book';
 import { vote } from 'actions/BookActions';
+import type { UserRecord } from 'reducers/UserReducer';
+import type BookRecord from 'records/BookRecord';
 
-const mapStateToProps = ({ club }) => ({ club });
+const mapStateToProps = ({ club, user }) => ({ club, user });
 
 const mapDispatchToProps = (dispatch) => ({ vote: (...args) => dispatch(vote(...args)) });
 
 type Props = {
 	club: ClubRecord,
+	user: UserRecord,
 	vote: (Object) => void,
 };
 
 export class CurrentClub extends PureComponent<Props> {
+	static navString = 'Home';
+
 	renderClubHeader() {
-		return <div>{this.props.club.name}</div>;
+		return <h2>{this.props.club.name || 'You are not a member of any clubs'}</h2>;
 	}
 
 	renderCurrentBook() {
@@ -35,29 +40,42 @@ export class CurrentClub extends PureComponent<Props> {
 		);
 	}
 
-	renderVoting() {
-		const { club, club: { books } } = this.props;
+	renderVoting = (book: BookRecord) => {
+		const { user: { id }, club } = this.props;
+		const onClick = (e): void => {
+			const inFavor = !!e.target.getAttribute('data-for');
+			this.props.vote({
+				book,
+				club,
+				inFavor,
+			});
+		};
+
+		if (book.voters.includes(id)) {
+			return null;
+		}
+
+		return (
+			<div className="w-25 p-1">
+				<button className="ml-1" onClick={onClick} data-for="for">
+					Vote For This Book
+				</button>
+				<button onClick={onClick}>Vote Against This Book</button>
+			</div>
+		);
+	};
+
+	renderProposedBooks() {
+		const { club: { books } } = this.props;
 		const proposedBooks = books.filter(({ status }) => {
 			return status === PROPOSED;
 		});
 
 		const bookList = proposedBooks.map((book) => {
-			const onClick = (e): void => {
-				const inFavor = !!e.target.getAttribute('data-for');
-				this.props.vote({
-					book,
-					club,
-					inFavor,
-				});
-			};
-
 			return (
 				<div key={book.isbn}>
 					<Book book={book} />
-					<button onClick={onClick} data-for="for">
-						Vote For This Book
-					</button>
-					<button onClick={onClick}>Vote Against This Book</button>
+					{this.renderVoting(book)}
 				</div>
 			);
 		});
@@ -91,7 +109,7 @@ export class CurrentClub extends PureComponent<Props> {
 			<div>
 				{this.renderClubHeader()}
 				{this.renderCurrentBook()}
-				{this.renderVoting()}
+				{this.renderProposedBooks()}
 				{this.renderMembers()}
 			</div>
 		);

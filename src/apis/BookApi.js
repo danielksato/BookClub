@@ -9,7 +9,7 @@ import type { ClubResponse } from 'apis/ClubApi';
 
 export type BookResponse = {
 	selection: { status: string },
-	votes: Array<{ inFavor: boolean }>,
+	votes: Array<{ inFavor: boolean, userId: number }>,
 	[string]: number | string,
 };
 

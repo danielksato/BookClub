@@ -1,5 +1,5 @@
 // @flow
-import { Record } from 'immutable';
+import { Record, List } from 'immutable';
 import { PROPOSED } from 'constants/AppConstants';
 import type { BookResponse } from 'apis/BookApi';
 
@@ -13,6 +13,7 @@ export default class BookRecord extends Record({
 	status: PROPOSED,
 	thumbnail: '',
 	title: '',
+	voters: new List(),
 	votesAgainst: 0,
 	votesFor: 0,
 }) {
@@ -25,6 +26,7 @@ export default class BookRecord extends Record({
 	status: string;
 	thumbnail: string;
 	title: string;
+	voters: List<number>;
 	votesAgainst: 0;
 	votesFor: 0;
 
@@ -34,6 +36,7 @@ export default class BookRecord extends Record({
 			status: selection ? selection.status : PROPOSED,
 			votesAgainst: votes ? votes.filter(({ inFavor }) => !inFavor).length : 0,
 			votesFor: votes ? votes.filter(({ inFavor }) => inFavor).length : 0,
+			voters: votes ? List(votes.map(({ userId }) => userId)) : new List(),
 		});
 	}
 }

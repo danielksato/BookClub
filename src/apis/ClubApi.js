@@ -13,7 +13,7 @@ export type ClubResponse = {
 };
 
 export const getClub = (id: number): Promise<ClubResponse> => {
-	return fetch(`/club/${id}`).then((res) => res.json());
+	return fetch(`/club/${id}`, { credentials: 'include' }).then((res) => res.json());
 };
 
 export const createClub = (body: ClubRecord): Promise<ClubResponse> => {
