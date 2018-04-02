@@ -1,5 +1,6 @@
 const { User, Club } = require('../models');
 const errorHandler = require('./errorHandler');
+const bcrypt = require('bcrypt');
 
 User.getMembershipsById = function(id) {
 	return this.findById(id, {
@@ -28,13 +29,22 @@ module.exports = function(app) {
 		}, errorHandler(res));
 	});
 
-	app.post('/user', ({ body }, res) => {
-		User.findOrCreate({ where: { email: body.email } }).then((user) => {
-			if (body.password === user[0].password) {
-				res.json(user[0]);
+	app.post('/user', async ({ body }, res) => {
+		const { email, password, ...rest } = body;
+		try {
+			const hash = await bcrypt.hash(password, 10);
+			const [user, created] = await User.findOrCreate({
+				where: { email: body.email },
+				defaults: { password: hash, ...rest },
+			});
+			if (created) {
+				const { password, ...userData } = user.get();
+				res.json(userData);
 			} else {
 				res.sendStatus(403);
 			}
-		}, errorHandler(res));
+		} catch (err) {
+			errorHandler(res);
+		}
 	});
 };

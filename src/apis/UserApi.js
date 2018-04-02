@@ -9,6 +9,7 @@ export type UserResponse = {
 	lastName?: string,
 	email?: string,
 	membership?: { id: number, role: string },
+	password?: string,
 	clubs?: Array<number>,
 };
 
@@ -23,15 +24,14 @@ export const saveUser = (body: UserRecord): Promise<UserResponse> => {
 	}).then((res) => res.json());
 };
 
-export const login = (body: $FlowFixMe): Promise<UserResponse> => {
-	return fetch('/login', {
-		method: 'PUT',
-		body,
-	}).then((res) => res.json());
+export const login = (body: UserResponse): Promise<UserResponse> => {
+	return sendJSON('/login', { body });
 };
 
-export const createUser = (body: UserRecord): Promise<UserResponse> => {
-	return sendJSON('/user', { body });
+export const createUser = (body: UserResponse): Promise<UserResponse> => {
+	return sendJSON('/user', { body }).then((res) => {
+		return sendJSON('/login', { body: { ...body, ...res } });
+	});
 };
 
 export const loginWithGoogle = (): Promise<UserResponse> => {

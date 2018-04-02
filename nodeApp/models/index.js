@@ -5,12 +5,26 @@ const sequelize = new Sequelize('database', 'user', 'password', {
 	logging: false,
 });
 
-const User = sequelize.define('user', {
-	firstName: { type: Sequelize.STRING },
-	lastName: { type: Sequelize.STRING },
-	email: { type: Sequelize.STRING },
-	googleId: { type: Sequelize.STRING },
-});
+const User = sequelize.define(
+	'user',
+	{
+		firstName: { type: Sequelize.STRING },
+		lastName: { type: Sequelize.STRING },
+		email: { type: Sequelize.STRING },
+		googleId: { type: Sequelize.STRING },
+		password: { type: Sequelize.STRING },
+	},
+	{
+		defaultScope: {
+			attributes: {
+				exclude: ['password'],
+			},
+		},
+		scopes: {
+			withPassword: {},
+		},
+	}
+);
 
 const Club = sequelize.define('club', {
 	name: { type: Sequelize.STRING },

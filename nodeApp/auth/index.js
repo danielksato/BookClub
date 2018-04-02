@@ -1,6 +1,8 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const { User } = require('../models');
+const bcrypt = require('bcrypt');
 
 passport.use(
 	new GoogleStrategy(
@@ -38,6 +40,22 @@ passport.use(
 	)
 );
 
+passport.use(
+	new LocalStrategy({ usernameField: 'email' }, async (username, password, cb) => {
+		try {
+			const user = await User.scope('withPassword').findOne({ where: { email: username } });
+			const passwordValid = await bcrypt.compare(password, user.password);
+			if (!(user && passwordValid)) {
+				return cb(null, false);
+			} else {
+				return cb(null, user);
+			}
+		} catch (err) {
+			return cb(err);
+		}
+	})
+);
+
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
 });
@@ -58,6 +76,10 @@ module.exports = function(app) {
 			successRedirect: '/user',
 		})
 	);
+
+	app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
+		res.redirect('/user');
+	});
 
 	app.put('/logout', (req, res) => {
 		req.logout();

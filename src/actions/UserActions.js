@@ -11,7 +11,6 @@ import {
 } from 'apis/UserApi';
 import { selectTab } from 'actions/AppActions';
 import type { UserResponse } from 'apis/UserApi';
-import type { UserRecord } from 'reducers/UserReducer';
 
 const _loadUser: ActionCreator<> = createAction(LOAD_USER);
 export const loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
@@ -43,12 +42,14 @@ export const login = (userData: UserResponse): ThunkAction => {
 			(user) => {
 				dispatch(loadUserSuccess(user));
 			},
-			(err) => dispatch(_loadUserFailed(err))
+			(err) => {
+				dispatch(_loadUserFailed(err));
+			}
 		);
 	};
 };
 
-export const createUser = (userData: UserRecord): ThunkAction => {
+export const createUser = (userData: UserResponse): ThunkAction => {
 	return (dispatch) => {
 		createUserApi(userData).then(
 			(user) => {

@@ -18,17 +18,21 @@ const mapDispatchToProps = (dispatch: Function): Props => {
 };
 
 const fieldNames = {
-	LOGIN_EMAIL: 'LOGIN_EMAIL',
-	CREATE_LAST_NAME: 'CREATE_LAST_NAME',
-	CREATE_FIRST_NAME: 'CREATE_FIRST_NAME',
 	CREATE_EMAIL: 'CREATE_EMAIL',
+	CREATE_FIRST_NAME: 'CREATE_FIRST_NAME',
+	CREATE_LAST_NAME: 'CREATE_LAST_NAME',
+	CREATE_PASSWORD: 'CREATE_PASSWORD',
+	LOGIN_EMAIL: 'LOGIN_EMAIL',
+	LOGIN_PASSWORD: 'LOGIN_PASSWORD',
 };
 
 type State = {
-	LOGIN_EMAIL: string,
-	CREATE_LAST_NAME: string,
-	CREATE_FIRST_NAME: string,
 	CREATE_EMAIL: string,
+	CREATE_FIRST_NAME: string,
+	CREATE_LAST_NAME: string,
+	CREATE_PASSWORD: string,
+	LOGIN_EMAIL: string,
+	LOGIN_PASSWORD: string,
 };
 
 const prettyPrint = (fieldName: string) => {
@@ -45,7 +49,9 @@ export class Login extends PureComponent<Props, State> {
 		[fieldNames.CREATE_EMAIL]: '',
 		[fieldNames.CREATE_FIRST_NAME]: '',
 		[fieldNames.CREATE_LAST_NAME]: '',
+		[fieldNames.CREATE_PASSWORD]: '',
 		[fieldNames.LOGIN_EMAIL]: '',
+		[fieldNames.LOGIN_PASSWORD]: '',
 	};
 
 	onChange = (e: SyntheticEvent<HTMLInputElement>): void => {
@@ -54,23 +60,26 @@ export class Login extends PureComponent<Props, State> {
 	};
 
 	login = (): void => {
-		const { LOGIN_EMAIL } = this.state;
+		const { LOGIN_EMAIL, LOGIN_PASSWORD } = this.state;
 		this.props.login({
 			email: LOGIN_EMAIL,
+			password: LOGIN_PASSWORD,
 		});
 	};
 
 	create = (): void => {
-		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME } = this.state;
+		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, CREATE_PASSWORD } = this.state;
 		this.props.createUser({
 			email: CREATE_EMAIL,
 			firstName: CREATE_FIRST_NAME,
-			lasName: CREATE_LAST_NAME,
+			lastName: CREATE_LAST_NAME,
+			password: CREATE_PASSWORD,
 		});
 	};
 
 	renderFormField = (fieldName: string): Node => {
 		const prettyName = prettyPrint(fieldName);
+		const type = fieldName.includes('PASSWORD') ? 'password' : 'text';
 		return (
 			<div key={fieldName}>
 				<label htmlFor={fieldName}>{prettyName}</label>
@@ -79,6 +88,7 @@ export class Login extends PureComponent<Props, State> {
 					data-fieldname={fieldName}
 					id={fieldName}
 					onChange={this.onChange}
+					type={type}
 					value={this.state[fieldName]}
 				/>
 			</div>
@@ -86,11 +96,12 @@ export class Login extends PureComponent<Props, State> {
 	};
 
 	renderLogin() {
-		const { LOGIN_EMAIL } = fieldNames;
+		const { LOGIN_EMAIL, LOGIN_PASSWORD } = fieldNames;
+		const loginFields = [LOGIN_EMAIL, LOGIN_PASSWORD].map(this.renderFormField);
 		return (
 			<div className="form-group">
 				<p>Log In</p>
-				{this.renderFormField(LOGIN_EMAIL)}
+				{loginFields}
 				<button onClick={this.login} className="btn btn-primary">
 					Log In
 				</button>
@@ -99,8 +110,8 @@ export class Login extends PureComponent<Props, State> {
 	}
 
 	renderCreateAccount() {
-		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME } = fieldNames;
-		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME].map(
+		const { CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, CREATE_PASSWORD } = fieldNames;
+		const createFields = [CREATE_EMAIL, CREATE_FIRST_NAME, CREATE_LAST_NAME, CREATE_PASSWORD].map(
 			this.renderFormField
 		);
 		return (
