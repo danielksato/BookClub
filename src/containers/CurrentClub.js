@@ -5,17 +5,23 @@ import type { ClubRecord } from 'reducers/ClubReducer';
 import { PROPOSED, ACTIVE } from 'constants/AppConstants';
 import Book from 'components/Book';
 import { vote } from 'actions/BookActions';
+import { inviteMember } from 'actions/ClubActions';
 import type { UserRecord } from 'reducers/UserReducer';
 import type BookRecord from 'records/BookRecord';
+import Inviter from 'components/Inviter';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
-const mapDispatchToProps = (dispatch) => ({ vote: (...args) => dispatch(vote(...args)) });
+const mapDispatchToProps = (dispatch) => ({
+	vote: (...args) => dispatch(vote(...args)),
+	inviteMember: (...args) => dispatch(inviteMember(...args)),
+});
 
 type Props = {
 	club: ClubRecord,
 	user: UserRecord,
 	vote: (Object) => void,
+	inviteMember: ({ clubId: number, email: string }) => void,
 };
 
 export class CurrentClub extends PureComponent<Props> {
@@ -88,6 +94,10 @@ export class CurrentClub extends PureComponent<Props> {
 		);
 	}
 
+	renderInvite() {
+		return <Inviter club={this.props.club} inviteMember={this.props.inviteMember} />;
+	}
+
 	renderMembers() {
 		const memberList = this.props.club.users.map(({ id, firstName, lastName, role }) => {
 			return (
@@ -100,6 +110,7 @@ export class CurrentClub extends PureComponent<Props> {
 			<div>
 				<p>Members:</p>
 				{memberList}
+				{this.renderInvite()}
 			</div>
 		);
 	}

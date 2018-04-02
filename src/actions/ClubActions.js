@@ -7,8 +7,13 @@ import {
 	LOAD_CLUB,
 	LOAD_CLUB_SUCCESS,
 	LOAD_CLUB_FAILED,
+	INVITE_MEMBER,
 } from 'constants/ActionConstants';
-import { getClub, createClub as createClubApi } from 'apis/ClubApi';
+import {
+	getClub,
+	createClub as createClubApi,
+	inviteMember as inviteMemberApi,
+} from 'apis/ClubApi';
 import type { ClubRecord } from 'reducers/ClubReducer';
 import type { ClubResponse } from 'apis/ClubApi';
 
@@ -39,6 +44,19 @@ export const createClub = (club: ClubRecord): ThunkAction => {
 				dispatch(_createClubSuccess(res));
 			},
 			(err) => dispatch(_createClubFailed(err))
+		);
+	};
+};
+
+const _inviteMember: ActionCreator<string> = createAction(INVITE_MEMBER);
+export const inviteMember = ({ clubId, email }: { clubId: number, email: string }): ThunkAction => {
+	return (dispatch) => {
+		dispatch(_inviteMember(email));
+		inviteMemberApi({ clubId, email }).then(
+			({ club, invitation: { uuid } }: { club: ClubResponse }) => {
+				dispatch(loadClubSuccess(club));
+				// dispatch(showLinkWithUUID(uuid))
+			}
 		);
 	};
 };

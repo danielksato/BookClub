@@ -26,10 +26,6 @@ const User = sequelize.define(
 	}
 );
 
-const Club = sequelize.define('club', {
-	name: { type: Sequelize.STRING },
-});
-
 const Book = sequelize.define('book', {
 	author: { type: Sequelize.STRING },
 	image: { type: Sequelize.STRING },
@@ -44,11 +40,39 @@ const Vote = sequelize.define('vote', {
 	inFavor: { type: Sequelize.BOOLEAN, defaultValue: true },
 });
 
+const Club = sequelize.define(
+	'club',
+	{
+		name: { type: Sequelize.STRING },
+	},
+	{
+		defaultScope: {
+			include: [
+				{
+					model: Book,
+					include: { model: Vote },
+				},
+				{
+					model: User,
+					through: {
+						attributes: ['role'],
+					},
+				},
+			],
+		},
+	}
+);
+
 const Membership = sequelize.define('membership', {
 	role: { type: Sequelize.ENUM('invited', 'active', 'admin'), defaultValue: 'active' },
 });
+
 const Selection = sequelize.define('selection', {
 	status: { type: Sequelize.ENUM('proposed', 'selected', 'archived'), defaultValue: 'proposed' },
+});
+
+const Invitation = sequelize.define('invitation', {
+	uuid: { type: Sequelize.STRING },
 });
 
 User.belongsToMany(Club, { through: Membership });
@@ -62,12 +86,14 @@ User.hasMany(Vote);
 Vote.belongsTo(Club);
 Vote.belongsTo(Book);
 Vote.belongsTo(User);
+User.hasMany(Invitation);
 
 module.exports = {
-	User,
-	Club,
-	Membership,
-	Vote,
-	Selection,
 	Book,
+	Club,
+	Invitation,
+	Membership,
+	Selection,
+	User,
+	Vote,
 };

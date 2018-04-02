@@ -2,15 +2,16 @@
 import { sendJSON } from './ApiUtils';
 
 import type { UserRecord } from 'reducers/UserReducer';
+import type { ClubResponse } from 'apis/ClubApi';
 
 export type UserResponse = {
-	id?: number,
-	firstName?: string,
-	lastName?: string,
+	clubs?: Array<ClubResponse>,
 	email?: string,
-	membership?: { id: number, role: string },
+	firstName?: string,
+	id?: number,
+	lastName?: string,
+	membership?: { id: number, role: string, name: string },
 	password?: string,
-	clubs?: Array<number>,
 };
 
 export const getUser = (id: number): Promise<UserResponse> => {
@@ -44,4 +45,8 @@ export const authUser = (): Promise<UserResponse> => {
 
 export const logout = (): Promise<any> => {
 	return fetch('/logout', { credentials: 'include', method: 'PUT' });
+};
+
+export const acceptInvitation = (clubId: number): Promise<UserResponse> => {
+	return sendJSON(`/club/${clubId}/accept`, { method: 'PUT', body: {} });
 };

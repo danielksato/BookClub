@@ -1,17 +1,19 @@
-const { User, Club, Membership, Book, Selection, Vote } = require('../models');
+const { User, Club, Membership, Book, Selection, Vote, Invitation } = require('../models');
 
 Promise.all(
-	[User, Club, Membership, Book, Selection, Vote].map((Model) => Model.sync({ force: true }))
+	[User, Club, Membership, Book, Selection, Vote, Invitation].map((Model) =>
+		Model.sync({ force: false })
+	)
 ).then(() => {
-	Promise.all([
-		User.create({
-			firstName: 'Daniel',
-			lastName: 'Sato',
-			email: 'dksato@gmail.com',
-			googleId: '114424838772956984190',
-		}),
-		Club.create({
-			name: 'Bear Club',
-		}),
-	]).then(([user, club]) => club.addUser(user));
+	// Promise.all([
+	// 	User.create({
+	// 		firstName: 'Daniel',
+	// 		lastName: 'Sato',
+	// 		email: 'dksato@gmail.com',
+	// 		googleId: '114424838772956984190',
+	// 	}),
+	// 	Club.create({
+	// 		name: 'Bear Club',
+	// 	}),
+	// ]).then(([user, club]) => club.addUser(user));
 });

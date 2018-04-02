@@ -21,3 +21,4 @@ export const SET_GROWLER = 'SET_GROWLER';
 export const SEARCH_BOOK_SUCCESS = 'SEARCH_BOOK_SUCCESS';
 export const DELETE_BOOK = 'DELETE_BOOK';
 export const CONFIRM_BOOK = 'CONFIRM_BOOK';
+export const INVITE_MEMBER = 'INVITE_MEMBER';

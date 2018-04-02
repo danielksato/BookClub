@@ -9,19 +9,9 @@ import {
 	CREATE_CLUB_SUCCESS,
 } from 'constants/ActionConstants';
 import * as StatusConstants from 'constants/StatusConstants';
-import { INVITED } from 'constants/AppConstants';
+import { ClubRecord } from 'reducers/ClubReducer';
 
 import type { UserResponse } from 'apis/UserApi';
-
-export class MembershipRecord extends Record({
-	id: 0,
-	role: 'invited',
-	name: '',
-}) {
-	id: number;
-	role: string;
-	name: string;
-}
 
 export class UserRecord extends Record({
 	id: 0,
@@ -29,14 +19,14 @@ export class UserRecord extends Record({
 	lastName: '',
 	email: '',
 	clubs: new List(),
-	role: INVITED,
+	role: '',
 	status: StatusConstants.INITIAL,
 }) {
 	id: number;
 	firstName: string;
 	lastName: string;
 	email: string;
-	clubs: List<number>;
+	clubs: List<ClubRecord>;
 	role: string;
 	status: $Keys<typeof StatusConstants>;
 
@@ -44,8 +34,8 @@ export class UserRecord extends Record({
 		if (id) {
 			super({
 				id,
-				clubs: List(clubs ? clubs.map((club) => new MembershipRecord(club)) : []),
-				role: membership ? membership.role : INVITED,
+				clubs: List(clubs ? clubs.map((club) => new ClubRecord(club)) : []),
+				role: membership ? membership.role : '',
 				status: StatusConstants.DONE,
 				...rest,
 			});
@@ -69,6 +59,6 @@ export default createReducer((new UserRecord(): UserRecord), {
 		return new UserRecord();
 	},
 	[CREATE_CLUB_SUCCESS]: function(state, action) {
-		return state.update('clubs', (clubs) => clubs.push(new MembershipRecord(action.payload)));
+		return state.update('clubs', (clubs) => clubs.push(new ClubRecord(action.payload)));
 	},
 });

@@ -1,6 +1,8 @@
-const { User, Club } = require('../models');
+const { User, Club, Invitation } = require('../models');
 const errorHandler = require('./errorHandler');
 const bcrypt = require('bcrypt');
+const uuidv1 = require('uuid/v1');
+const { activeClubUser } = require('./middleware');
 
 User.getMembershipsById = function(id) {
 	return this.findById(id, {
@@ -43,6 +45,23 @@ module.exports = function(app) {
 			} else {
 				res.sendStatus(403);
 			}
+		} catch (err) {
+			errorHandler(res);
+		}
+	});
+
+	app.post('/club/:clubId/invite', activeClubUser, async ({ body: { email }, club, user }, res) => {
+		try {
+			const [newUser] = await User.findOrCreate({ where: { email } });
+			const invitation = await Invitation.create({ uuid: uuidv1() });
+			await Promise.all([
+				newUser.addInvitation(invitation),
+				club.addUser(newUser, { through: { role: 'invited' } }),
+			]);
+			res.json({
+				club: await club.reload(),
+				invitation,
+			});
 		} catch (err) {
 			errorHandler(res);
 		}

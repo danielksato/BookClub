@@ -7,6 +7,7 @@ import type { UserResponse } from 'apis/UserApi';
 export type ClubResponse = {
 	id?: number,
 	name?: string,
+	membership?: { role: string },
 	users?: Array<UserResponse>,
 	books?: Array<BookResponse>,
 	votes?: Array<{ inFavor: boolean }>,
@@ -18,4 +19,14 @@ export const getClub = (id: number): Promise<ClubResponse> => {
 
 export const createClub = (body: ClubRecord): Promise<ClubResponse> => {
 	return sendJSON('/club', { body });
+};
+
+export const inviteMember = ({
+	clubId,
+	email,
+}: {
+	clubId: number,
+	email: string,
+}): Promise<{ club: ClubResponse }> => {
+	return sendJSON(`/club/${clubId}/invite`, { body: { email } });
 };

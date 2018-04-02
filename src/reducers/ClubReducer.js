@@ -10,24 +10,27 @@ import type { ClubResponse } from 'apis/ClubApi';
 import type { Action } from 'actions';
 
 export class ClubRecord extends Record({
+	books: new List(),
 	id: 0,
 	name: '',
-	users: new List(),
-	books: new List(),
+	role: '',
 	status: StatusConstants.INITIAL,
+	users: new List(),
 }) {
+	books: List<BookRecord>;
 	id: number;
 	name: string;
-	users: List<UserRecord>;
-	books: List<BookRecord>;
+	role: string;
 	status: $Keys<typeof StatusConstants>;
+	users: List<UserRecord>;
 
-	constructor({ users, books, ...rest }: ClubResponse = {}) {
+	constructor({ users, books, membership, ...rest }: ClubResponse = {}) {
 		if (rest.name) {
 			super({
-				users: List(users ? users.map((user) => new UserRecord(user)) : []),
 				books: fromJS(books ? books.map((book) => new BookRecord(book)) : []),
+				role: membership ? membership.role : '',
 				status: StatusConstants.DONE,
+				users: List(users ? users.map((user) => new UserRecord(user)) : []),
 				...rest,
 			});
 		} else {

@@ -2,16 +2,18 @@
 import React, { PureComponent, Fragment, type Node } from 'react';
 import { connect } from 'react-redux';
 import { loadClub, createClub } from 'actions/ClubActions';
+import { acceptInvitation } from 'actions/UserActions';
+import { INVITED } from 'constants/AppConstants';
 
-import type { MembershipRecord } from 'reducers/UserReducer';
 import type { List } from 'immutable';
 import { ClubRecord } from 'reducers/ClubReducer';
 
 type Props = {
 	currentClub: ClubRecord,
-	clubs: List<MembershipRecord>,
+	clubs: List<ClubRecord>,
 	loadClub: (id: number) => void,
 	createClub: (club: ClubRecord) => void,
+	acceptInvitation: (clubId: number) => void,
 };
 
 type State = { name: string };
@@ -21,6 +23,7 @@ const mapDispatchToProps = (dispatch: Function) => {
 	return {
 		loadClub: (...args) => dispatch(loadClub(...args)),
 		createClub: (...args) => dispatch(createClub(...args)),
+		acceptInvitation: (...args) => dispatch(acceptInvitation(...args)),
 	};
 };
 
@@ -38,6 +41,11 @@ export class MyClubs extends PureComponent<Props, State> {
 		this.props.loadClub(id);
 	};
 
+	acceptInvitation = (e: SyntheticEvent<HTMLElement>) => {
+		const clubId = parseInt(e.currentTarget.getAttribute('data-clubid'), 10);
+		this.props.acceptInvitation(clubId);
+	};
+
 	onCreateClub = () => {
 		const { name } = this.state;
 		this.props.createClub(new ClubRecord({ name }));
@@ -49,13 +57,15 @@ export class MyClubs extends PureComponent<Props, State> {
 
 	renderAddtionalClubs(): Node {
 		const { clubs, currentClub } = this.props;
-		const additionalClubs = clubs.filter(({ id }) => id !== currentClub.id).map(({ name, id }) => {
-			return (
-				<div key={`additional-club-${id}`} data-clubid={id} onClick={this.onSwitchClubs}>
-					{name}
-				</div>
-			);
-		});
+		const additionalClubs = clubs
+			.filter(({ id, role }: ClubRecord) => id !== currentClub.id && role !== INVITED)
+			.map(({ name, id }) => {
+				return (
+					<div key={`additional-club-${id}`} data-clubid={id} onClick={this.onSwitchClubs}>
+						{name}
+					</div>
+				);
+			});
 		if (!additionalClubs.size) {
 			return null;
 		}
@@ -63,6 +73,28 @@ export class MyClubs extends PureComponent<Props, State> {
 			<div>
 				<p>Switch Club:</p>
 				{additionalClubs}
+			</div>
+		);
+	}
+
+	renderInvitedClubs(): Node {
+		const { clubs } = this.props;
+		const invitedClubs = clubs
+			.filter(({ role }: ClubRecord) => role === INVITED)
+			.map(({ name, id }) => {
+				return (
+					<div key={`invited-club-${id}`} data-clubid={id} onClick={this.acceptInvitation}>
+						{name}
+					</div>
+				);
+			});
+		if (!invitedClubs.size) {
+			return null;
+		}
+		return (
+			<div>
+				<p>Pending Invitations:</p>
+				{invitedClubs}
 			</div>
 		);
 	}
@@ -83,6 +115,7 @@ export class MyClubs extends PureComponent<Props, State> {
 			<Fragment>
 				{this.renderCurrentClub()}
 				{this.renderAddtionalClubs()}
+				{this.renderInvitedClubs()}
 				{this.renderCreateClub()}
 			</Fragment>
 		);

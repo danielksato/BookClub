@@ -1,5 +1,6 @@
-const { Club, Book, User, Selection, Vote } = require('../models');
+const { Club, Selection } = require('../models');
 const errorHandler = require('./errorHandler');
+const { invitedClubUser } = require('./middleware');
 
 Club.prototype.addBookIfNotPresent = function(book) {
 	return this.hasBook(book).then((hasBook) => {
@@ -12,9 +13,7 @@ Club.prototype.addBookIfNotPresent = function(book) {
 module.exports = function(app) {
 	app.get('/club/:id', (req, res) => {
 		const { id } = req.params;
-		Club.findById(id, {
-			include: [{ model: Book, include: { model: Vote } }, { model: User }],
-		}).then((club) => {
+		Club.findById(id).then((club) => {
 			res.json(club);
 		}, errorHandler(res));
 	});
@@ -24,20 +23,16 @@ module.exports = function(app) {
 			(club) =>
 				club
 					.addUser(user, { through: { role: 'admin' } })
-					.then(() =>
-						// this is slow. Maybe do this optimistically?
-						club.reload({
-							include: [
-								{
-									model: Book,
-									include: { model: Vote },
-								},
-								{ model: User },
-							],
-						})
-					)
+					.then(() => club.reload())
 					.then((club) => res.json(club)),
 			errorHandler(res)
 		);
+	});
+
+	app.put('/club/:clubId/accept', invitedClubUser, async ({ club, user: { id } }, res) => {
+		let [user] = await club.getUsers({ where: { id }, through: {} });
+		await user.membership.update({ role: 'active' });
+		user = await user.reload();
+		res.json(user);
 	});
 };

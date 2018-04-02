@@ -8,13 +8,24 @@ import {
 	loginWithGoogle as loginWithGoogleApi,
 	authUser as authUserApi,
 	logout as logoutApi,
+	acceptInvitation as acceptInvitationApi,
 } from 'apis/UserApi';
 import { selectTab } from 'actions/AppActions';
 import type { UserResponse } from 'apis/UserApi';
+import { loadClub } from 'actions/ClubActions';
 
 const _loadUser: ActionCreator<> = createAction(LOAD_USER);
-export const loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
+const _loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
 const _loadUserFailed: ActionCreator<> = createAction(LOAD_USER_FAILED);
+
+export const loadUserSuccess = (user: UserResponse): ThunkAction => {
+	return (dispatch) => {
+		if (user.clubs && user.clubs[0] && user.clubs[0].id) {
+			dispatch(loadClub(user.clubs[0].id));
+		}
+		dispatch(_loadUserSuccess(user));
+	};
+};
 
 export const _logout = createAction(LOG_OUT);
 export const logout = (): ThunkAction => {
@@ -75,5 +86,11 @@ export const authUser = (): ThunkAction => {
 			dispatch(loadUserSuccess(user));
 			return user;
 		});
+	};
+};
+
+export const acceptInvitation = (clubId: number): ThunkAction => {
+	return (dispatch) => {
+		acceptInvitationApi(clubId).then((user) => dispatch(loadUserSuccess(user)));
 	};
 };
