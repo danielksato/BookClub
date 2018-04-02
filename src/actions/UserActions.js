@@ -13,9 +13,9 @@ import { selectTab } from 'actions/AppActions';
 import type { UserResponse } from 'apis/UserApi';
 import type { UserRecord } from 'reducers/UserReducer';
 
-const _loadUser: ActionCreator<null> = createAction(LOAD_USER);
+const _loadUser: ActionCreator<> = createAction(LOAD_USER);
 export const loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
-const _loadUserFailed: ActionCreator<null> = createAction(LOAD_USER_FAILED);
+const _loadUserFailed: ActionCreator<> = createAction(LOAD_USER_FAILED);
 
 export const _logout = createAction(LOG_OUT);
 export const logout = (): ThunkAction => {

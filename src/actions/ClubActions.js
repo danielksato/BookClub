@@ -12,13 +12,13 @@ import { getClub, createClub as createClubApi } from 'apis/ClubApi';
 import type { ClubRecord } from 'reducers/ClubReducer';
 import type { ClubResponse } from 'apis/ClubApi';
 
-const _loadClub: ActionCreator<*> = createAction(LOAD_CLUB);
+const _loadClub: ActionCreator<> = createAction(LOAD_CLUB);
 export const loadClubSuccess: ActionCreator<ClubResponse> = createAction(LOAD_CLUB_SUCCESS);
-const _loadClubFailed: ActionCreator<*> = createAction(LOAD_CLUB_FAILED);
+const _loadClubFailed: ActionCreator<> = createAction(LOAD_CLUB_FAILED);
 
-const _createClub: ActionCreator<*> = createAction(CREATE_CLUB);
+const _createClub: ActionCreator<> = createAction(CREATE_CLUB);
 const _createClubSuccess: ActionCreator<ClubResponse> = createAction(CREATE_CLUB_SUCCESS);
-const _createClubFailed: ActionCreator<*> = createAction(CREATE_CLUB_FAILED);
+const _createClubFailed: ActionCreator<> = createAction(CREATE_CLUB_FAILED);
 
 export const loadClub = (id: number): ThunkAction => {
 	return (dispatch) => {
