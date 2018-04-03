@@ -82,10 +82,17 @@ export const loginWithGoogle = (): ThunkAction => {
 
 export const authUser = (): ThunkAction => {
 	return (dispatch) => {
-		return authUserApi().then((user) => {
-			dispatch(loadUserSuccess(user));
-			return user;
-		});
+		return authUserApi().then(
+			(user) => {
+				dispatch(loadUserSuccess(user));
+				return user;
+			},
+			(err) => {
+				/* eslint-disable no-console */
+				console.error(err);
+				/* eslint-enable no-console */
+			}
+		);
 	};
 };
 

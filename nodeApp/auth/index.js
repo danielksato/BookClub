@@ -12,7 +12,7 @@ passport.use(
 			callbackURL: 'http://bookclub-dev.dksato.com:3000/oauth2/callback',
 		},
 		function(accessToken, refreshToken, profile, cb) {
-			const { id, name: { familyName, givenName }, photos, emails } = profile;
+			const { id, name: { familyName, givenName }, emails } = profile;
 
 			const where = emails ? { email: emails[0].value } : { googleId: id };
 			User.findOne({ where }).then(
