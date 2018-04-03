@@ -1,7 +1,7 @@
 {
     "extends": ["standard", "standard-react", "plugin:prettier/recommended", "plugin:flowtype/recommended"],
     "parser": "babel-eslint",
-    "plugins": ["flowtype"],
+    "plugins": ["flowtype", "jest"],
     "settings": {
         "flowtype": {
             "onlyFilesWithAnnotation": "false"
@@ -16,6 +16,8 @@
     },
     "globals": {
         "fetch": false,
-        "it": false
+    },
+    "env": {
+        "jest/globals": true
     }
 }
