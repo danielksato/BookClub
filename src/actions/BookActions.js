@@ -9,6 +9,7 @@ import {
 	searchBook as searchBookApi,
 	suggestBook as suggestBookApi,
 	vote as voteApi,
+	modifyBook as modifyBookApi,
 } from 'apis/BookApi';
 import { loadClubSuccess } from 'actions/ClubActions';
 import { setGrowler, selectTab } from 'actions/AppActions';
@@ -62,6 +63,23 @@ export const vote = ({
 }): ThunkAction => {
 	return function(dispatch) {
 		voteApi({ book, club, inFavor }).then(
+			(club) => dispatch(loadClubSuccess(club)),
+			handleBookError(dispatch)
+		);
+	};
+};
+
+export const modifyBook = ({
+	status,
+	bookId,
+	clubId,
+}: {
+	status: string,
+	bookId: number,
+	clubId: number,
+}): ThunkAction => {
+	return async function(dispatch) {
+		modifyBookApi({ status, bookId, clubId }).then(
 			(club) => dispatch(loadClubSuccess(club)),
 			handleBookError(dispatch)
 		);

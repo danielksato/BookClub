@@ -3,6 +3,8 @@ import React, { PureComponent, type Node } from 'react';
 import type BookRecord from 'records/BookRecord';
 import styles from 'styles/Book.module.css';
 import classnames from 'classnames';
+import { PROPOSED, ACTIVE } from 'constants/AppConstants';
+import parseDate from 'util/ParseDate';
 
 type Props = {
 	book: BookRecord,
@@ -21,8 +23,27 @@ export default class Book extends PureComponent<Props> {
 		);
 	}
 
+	renderVotes(): Node {
+		const { votesFor, votesAgainst, status } = this.props.book;
+		if (status === PROPOSED) {
+			return (
+				<div>
+					<span>{votesFor} votes in favor</span>
+					<span>{votesAgainst} votes against</span>
+				</div>
+			);
+		}
+	}
+
+	renderStatus(): Node {
+		const { status, updatedAt } = this.props.book;
+		if (status === ACTIVE) {
+			return <span>Selected at {parseDate(updatedAt)}</span>;
+		}
+	}
+
 	render(): Node {
-		const { title, author, link, length, votesFor, votesAgainst } = this.props.book;
+		const { title, author, link, length } = this.props.book;
 		return (
 			<a
 				href={link}
@@ -34,8 +55,8 @@ export default class Book extends PureComponent<Props> {
 					<span>{title}</span>
 					<span>{author}</span>
 					<span>{length} pages</span>
-					<span>{votesFor} votes in favor</span>
-					<span>{votesAgainst} votes against</span>
+					{this.renderVotes()}
+					{this.renderStatus()}
 				</div>
 			</a>
 		);

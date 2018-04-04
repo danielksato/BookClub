@@ -28,6 +28,7 @@ const authedUser = ({ params: { user } }, res, next) => {
 
 module.exports = {
 	activeClubUser: userRole(['active', 'admin']),
+	adminClubUser: userRole(['admin']),
 	authedUser,
 	invitedClubUser: userRole(['invited']),
 };

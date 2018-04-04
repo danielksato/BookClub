@@ -1,4 +1,6 @@
 const { Book, Club, User, Vote, Selection } = require('../models');
+const errorHandler = require('./errorHandler');
+const { adminClubUser } = require('./middleware');
 
 Book.createByISBN = function(newBook) {
 	const { isbn } = newBook;
@@ -125,4 +127,17 @@ module.exports = function(app) {
 			);
 		}
 	);
+
+	app.put('/club/:clubId/book/:bookId', adminClubUser, async (req, res) => {
+		try {
+			const { clubId, bookId } = req.params;
+			const { status } = req.body;
+			const selection = await Selection.findOne({ where: { bookId, clubId } });
+			await selection.update({ status });
+			const updatedClub = await Club.findById(clubId);
+			res.json(updatedClub);
+		} catch (err) {
+			errorHandler(res);
+		}
+	});
 };

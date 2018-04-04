@@ -1,20 +1,22 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import type { ClubRecord } from 'reducers/ClubReducer';
-import { PROPOSED, ACTIVE } from 'constants/AppConstants';
+import { PROPOSED, ACTIVE, ADMIN, ARCHIVED } from 'constants/AppConstants';
 import Book from 'components/Book';
-import { vote } from 'actions/BookActions';
+import { vote, modifyBook } from 'actions/BookActions';
 import { inviteMember } from 'actions/ClubActions';
 import type { UserRecord } from 'reducers/UserReducer';
 import type BookRecord from 'records/BookRecord';
 import Inviter from 'components/Inviter';
+import getCurrentRole from 'util/GetCurrentRole';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
 const mapDispatchToProps = (dispatch) => ({
 	vote: (...args) => dispatch(vote(...args)),
 	inviteMember: (...args) => dispatch(inviteMember(...args)),
+	modifyBook: (...args) => dispatch(modifyBook(...args)),
 });
 
 type Props = {
@@ -22,13 +24,34 @@ type Props = {
 	user: UserRecord,
 	vote: (Object) => void,
 	inviteMember: ({ clubId: number, email: string }) => void,
+	modifyBook: (Object) => void,
 };
 
 export class CurrentClub extends PureComponent<Props> {
 	static navString = 'Home';
 
+	get currentRole(): ?string {
+		const { club, user } = this.props;
+		return getCurrentRole({ club, user });
+	}
+
 	renderClubHeader() {
 		return <h2>{this.props.club.name || 'You are not a member of any clubs'}</h2>;
+	}
+
+	renderArchive(book: BookRecord): Node {
+		const { club: { id }, modifyBook } = this.props;
+		if (this.currentRole !== ADMIN) {
+			return null;
+		}
+		const onClick = () => modifyBook({ status: ARCHIVED, bookId: book.id, clubId: id });
+		return (
+			<div className="w-25 p-1">
+				<button className="ml-1" onClick={onClick} data-for="for">
+					Archive this book
+				</button>
+			</div>
+		);
 	}
 
 	renderCurrentBook() {
@@ -42,11 +65,12 @@ export class CurrentClub extends PureComponent<Props> {
 			<div>
 				<p>Current Book:</p>
 				<Book book={currentBook} />
+				{this.renderArchive(currentBook)}
 			</div>
 		);
 	}
 
-	renderVoting = (book: BookRecord) => {
+	renderVoting(book: BookRecord) {
 		const { user: { id }, club } = this.props;
 		const onClick = (e): void => {
 			const inFavor = !!e.target.getAttribute('data-for');
@@ -69,9 +93,24 @@ export class CurrentClub extends PureComponent<Props> {
 				<button onClick={onClick}>Vote Against This Book</button>
 			</div>
 		);
-	};
+	}
 
-	renderProposedBooks() {
+	renderAutocraticSelect(book: BookRecord): Node {
+		const { club: { id }, modifyBook } = this.props;
+		if (this.currentRole !== ADMIN) {
+			return null;
+		}
+		const onClick = () => modifyBook({ status: ACTIVE, bookId: book.id, clubId: id });
+		return (
+			<div className="w-25 p-1">
+				<button className="ml-1" onClick={onClick} data-for="for">
+					Select this book
+				</button>
+			</div>
+		);
+	}
+
+	renderProposedBooks(): Node {
 		const { club: { books } } = this.props;
 		const proposedBooks = books.filter(({ status }) => {
 			return status === PROPOSED;
@@ -82,6 +121,7 @@ export class CurrentClub extends PureComponent<Props> {
 				<div key={book.isbn}>
 					<Book book={book} />
 					{this.renderVoting(book)}
+					{this.renderAutocraticSelect(book)}
 				</div>
 			);
 		});
@@ -94,11 +134,11 @@ export class CurrentClub extends PureComponent<Props> {
 		);
 	}
 
-	renderInvite() {
+	renderInvite(): Node {
 		return <Inviter club={this.props.club} inviteMember={this.props.inviteMember} />;
 	}
 
-	renderMembers() {
+	renderMembers(): Node {
 		const memberList = this.props.club.users.map(({ id, firstName, lastName, role }) => {
 			return (
 				<p key={`member-${id}`} className={role}>
@@ -115,7 +155,7 @@ export class CurrentClub extends PureComponent<Props> {
 		);
 	}
 
-	render() {
+	render(): Node {
 		return (
 			<div>
 				{this.renderClubHeader()}

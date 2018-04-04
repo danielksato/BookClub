@@ -25,7 +25,7 @@ export const suggestBook = function({
 	book: BookRecord,
 	club: ClubRecord,
 }): Promise<ClubResponse> {
-	return sendJSON(`/club/${id}/book`, { method: 'POST', body: book });
+	return sendJSON(`/club/${id}/book`, { body: book });
 };
 
 export const vote = function({
@@ -37,5 +37,17 @@ export const vote = function({
 	club: ClubRecord,
 	inFavor: boolean,
 }): Promise<ClubResponse> {
-	return sendJSON(`/club/${club.id}/book/${book.id}/vote`, { method: 'POST', body: { inFavor } });
+	return sendJSON(`/club/${club.id}/book/${book.id}/vote`, { body: { inFavor } });
+};
+
+export const modifyBook = function({
+	status,
+	bookId,
+	clubId,
+}: {
+	status: string,
+	bookId: number,
+	clubId: number,
+}): Promise<ClubResponse> {
+	return sendJSON(`/club/${clubId}/book/${bookId}`, { body: { status }, method: 'PUT' });
 };

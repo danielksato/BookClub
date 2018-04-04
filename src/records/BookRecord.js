@@ -13,6 +13,7 @@ export default class BookRecord extends Record({
 	status: PROPOSED,
 	thumbnail: '',
 	title: '',
+	updatedAt: '',
 	voters: new List(),
 	votesAgainst: 0,
 	votesFor: 0,
@@ -26,6 +27,7 @@ export default class BookRecord extends Record({
 	status: string;
 	thumbnail: string;
 	title: string;
+	updatedAt: string;
 	voters: List<number>;
 	votesAgainst: 0;
 	votesFor: 0;

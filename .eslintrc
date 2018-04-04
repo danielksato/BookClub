@@ -11,6 +11,7 @@
         "no-console": "error",
         "no-debugger": "error",
         "no-underscore-dangle": "off",
+        "no-useless-return": "off",
         "react/jsx-indent": "off",
         "react/jsx-indent-props": "off"
     },
