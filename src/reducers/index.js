@@ -1,12 +1,14 @@
 // @flow
 import { combineReducers } from 'redux';
 
-import userReducer from './UserReducer';
-import clubReducer from './ClubReducer';
-import appReducer from './AppReducer';
+import user from 'reducers/UserReducer';
+import club from 'reducers/ClubReducer';
+import app from 'reducers/AppReducer';
+import message from 'reducers/MessageReducer';
 
 export default combineReducers({
-	app: appReducer,
-	user: userReducer,
-	club: clubReducer,
+	app,
+	club,
+	message,
+	user,
 });

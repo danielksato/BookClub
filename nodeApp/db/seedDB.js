@@ -1,7 +1,7 @@
-const { User, Club, Membership, Book, Selection, Vote, Invitation } = require('../models');
+const { User, Club, Membership, Book, Selection, Vote, Invitation, Message } = require('../models');
 
 Promise.all(
-	[User, Club, Membership, Book, Selection, Vote, Invitation].map((Model) =>
+	[User, Club, Membership, Book, Selection, Vote, Invitation, Message].map((Model) =>
 		Model.sync({ force: false })
 	)
 ).then(() => {

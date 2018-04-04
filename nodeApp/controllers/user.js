@@ -13,12 +13,9 @@ User.getMembershipsById = function(id) {
 module.exports = function(app) {
 	app.get('/user', (req, res) => {
 		if (req.user) {
-			User.getMembershipsById(req.user.id).then(
-				(user) => {
-					res.json(user);
-				},
-				() => res.redirect('/')
-			);
+			User.getMembershipsById(req.user.id).then((user) => {
+				res.json(user);
+			});
 		} else {
 			res.sendStatus(401);
 		}

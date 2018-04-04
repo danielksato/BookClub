@@ -9,12 +9,10 @@ type Props = {
 	createUser: (Object) => void,
 };
 
-const mapDispatchToProps = (dispatch: Function): Props => {
-	return {
-		login: (...args) => dispatch(login(...args)),
-		loginWithGoogle: () => dispatch(loginWithGoogle()),
-		createUser: (...args) => dispatch(createUser(...args)),
-	};
+const mapDispatchToProps = {
+	login,
+	loginWithGoogle,
+	createUser,
 };
 
 const fieldNames = {

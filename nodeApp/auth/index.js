@@ -44,6 +44,9 @@ passport.use(
 	new LocalStrategy({ usernameField: 'email' }, async (username, password, cb) => {
 		try {
 			const user = await User.scope('withPassword').findOne({ where: { email: username } });
+			console.log(user);
+			console.log(user.password);
+			console.log(password);
 			const passwordValid = await bcrypt.compare(password, user.password);
 			if (!(user && passwordValid)) {
 				return cb(null, false);

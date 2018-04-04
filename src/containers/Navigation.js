@@ -3,13 +3,13 @@ import React, { PureComponent, type Node } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import SuggestBook from 'containers/SuggestBook';
-import ScheduleMeeting from 'containers/ScheduleMeeting';
+import Messages from 'containers/Messages';
 import MyClubs from 'containers/MyClubs';
 import { selectTab } from 'actions/AppActions';
 import CurrentClub from 'containers/CurrentClub';
 import { logout } from 'actions/UserActions';
 
-export const navTabs = [CurrentClub, SuggestBook, ScheduleMeeting, MyClubs];
+export const navTabs = [CurrentClub, SuggestBook, Messages, MyClubs];
 
 const mapDispatchToProps = (dispatch) => ({
 	selectTab: (...args) => dispatch(selectTab(...args)),

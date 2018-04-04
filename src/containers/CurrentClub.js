@@ -13,11 +13,11 @@ import getCurrentRole from 'util/GetCurrentRole';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
-const mapDispatchToProps = (dispatch) => ({
-	vote: (...args) => dispatch(vote(...args)),
-	inviteMember: (...args) => dispatch(inviteMember(...args)),
-	modifyBook: (...args) => dispatch(modifyBook(...args)),
-});
+const mapDispatchToProps = {
+	vote,
+	inviteMember,
+	modifyBook,
+};
 
 type Props = {
 	club: ClubRecord,

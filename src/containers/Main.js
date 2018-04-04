@@ -7,9 +7,7 @@ import { authUser } from 'actions/UserActions';
 import { navTabs } from './Navigation';
 
 const mapStateToProps = ({ app: { tabIndex }, user: { id } }) => ({ tabIndex, loggedIn: !!id });
-const mapDispatchToProps = (dispatch) => ({
-	authUser: () => dispatch(authUser()),
-});
+const mapDispatchToProps = { authUser };
 
 type Props = {
 	tabIndex: number,

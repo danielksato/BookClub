@@ -75,10 +75,13 @@ const Invitation = sequelize.define('invitation', {
 	uuid: { type: Sequelize.STRING },
 });
 
+const Message = sequelize.define('message', {
+	message: { type: Sequelize.TEXT },
+});
+
 User.belongsToMany(Club, { through: Membership });
 Club.belongsToMany(User, { through: Membership });
 Club.belongsToMany(Book, { through: Selection });
-// Book.belongsToMany(Club, { through: Selection });
 
 Club.hasMany(Vote);
 Book.hasMany(Vote);
@@ -87,6 +90,10 @@ Vote.belongsTo(Club);
 Vote.belongsTo(Book);
 Vote.belongsTo(User);
 User.hasMany(Invitation);
+Message.belongsTo(User);
+Message.belongsTo(Club);
+Club.hasMany(Message);
+User.hasMany(Message);
 
 module.exports = {
 	Book,
@@ -96,4 +103,5 @@ module.exports = {
 	Selection,
 	User,
 	Vote,
+	Message,
 };

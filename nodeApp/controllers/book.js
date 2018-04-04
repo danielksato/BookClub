@@ -130,11 +130,12 @@ module.exports = function(app) {
 
 	app.put('/club/:clubId/book/:bookId', adminClubUser, async (req, res) => {
 		try {
-			const { clubId, bookId } = req.params;
+			const { club } = req;
+			const { bookId } = req.params;
 			const { status } = req.body;
-			const selection = await Selection.findOne({ where: { bookId, clubId } });
+			const selection = await Selection.findOne({ where: { bookId, clubId: club.id } });
 			await selection.update({ status });
-			const updatedClub = await Club.findById(clubId);
+			const updatedClub = await club.reload();
 			res.json(updatedClub);
 		} catch (err) {
 			errorHandler(res);
