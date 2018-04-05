@@ -28,6 +28,8 @@ type State = {
 
 export class SuggestBook extends PureComponent<Props, State> {
 	static navString = 'Suggest a book';
+	static urlParam = '/suggest';
+
 	state = { search: '' };
 
 	constructor(): void {

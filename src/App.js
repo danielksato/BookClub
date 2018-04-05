@@ -7,21 +7,24 @@ import rootReducer from 'reducers';
 import Header from 'containers/Header';
 import Main from 'containers/Main';
 import Growler from 'containers/Growler';
+import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import createHistory from 'history/createBrowserHistory';
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const history = createHistory();
+const store = createStore(rootReducer, applyMiddleware(thunk, routerMiddleware(history)));
 
-class App extends PureComponent<*> {
+export default class App extends PureComponent<*> {
 	render(): Node {
 		return (
 			<Provider store={store}>
-				<Fragment>
-					<Growler />
-					<Header />
-					<Main />
-				</Fragment>
+				<ConnectedRouter history={history}>
+					<Fragment>
+						<Growler />
+						<Header />
+						<Main />
+					</Fragment>
+				</ConnectedRouter>
 			</Provider>
 		);
 	}
 }
-
-export default App;

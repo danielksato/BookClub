@@ -12,7 +12,7 @@ import {
 	modifyBook as modifyBookApi,
 } from 'apis/BookApi';
 import { loadClubSuccess } from 'actions/ClubActions';
-import { setGrowler, selectTab } from 'actions/AppActions';
+import { setGrowler } from 'actions/AppActions';
 
 import type BookRecord from 'records/BookRecord';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -47,7 +47,6 @@ export const suggestBook = ({
 	return function(dispatch) {
 		suggestBookApi({ book, club }).then((club: ClubResponse) => {
 			dispatch(loadClubSuccess(club));
-			dispatch(selectTab(0));
 		}, handleBookError(dispatch));
 	};
 };

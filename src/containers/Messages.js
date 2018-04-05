@@ -29,6 +29,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 export class Messages extends PureComponent<Props, State> {
 	static navString = 'Messages';
+	static urlParam = '/messages';
+
 	state = { message: '' };
 	ws: $FlowFixMe;
 

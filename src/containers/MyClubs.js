@@ -29,6 +29,7 @@ const mapDispatchToProps = (dispatch: Function) => {
 
 export class MyClubs extends PureComponent<Props, State> {
 	static navString = 'My Clubs';
+	static urlParam = '/myclubs';
 
 	state = { name: '' };
 
@@ -81,7 +82,6 @@ export class MyClubs extends PureComponent<Props, State> {
 		const { clubs } = this.props;
 		const invitedClubs = clubs
 			.filter(({ role }: ClubRecord) => {
-				console.log(role);
 				return role === INVITED;
 			})
 			.map(({ name, id }) => {

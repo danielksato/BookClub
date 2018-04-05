@@ -11,9 +11,18 @@ Club.prototype.addBookIfNotPresent = function(book) {
 };
 
 module.exports = function(app) {
+	app.get('/club', ({ session: { club } }, res) => {
+		if (club) {
+			res.json(club);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+
 	app.get('/club/:id', (req, res) => {
 		const { id } = req.params;
 		Club.findById(id).then((club) => {
+			req.session.club = club;
 			res.json(club);
 		}, errorHandler(res));
 	});

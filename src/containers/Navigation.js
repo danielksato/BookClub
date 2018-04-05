@@ -5,14 +5,13 @@ import { connect } from 'react-redux';
 import SuggestBook from 'containers/SuggestBook';
 import Messages from 'containers/Messages';
 import MyClubs from 'containers/MyClubs';
-import { selectTab } from 'actions/AppActions';
 import CurrentClub from 'containers/CurrentClub';
 import { logout } from 'actions/UserActions';
+import { Link } from 'react-router-dom';
 
 export const navTabs = [CurrentClub, SuggestBook, Messages, MyClubs];
 
 const mapDispatchToProps = (dispatch) => ({
-	selectTab: (...args) => dispatch(selectTab(...args)),
 	logout: () => dispatch(logout()),
 });
 
@@ -21,23 +20,19 @@ const mapStateToProps = ({ app: { tabIndex }, user: { id } }) => ({ tabIndex, lo
 type Props = {
 	loggedIn: boolean,
 	logout: () => void,
-	selectTab: (number) => void,
 	tabIndex: PureComponent<*>,
 };
 
 export class Navigation extends PureComponent<Props> {
-	onClick = (e: SyntheticEvent<HTMLElement>) => {
-		this.props.selectTab(parseInt(e.currentTarget.getAttribute('data-tabindex'), 10));
-	};
-
 	renderTabs(): Array<Node> {
-		return navTabs.map(({ navString }, index) => {
+		return navTabs.map(({ navString, urlParam }, index) => {
 			const className = classnames(['nav-link', { active: index === this.props.tabIndex }]);
+			const [linkParam] = /^\/\w+/.exec(urlParam);
 			return (
 				<li key={`${navString}-${index}`} className="nav-item">
-					<a className={className} data-tabindex={index} onClick={this.onClick}>
+					<Link className={className} data-tabindex={index} to={linkParam}>
 						{navString}
-					</a>
+					</Link>
 				</li>
 			);
 		});

@@ -1,8 +1,6 @@
 // @flow
 import { createAction, type ActionCreator, type ThunkAction } from 'actions';
-import { SELECT_TAB, SET_GROWLER } from 'constants/ActionConstants';
-
-export const selectTab: ActionCreator<number> = createAction(SELECT_TAB);
+import { SET_GROWLER } from 'constants/ActionConstants';
 
 export const _setGrowler: ActionCreator<Error> = createAction(SET_GROWLER);
 

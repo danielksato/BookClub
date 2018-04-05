@@ -10,6 +10,7 @@ import type { UserRecord } from 'reducers/UserReducer';
 import type BookRecord from 'records/BookRecord';
 import Inviter from 'components/Inviter';
 import getCurrentRole from 'util/GetCurrentRole';
+import { replace } from 'react-router-redux';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
@@ -17,6 +18,7 @@ const mapDispatchToProps = {
 	vote,
 	inviteMember,
 	modifyBook,
+	replace,
 };
 
 type Props = {
@@ -25,14 +27,23 @@ type Props = {
 	vote: (Object) => void,
 	inviteMember: ({ clubId: number, email: string }) => void,
 	modifyBook: (Object) => void,
+	replace: (string) => void,
 };
 
 export class CurrentClub extends PureComponent<Props> {
 	static navString = 'Home';
+	static urlParam = '/club/:clubId?';
 
 	get currentRole(): ?string {
 		const { club, user } = this.props;
 		return getCurrentRole({ club, user });
+	}
+
+	componentDidMount() {
+		const { club: { id }, replace } = this.props;
+		if (id) {
+			replace(`/club/${id}`);
+		}
 	}
 
 	renderClubHeader() {

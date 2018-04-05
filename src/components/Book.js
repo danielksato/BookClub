@@ -28,7 +28,7 @@ export default class Book extends PureComponent<Props> {
 		if (status === PROPOSED) {
 			return (
 				<div>
-					<span>{votesFor} votes in favor</span>
+					<span>{votesFor} votes in favor, </span>
 					<span>{votesAgainst} votes against</span>
 				</div>
 			);

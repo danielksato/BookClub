@@ -30,3 +30,7 @@ export const inviteMember = ({
 }): Promise<{ club: ClubResponse }> => {
 	return sendJSON(`/api/club/${clubId}/invite`, { body: { email } });
 };
+
+export const authClub = (): Promise<?ClubResponse> => {
+	return fetch('/api/club', { credentials: 'include' }).then((res) => res.json());
+};

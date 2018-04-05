@@ -19,5 +19,5 @@ export function createAction<T>(actionName: ActionType): ActionCreator<T> {
 
 export type ThunkAction = (
 	dispatch: (action: Action<any> | ThunkAction) => any,
-	getState?: () => Object
+	getState: () => Object
 ) => any;
