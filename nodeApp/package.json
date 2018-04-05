@@ -18,7 +18,8 @@
     "passport-local": "^1.0.0",
     "sequelize": "^4.37.3",
     "session-file-store": "^1.2.0",
-    "sqlite3": "^4.0.0"
+    "sqlite3": "^4.0.0",
+    "ws": "^5.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"

@@ -33,6 +33,8 @@ const _sendMessage: ActionCreator<> = createAction(SEND_MESSAGE);
 const _sendMessageSuccess: ActionCreator<MessageResponse> = createAction(SEND_MESSAGE_SUCCESS);
 const _sendMessageFailed: ActionCreator<> = createAction(SEND_MESSAGE_FAILED);
 
+export const receiveMessage = _sendMessageSuccess;
+
 export const sendMessage = ({
 	message,
 	clubId,

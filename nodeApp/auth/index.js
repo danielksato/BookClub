@@ -3,6 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
+const session = require('./session');
 
 passport.use(
 	new GoogleStrategy(
@@ -44,9 +45,6 @@ passport.use(
 	new LocalStrategy({ usernameField: 'email' }, async (username, password, cb) => {
 		try {
 			const user = await User.scope('withPassword').findOne({ where: { email: username } });
-			console.log(user);
-			console.log(user.password);
-			console.log(password);
 			const passwordValid = await bcrypt.compare(password, user.password);
 			if (!(user && passwordValid)) {
 				return cb(null, false);
@@ -67,9 +65,12 @@ passport.deserializeUser(function(id, done) {
 	User.findById(id).then((user) => done(null, user), (err) => done(err, null));
 });
 
+const passportSession = passport.session();
+
 module.exports = function(app) {
+	session(app);
 	app.use(passport.initialize());
-	app.use(passport.session());
+	app.use(passportSession);
 
 	app.get('/oauth2', passport.authenticate('google', { scope: ['profile'] }));
 	app.get(
@@ -89,3 +90,5 @@ module.exports = function(app) {
 		res.sendStatus(200);
 	});
 };
+
+module.exports.passportSession = passportSession;

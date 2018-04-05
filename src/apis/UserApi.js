@@ -15,38 +15,40 @@ export type UserResponse = {
 };
 
 export const getUser = (id: number): Promise<UserResponse> => {
-	return fetch(`/user/${id}`).then((res) => res.json());
+	return fetch(`/api/user/${id}`).then((res) => res.json());
 };
 
 export const saveUser = (body: UserRecord): Promise<UserResponse> => {
-	return fetch(`/user/${body.id}`, {
+	return fetch(`/api/user/${body.id}`, {
 		method: 'POST',
 		body,
 	}).then((res) => res.json());
 };
 
 export const login = (body: UserResponse): Promise<UserResponse> => {
-	return sendJSON('/login', { body });
+	return sendJSON('/api/login', { body });
 };
 
 export const createUser = (body: UserResponse): Promise<UserResponse> => {
-	return sendJSON('/user', { body }).then((res) => {
-		return sendJSON('/login', { body: { ...body, ...res } });
+	return sendJSON('/api/user', { body }).then((res) => {
+		return sendJSON('/api/login', { body: { ...body, ...res } });
 	});
 };
 
 export const loginWithGoogle = (): Promise<UserResponse> => {
-	return fetch('/oauth2', { mode: 'no-cors', credentials: 'include' }).then((res) => res.json());
+	return fetch('/api/oauth2', { mode: 'no-cors', credentials: 'include' }).then((res) =>
+		res.json()
+	);
 };
 
 export const authUser = (): Promise<UserResponse> => {
-	return fetch('/user', { credentials: 'include' }).then((res) => res.json());
+	return fetch('/api/user', { credentials: 'include' }).then((res) => res.json());
 };
 
 export const logout = (): Promise<any> => {
-	return fetch('/logout', { credentials: 'include', method: 'PUT' });
+	return fetch('/api/logout', { credentials: 'include', method: 'PUT' });
 };
 
 export const acceptInvitation = (clubId: number): Promise<UserResponse> => {
-	return sendJSON(`/club/${clubId}/accept`, { method: 'PUT', body: {} });
+	return sendJSON(`/api/club/${clubId}/accept`, { method: 'PUT', body: {} });
 };

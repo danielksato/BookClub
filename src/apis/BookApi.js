@@ -14,7 +14,7 @@ export type BookResponse = {
 };
 
 export const searchBook = function({ search }: { search: string }): Promise<Array<BookResponse>> {
-	return sendJSON('/book/search', { method: 'PUT', body: { search } });
+	return sendJSON('/api/book/search', { method: 'PUT', body: { search } });
 	// return Promise.resolve(mockBookSearch());
 };
 
@@ -25,7 +25,7 @@ export const suggestBook = function({
 	book: BookRecord,
 	club: ClubRecord,
 }): Promise<ClubResponse> {
-	return sendJSON(`/club/${id}/book`, { body: book });
+	return sendJSON(`/api/club/${id}/book`, { body: book });
 };
 
 export const vote = function({
@@ -37,7 +37,7 @@ export const vote = function({
 	club: ClubRecord,
 	inFavor: boolean,
 }): Promise<ClubResponse> {
-	return sendJSON(`/club/${club.id}/book/${book.id}/vote`, { body: { inFavor } });
+	return sendJSON(`/api/club/${club.id}/book/${book.id}/vote`, { body: { inFavor } });
 };
 
 export const modifyBook = function({
@@ -49,5 +49,5 @@ export const modifyBook = function({
 	bookId: number,
 	clubId: number,
 }): Promise<ClubResponse> {
-	return sendJSON(`/club/${clubId}/book/${bookId}`, { body: { status }, method: 'PUT' });
+	return sendJSON(`/api/club/${clubId}/book/${bookId}`, { body: { status }, method: 'PUT' });
 };

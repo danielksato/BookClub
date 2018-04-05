@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import { getMessages, sendMessage } from 'actions/MessageActions';
+import { getMessages, sendMessage, receiveMessage } from 'actions/MessageActions';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -13,6 +13,7 @@ type Props = {
 	club: ClubRecord,
 	getMessages: (Object) => void,
 	sendMessage: (Object) => void,
+	receiveMessage: (Object) => void,
 };
 
 type State = {
@@ -20,11 +21,16 @@ type State = {
 };
 
 const mapStateToProps = ({ club, user, message }) => ({ club, user, message });
-const mapDispatchToProps = { getMessages, sendMessage };
+const mapDispatchToProps = (dispatch) => ({
+	getMessages: (...args) => dispatch(getMessages(...args)),
+	sendMessage: (...args) => dispatch(sendMessage(...args)),
+	receiveMessage: (message) => dispatch(receiveMessage(message)),
+});
 
 export class Messages extends PureComponent<Props, State> {
 	static navString = 'Messages';
 	state = { message: '' };
+	ws: $FlowFixMe;
 
 	getUser = (userId: number): string => {
 		const { user: { id }, club: { users } } = this.props;
@@ -32,12 +38,28 @@ export class Messages extends PureComponent<Props, State> {
 			return 'You';
 		}
 		const user = users.find(({ id }) => id === userId);
-		return user ? `${user.firstname} ${user.lastName}` : 'Somebody';
+		return user ? `${user.firstName} ${user.lastName}` : 'Somebody';
+	};
+
+	registerWebSocket = () => {
+		const { receiveMessage } = this.props;
+		this.ws = new WebSocket('ws://bookclub-dev.dksato.com:3000/socket/messages');
+		// $FlowFixMe WebSocket isn't typed
+		this.ws.addEventListener('message', ({ data }) => {
+			receiveMessage(JSON.parse(data));
+		});
+
+		this.ws.addEventListener('close', this.registerWebSocket);
 	};
 
 	componentDidMount(): void {
-		const { club: { id } } = this.props;
-		this.props.getMessages({ clubId: id });
+		const { club: { id }, getMessages } = this.props;
+		getMessages({ clubId: id });
+		this.registerWebSocket();
+	}
+
+	componentWillUnmount(): void {
+		this.ws.close();
 	}
 
 	onTypeMessage = (e: SyntheticEvent<HTMLInputElement>): void => {

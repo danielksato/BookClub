@@ -14,11 +14,11 @@ export type ClubResponse = {
 };
 
 export const getClub = (id: number): Promise<ClubResponse> => {
-	return fetch(`/club/${id}`, { credentials: 'include' }).then((res) => res.json());
+	return fetch(`/api/club/${id}`, { credentials: 'include' }).then((res) => res.json());
 };
 
 export const createClub = (body: ClubRecord): Promise<ClubResponse> => {
-	return sendJSON('/club', { body });
+	return sendJSON('/api/club', { body });
 };
 
 export const inviteMember = ({
@@ -28,5 +28,5 @@ export const inviteMember = ({
 	clubId: number,
 	email: string,
 }): Promise<{ club: ClubResponse }> => {
-	return sendJSON(`/club/${clubId}/invite`, { body: { email } });
+	return sendJSON(`/api/club/${clubId}/invite`, { body: { email } });
 };

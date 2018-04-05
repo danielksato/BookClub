@@ -80,7 +80,10 @@ export class MyClubs extends PureComponent<Props, State> {
 	renderInvitedClubs(): Node {
 		const { clubs } = this.props;
 		const invitedClubs = clubs
-			.filter(({ role }: ClubRecord) => role === INVITED)
+			.filter(({ role }: ClubRecord) => {
+				console.log(role);
+				return role === INVITED;
+			})
 			.map(({ name, id }) => {
 				return (
 					<div key={`invited-club-${id}`} data-clubid={id} onClick={this.acceptInvitation}>

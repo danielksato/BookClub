@@ -10,7 +10,9 @@ export type MessageResponse = {
 };
 
 export const getMessages = ({ clubId }: { clubId: number }): Promise<Array<MessageResponse>> => {
-	return fetch(`/club/${clubId}/messages`, { credentials: 'include' }).then((res) => res.json());
+	return fetch(`/api/club/${clubId}/messages`, { credentials: 'include' }).then((res) =>
+		res.json()
+	);
 };
 
 export const sendMessage = ({
@@ -20,5 +22,5 @@ export const sendMessage = ({
 	clubId: number,
 	message: string,
 }): Promise<MessageResponse> => {
-	return sendJSON(`/club/${clubId}/message`, { body: { message } });
+	return sendJSON(`/api/club/${clubId}/message`, { body: { message } });
 };

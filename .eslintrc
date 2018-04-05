@@ -17,6 +17,7 @@
     },
     "globals": {
         "fetch": false,
-        "it": false
+        "it": false,
+        "WebSocket": false
     }
 }

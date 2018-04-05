@@ -14,19 +14,22 @@ export class ClubRecord extends Record({
 	id: 0,
 	name: '',
 	status: StatusConstants.INITIAL,
+	role: null,
 	users: new List(),
 }) {
 	books: List<BookRecord>;
 	id: number;
 	name: string;
+	role: ?string;
 	status: $Keys<typeof StatusConstants>;
 	users: List<UserRecord>;
 
-	constructor({ users, books, ...rest }: ClubResponse = {}) {
+	constructor({ users, books, membership, ...rest }: ClubResponse = {}) {
 		if (rest.name) {
 			super({
 				books: fromJS(books ? books.map((book) => new BookRecord(book)) : []),
 				status: StatusConstants.DONE,
+				role: membership ? membership.role : null,
 				users: List(users ? users.map((user) => new UserRecord(user)) : []),
 				...rest,
 			});

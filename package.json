@@ -16,7 +16,8 @@
     "redux-actions": "^2.3.0",
     "redux-create-reducer": "^1.1.1",
     "redux-thunk": "^2.2.0",
-    "reselect": "^3.0.1"
+    "reselect": "^3.0.1",
+    "ws": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,9 +42,17 @@
     "prettier": "^1.11.1"
   },
   "proxy": {
-    "/*": {
+    "/socket": {
+      "target": "ws://bookclub-dev.dksato.com:4040",
+      "changeOrigin": true,
+      "ws": true
+    },
+    "/api": {
       "target": "http://bookclub-dev.dksato.com:8080",
-      "changeOrigin": true
+      "changeOrigin": true,
+      "pathRewrite": {
+        "api": ""
+      }
     }
   }
 }
