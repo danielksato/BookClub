@@ -16,8 +16,7 @@
     "redux-actions": "^2.3.0",
     "redux-create-reducer": "^1.1.1",
     "redux-thunk": "^2.2.0",
-    "reselect": "^3.0.1",
-    "ws": "^5.1.1"
+    "reselect": "^3.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

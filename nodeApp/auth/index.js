@@ -10,7 +10,7 @@ passport.use(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: 'http://bookclub-dev.dksato.com:3000/oauth2/callback',
+			callbackURL: 'http://bookclub-dev.dksato.com:3000/api/oauth2/callback',
 		},
 		function(accessToken, refreshToken, profile, cb) {
 			const { id, name: { familyName, givenName }, emails } = profile;
@@ -77,12 +77,12 @@ module.exports = function(app) {
 		'/oauth2/callback',
 		passport.authenticate('google', {
 			failureRedirect: '/',
-			successRedirect: '/user',
+			successRedirect: '/api/user',
 		})
 	);
 
 	app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
-		res.redirect('/user');
+		res.redirect('/api/user');
 	});
 
 	app.put('/logout', (req, res) => {
