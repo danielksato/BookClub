@@ -1,6 +1,6 @@
 const { Club, Selection } = require('../models');
 const errorHandler = require('./errorHandler');
-const { invitedClubUser } = require('./middleware');
+const { invitedClubUser, authedUser } = require('./middleware');
 
 Club.prototype.addBookIfNotPresent = function(book) {
 	return this.hasBook(book).then((hasBook) => {
@@ -11,7 +11,7 @@ Club.prototype.addBookIfNotPresent = function(book) {
 };
 
 module.exports = function(app) {
-	app.get('/club', async ({ session: { club } }, res) => {
+	app.get('/club', authedUser, async ({ session: { club } }, res) => {
 		if (club) {
 			const updatedClub = await Club.findById(club.id);
 			res.json(updatedClub);
@@ -20,7 +20,7 @@ module.exports = function(app) {
 		}
 	});
 
-	app.get('/club/:id', (req, res) => {
+	app.get('/club/:id', authedUser, (req, res) => {
 		const { id } = req.params;
 		Club.findById(id).then((club) => {
 			req.session.club = club;
@@ -28,13 +28,16 @@ module.exports = function(app) {
 		}, errorHandler(res));
 	});
 
-	app.post('/club', ({ body, user }, res) => {
+	app.post('/club', authedUser, ({ body, user }, res) => {
 		Club.create({ name: body.name }).then(
 			(club) =>
 				club
 					.addUser(user, { through: { role: 'admin' } })
 					.then(() => club.reload())
-					.then((club) => res.json(club)),
+					.then((club) => {
+						req.session.club = club;
+						res.json(club);
+					}),
 			errorHandler(res)
 		);
 	});

@@ -1,0 +1,32 @@
+@import '../index.scss';
+
+.container {
+    @extend .container;
+    @extend .mt-3;
+}
+
+.clubList {
+    @include borderGroup;
+    p {
+        font-size: $font-size-lg;
+    }
+}
+
+.createClub {
+    @include borderGroup;
+    @extend .form-group;
+
+    input {
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    button {
+        display: block;
+    }
+}
+
+.clubName {
+    cursor: pointer;
+}

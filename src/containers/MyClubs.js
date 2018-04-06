@@ -4,9 +4,12 @@ import { connect } from 'react-redux';
 import { loadClub, createClub } from 'actions/ClubActions';
 import { acceptInvitation } from 'actions/UserActions';
 import { INVITED } from 'constants/AppConstants';
+import preventDefault from 'util/PreventDefault';
 
 import type { List } from 'immutable';
 import { ClubRecord } from 'reducers/ClubReducer';
+
+import styles from 'styles/MyClubs.scss';
 
 type Props = {
 	currentClub: ClubRecord,
@@ -53,7 +56,7 @@ export class MyClubs extends PureComponent<Props, State> {
 	};
 
 	renderCurrentClub(): Node {
-		return <div>Current Club: {this.props.currentClub.name}</div>;
+		return <div className={styles.currentClub}>Current Club: {this.props.currentClub.name}</div>;
 	}
 
 	renderAddtionalClubs(): Node {
@@ -62,7 +65,12 @@ export class MyClubs extends PureComponent<Props, State> {
 			.filter(({ id, role }: ClubRecord) => id !== currentClub.id && role !== INVITED)
 			.map(({ name, id }) => {
 				return (
-					<div key={`additional-club-${id}`} data-clubid={id} onClick={this.onSwitchClubs}>
+					<div
+						key={`additional-club-${id}`}
+						className={styles.clubName}
+						data-clubid={id}
+						onClick={this.onSwitchClubs}
+					>
 						{name}
 					</div>
 				);
@@ -71,8 +79,8 @@ export class MyClubs extends PureComponent<Props, State> {
 			return null;
 		}
 		return (
-			<div>
-				<p>Switch Club:</p>
+			<div className={styles.clubList}>
+				<p>Switch Club</p>
 				{additionalClubs}
 			</div>
 		);
@@ -86,7 +94,12 @@ export class MyClubs extends PureComponent<Props, State> {
 			})
 			.map(({ name, id }) => {
 				return (
-					<div key={`invited-club-${id}`} data-clubid={id} onClick={this.acceptInvitation}>
+					<div
+						key={`invited-club-${id}`}
+						data-clubid={id}
+						onClick={this.acceptInvitation}
+						className={styles.clubName}
+					>
 						{name}
 					</div>
 				);
@@ -95,8 +108,8 @@ export class MyClubs extends PureComponent<Props, State> {
 			return null;
 		}
 		return (
-			<div>
-				<p>Pending Invitations:</p>
+			<div className={styles.clubList}>
+				<p>Pending Invitations</p>
 				{invitedClubs}
 			</div>
 		);
@@ -105,22 +118,25 @@ export class MyClubs extends PureComponent<Props, State> {
 	renderCreateClub(): Node {
 		const { name } = this.state;
 		return (
-			<div>
-				<input id="create-club" value={name} onChange={this.setName} />
+			<form className={styles.createClub} onSubmit={preventDefault}>
+				<input id="create-club" className="form-control" value={name} onChange={this.setName} />
 				<label htmlFor="create-club">Name</label>
-				<button onClick={this.onCreateClub}>Create Club</button>
-			</div>
+				<button onClick={this.onCreateClub} type="submit">
+					Create Club
+				</button>
+			</form>
 		);
 	}
 
 	render(): Node {
 		return (
-			<Fragment>
+			<div className={styles.container}>
+				<h2>My Clubs</h2>
 				{this.renderCurrentClub()}
 				{this.renderAddtionalClubs()}
 				{this.renderInvitedClubs()}
 				{this.renderCreateClub()}
-			</Fragment>
+			</div>
 		);
 	}
 }

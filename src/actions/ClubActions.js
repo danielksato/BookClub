@@ -14,6 +14,8 @@ import {
 	createClub as createClubApi,
 	inviteMember as inviteMemberApi,
 } from 'apis/ClubApi';
+import { push } from 'react-router-redux';
+
 import type { ClubRecord } from 'reducers/ClubReducer';
 import type { ClubResponse } from 'apis/ClubApi';
 
@@ -29,7 +31,10 @@ export const loadClub = (id: number): ThunkAction => {
 	return (dispatch) => {
 		dispatch(_loadClub());
 		getClub(id).then(
-			(res) => dispatch(loadClubSuccess(res)),
+			(res) => {
+				dispatch(loadClubSuccess(res));
+				dispatch(push('/club'));
+			},
 			(err) => dispatch(_loadClubFailed(err))
 		);
 	};

@@ -22,7 +22,7 @@ const userRole = (roles) => async (req, res, next) => {
 	return unauth(res);
 };
 
-const authedUser = ({ params: { user } }, res, next) => {
+const authedUser = ({ user }, res, next) => {
 	return user ? next() : unauth(res);
 };
 
