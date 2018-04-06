@@ -7,7 +7,7 @@ const userRole = (roles) => async (req, res, next) => {
 	if (user && clubId) {
 		try {
 			const club = await Club.findById(clubId);
-			const clubUser = club.users.find(({ id }) => id === user.id);
+			const clubUser = club && club.users.find(({ id }) => id === user.id);
 			if (clubUser && roles.includes(clubUser.membership.role)) {
 				req.club = club;
 				return next();

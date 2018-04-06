@@ -51,7 +51,7 @@ export class Messages extends PureComponent<Props, State> {
 			receiveMessage(JSON.parse(data));
 		});
 
-		this.ws.addEventListener('close', this.registerWebSocket);
+		// this.ws.addEventListener('close', this.registerWebSocket);
 	};
 
 	componentDidMount(): void {

@@ -37,7 +37,7 @@ export class Header extends PureComponent<Props> {
 
 	render(): Node {
 		const { club: { name } } = this.props;
-		const clubName = name || 'Book Club';
+		const clubName = name || 'BookBrunch';
 
 		return (
 			<div className="navbar navbar-dark navbar-expand-lg bg-dark d-flex justify-content-between">
