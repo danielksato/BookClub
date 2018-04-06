@@ -10,7 +10,7 @@ passport.use(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: 'http://bookclub-dev.dksato.com:3000/api/oauth2/callback',
+			callbackURL: 'http://dev.book-brunch.com:3000/api/oauth2/callback',
 		},
 		function(accessToken, refreshToken, profile, cb) {
 			const { id, name: { familyName, givenName }, emails } = profile;

@@ -1,7 +1,7 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import type BookRecord from 'records/BookRecord';
-import styles from 'styles/Book.module.css';
+import styles from 'styles/Book.scss';
 import classnames from 'classnames';
 import { PROPOSED, ACTIVE } from 'constants/AppConstants';
 import parseDate from 'util/ParseDate';

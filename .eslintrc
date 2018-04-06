@@ -1,5 +1,5 @@
 {
-    "extends": ["standard", "standard-react", "plugin:prettier/recommended", "plugin:flowtype/recommended"],
+    "extends": ["standard-react", "plugin:prettier/recommended", "plugin:flowtype/recommended"],
     "parser": "babel-eslint",
     "plugins": ["flowtype"],
     "settings": {
