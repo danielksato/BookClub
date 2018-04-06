@@ -1,0 +1,26 @@
+@import '../index.scss';
+
+.container {
+    @extend .container;
+    @extend .mt-3;
+}
+
+.searchForm {
+    @extend .form-group;
+    @extend .mt-3;
+
+    input {
+        @extend .w-50;
+    }
+}
+
+.searchResult {
+    @include borderGroup;
+    display: inline-block;
+    background-color: $gray-200;
+
+    button {
+        @extend .mt-2;
+        display: block;
+    }
+}

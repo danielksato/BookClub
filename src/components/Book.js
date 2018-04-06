@@ -1,26 +1,18 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import type BookRecord from 'records/BookRecord';
-import styles from 'styles/Book.scss';
-import classnames from 'classnames';
 import { PROPOSED, ACTIVE } from 'constants/AppConstants';
 import parseDate from 'util/ParseDate';
+import styles from 'styles/Book.scss';
 
 type Props = {
 	book: BookRecord,
-	large?: boolean,
 };
 
 export default class Book extends PureComponent<Props> {
 	renderThumb(): Node {
-		const { book: { thumbnail, image, title }, large } = this.props;
-		return (
-			<img
-				alt={`cover for ${title}`}
-				className="align-self-center"
-				src={large ? image : thumbnail}
-			/>
-		);
+		const { book: { image, title } } = this.props;
+		return <img alt={`cover for ${title}`} className="align-self-center" src={image} />;
 	}
 
 	renderVotes(): Node {
@@ -38,21 +30,17 @@ export default class Book extends PureComponent<Props> {
 	renderStatus(): Node {
 		const { status, updatedAt } = this.props.book;
 		if (status === ACTIVE) {
-			return <span>Selected at {parseDate(updatedAt)}</span>;
+			return <span>Selected on {parseDate(updatedAt)}</span>;
 		}
 	}
 
 	render(): Node {
 		const { title, author, link, length } = this.props.book;
 		return (
-			<a
-				href={link}
-				target="_blank"
-				className={classnames('media p-1 w-25 border rounded bg-secondary', styles.link)}
-			>
+			<a href={link} rel="nofollow noopener" target="_blank" className={styles.link}>
 				{this.renderThumb()}
-				<div className={classnames('media-body p-1 font-size-small', styles.text)}>
-					<span>{title}</span>
+				<div className={styles.text}>
+					<span className={styles.title}>{title}</span>
 					<span>{author}</span>
 					<span>{length} pages</span>
 					{this.renderVotes()}

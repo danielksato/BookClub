@@ -133,7 +133,18 @@ module.exports = function(app) {
 			const { club } = req;
 			const { bookId } = req.params;
 			const { status } = req.body;
-			const selection = await Selection.findOne({ where: { bookId, clubId: club.id } });
+			const deactivation =
+				status === 'active'
+					? Selection.findAll({ where: { clubId: club.id, status } }).then((activeSelections) => {
+							return Promise.all(
+								activeSelections.map((selection) => selection.update({ status: 'archived' }))
+							);
+					  })
+					: Promise.resolve(null);
+			const [selection] = await Promise.all([
+				Selection.findOne({ where: { bookId, clubId: club.id } }),
+				deactivation,
+			]);
 			await selection.update({ status });
 			const updatedClub = await club.reload();
 			res.json(updatedClub);

@@ -1,14 +1,35 @@
+@import '../index.scss';
+
 .text {
+    @extend .p-3;
+    align-self: center;
     display: inline-flex;
     flex-direction: column;
+    font-size: $font-size-xs;
 }
 
 .link {
+    @include borderGroup;
+    @extend .w-50;
+    background-color: $white;
+    display: inline-flex;
     color: initial;
     text-decoration: none;
+
+    img {
+        border: 1px solid $gray-400;
+    }
+
 }
 
 .link:hover {
     color: initial;
     text-decoration: none;
+}
+
+.title {
+    @extend .mb-2;
+    &:first-child {
+        font-size: $font-size-base;
+    }
 }

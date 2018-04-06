@@ -22,6 +22,10 @@
     p {
         font-size: $font-size-lg;
     }
+
+    button {
+        display: block;
+    }
 }
 
 .invite {
@@ -44,6 +48,7 @@
 
     button {
         @extend .mt-2;
+        display: block;
     }
 }
 
