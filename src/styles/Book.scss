@@ -10,7 +10,7 @@
 
 .link {
     @include borderGroup;
-    @extend .w-50;
+    @extend .w-100;
     background-color: $white;
     display: inline-flex;
     color: initial;

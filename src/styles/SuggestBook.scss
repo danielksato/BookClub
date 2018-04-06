@@ -16,7 +16,8 @@
 
 .searchResult {
     @include borderGroup;
-    display: inline-block;
+    @extend .w-50;
+    display: block;
     background-color: $gray-200;
 
     button {

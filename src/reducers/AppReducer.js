@@ -1,6 +1,6 @@
 // @flow
 import { Record, List } from 'immutable';
-import { SET_GROWLER, SEARCH_BOOK_SUCCESS } from 'constants/ActionConstants';
+import { SET_GROWLER, SEARCH_BOOK_SUCCESS, DELETE_BOOK } from 'constants/ActionConstants';
 import { createReducer } from 'redux-create-reducer';
 import BookRecord from 'records/BookRecord';
 
@@ -21,5 +21,11 @@ export default createReducer(new AppStateRecord(), {
 	},
 	[SEARCH_BOOK_SUCCESS]: function(state, { payload }: Action<Array<BookResponse>>) {
 		return state.set('books', List(payload.map((book) => new BookRecord(book))));
+	},
+	[DELETE_BOOK]: function(state, { payload }: Action<BookRecord>) {
+		const bookId = payload.isbn;
+		return state.update('books', (books: List<BookRecord>) =>
+			books.filter(({ isbn }) => isbn !== bookId)
+		);
 	},
 });

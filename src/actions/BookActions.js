@@ -2,7 +2,7 @@
 import { createAction, type ActionCreator, type ThunkAction } from 'actions';
 import {
 	SEARCH_BOOK_SUCCESS,
-	// DELETE_BOOK,
+	DELETE_BOOK,
 	// CONFIRM_BOOK,
 } from 'constants/ActionConstants';
 import {
@@ -13,6 +13,7 @@ import {
 } from 'apis/BookApi';
 import { loadClubSuccess } from 'actions/ClubActions';
 import { setGrowler } from 'actions/AppActions';
+import { push } from 'react-router-redux';
 
 import type BookRecord from 'records/BookRecord';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -37,6 +38,7 @@ export const searchBook = (search: string): ThunkAction => {
 	};
 };
 
+const _deleteBook: ActionCreator<BookRecord> = createAction(DELETE_BOOK);
 export const suggestBook = ({
 	book,
 	club,
@@ -45,8 +47,10 @@ export const suggestBook = ({
 	club: ClubRecord,
 }): ThunkAction => {
 	return function(dispatch) {
+		dispatch(_deleteBook(book));
 		suggestBookApi({ book, club }).then((club: ClubResponse) => {
 			dispatch(loadClubSuccess(club));
+			dispatch(push('/club'));
 		}, handleBookError(dispatch));
 	};
 };
