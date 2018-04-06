@@ -1,0 +1,28 @@
+@import '../index.scss';
+
+.container {
+    @extend .container;
+    @extend .mt-3;
+    @extend .w-75;
+}
+
+.history {
+    @include borderGroup;
+}
+
+.messageEntry {
+    @include borderGroup;
+    @extend .form-group;
+    @extend .mt-2;
+
+    button {
+        @extend .mt-2;
+        display: block;
+
+
+    }
+}
+
+.message {
+    @extend .mb-1;
+}

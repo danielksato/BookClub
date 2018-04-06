@@ -2,6 +2,7 @@
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import { login, createUser, loginWithGoogle } from 'actions/UserActions';
+import preventDefault from 'util/PreventDefault';
 import styles from 'styles/Login.scss';
 
 type Props = {
@@ -98,7 +99,7 @@ export class Login extends PureComponent<Props, State> {
 		const { LOGIN_EMAIL, LOGIN_PASSWORD } = fieldNames;
 		const loginFields = [LOGIN_EMAIL, LOGIN_PASSWORD].map(this.renderFormField);
 		return (
-			<form className={styles.formGroup}>
+			<form className={styles.formGroup} onSubmit={preventDefault}>
 				<p>Log In</p>
 				{loginFields}
 				<button onClick={this.login} type="submit">
@@ -114,7 +115,7 @@ export class Login extends PureComponent<Props, State> {
 			this.renderFormField
 		);
 		return (
-			<form className={styles.formGroup}>
+			<form className={styles.formGroup} onSubmit={preventDefault}>
 				<p>Create an Account</p>
 				{createFields}
 				<button onClick={this.create} type="submit">

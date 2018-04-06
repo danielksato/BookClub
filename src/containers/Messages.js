@@ -2,10 +2,13 @@
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import { getMessages, sendMessage, receiveMessage } from 'actions/MessageActions';
+import preventDefault from 'util/PreventDefault';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
 import type { MessageStateRecord } from '../reducers/MessageReducer';
+
+import styles from 'styles/Messages.scss';
 
 type Props = {
 	user: UserRecord,
@@ -43,21 +46,31 @@ export class Messages extends PureComponent<Props, State> {
 		return user ? `${user.firstName} ${user.lastName}` : 'Somebody';
 	};
 
-	registerWebSocket = () => {
+	registerWebSocket = (): void => {
 		const { receiveMessage } = this.props;
 		this.ws = new WebSocket('ws://dev.book-brunch.com:3000/socket/messages');
 		// $FlowFixMe WebSocket isn't typed
 		this.ws.addEventListener('message', ({ data }) => {
 			receiveMessage(JSON.parse(data));
 		});
-
-		// this.ws.addEventListener('close', this.registerWebSocket);
 	};
 
-	componentDidMount(): void {
+	getMessages = (): void => {
 		const { club: { id }, getMessages } = this.props;
-		getMessages({ clubId: id });
-		this.registerWebSocket();
+		if (id) {
+			getMessages({ clubId: id });
+			this.registerWebSocket();
+		}
+	};
+
+	componentDidMount() {
+		this.getMessages();
+	}
+
+	componentDidUpdate() {
+		if (!this.ws) {
+			this.getMessages();
+		}
 	}
 
 	componentWillUnmount(): void {
@@ -72,15 +85,19 @@ export class Messages extends PureComponent<Props, State> {
 		const { message } = this.state;
 		const { club: { id }, sendMessage } = this.props;
 		sendMessage({ message, clubId: id });
+		this.setState({ message: '' });
 	};
 
 	renderMessages(): Node {
 		const { message: { messages } } = this.props;
+		if (!messages.size) {
+			return <p className={styles.message}>There are no messages yet. Say hello!</p>;
+		}
 		return messages.map(({ userId, message, id }) => {
 			return (
-				<div key={`message-${id}`}>
+				<p key={`message-${id}`} className={styles.message}>
 					{this.getUser(userId)}: {message}
-				</div>
+				</p>
 			);
 		});
 	}
@@ -88,21 +105,28 @@ export class Messages extends PureComponent<Props, State> {
 	renderMessageEntry(): Node {
 		const { message } = this.state;
 		return (
-			<div>
-				<input id="message-entry" value={message} onChange={this.onTypeMessage} />
+			<form className={styles.messageEntry} onSubmit={preventDefault}>
+				<input
+					id="message-entry"
+					value={message}
+					onChange={this.onTypeMessage}
+					className="form-control"
+				/>
 				<label htmlFor="message-entry">Write a message</label>
-				<button onClick={this.onSendMessage}>Send</button>
-			</div>
+				<button disabled={!message} onClick={this.onSendMessage} type="submit">
+					Send
+				</button>
+			</form>
 		);
 	}
 
 	render(): Node {
 		const { club: { name } } = this.props;
 		return (
-			<div>
+			<div className={styles.container}>
 				<h2>Messages for {name}</h2>
-				<div>{this.renderMessages()}</div>
-				<div>{this.renderMessageEntry()}</div>
+				<div className={styles.history}>{this.renderMessages()}</div>
+				{this.renderMessageEntry()}
 			</div>
 		);
 	}
