@@ -1,0 +1,16 @@
+@import '../index.scss';
+
+.container {
+    padding: 0;
+    
+    [data-role=#{$invited}] {
+        color: $gray-400;
+    }
+
+    span {
+        @extend .mr-1;
+        &:not(:first-child) {
+            font-size: $font-size-sm;
+        }
+    }
+}

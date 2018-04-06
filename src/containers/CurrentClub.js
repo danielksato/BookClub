@@ -12,6 +12,8 @@ import Inviter from 'components/Inviter';
 import getCurrentRole from 'util/GetCurrentRole';
 import { replace } from 'react-router-redux';
 import styles from 'styles/CurrentClub.scss';
+import { Link } from 'react-router-dom';
+import Member from 'components/Member';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
@@ -48,7 +50,7 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderClubHeader() {
-		return <h2>{this.props.club.name || 'You are not a member of any clubs'}</h2>;
+		return <h2>{this.props.club.name || 'No club selected'}</h2>;
 	}
 
 	renderArchive(book: BookRecord): Node {
@@ -57,13 +59,7 @@ export class CurrentClub extends PureComponent<Props> {
 			return null;
 		}
 		const onClick = () => modifyBook({ status: ARCHIVED, bookId: book.id, clubId: id });
-		return (
-			<div className="w-25 p-1">
-				<button className="ml-1" onClick={onClick} data-for="for">
-					Archive this book
-				</button>
-			</div>
-		);
+		return <button onClick={onClick}>Archive this book</button>;
 	}
 
 	renderCurrentBook() {
@@ -74,7 +70,7 @@ export class CurrentClub extends PureComponent<Props> {
 		}
 
 		return (
-			<div>
+			<div className={styles.activeBook}>
 				<p>Current Book:</p>
 				<Book book={currentBook} />
 				{this.renderArchive(currentBook)}
@@ -98,8 +94,8 @@ export class CurrentClub extends PureComponent<Props> {
 		}
 
 		return (
-			<div className="w-25 p-1">
-				<button className="ml-1" onClick={onClick} data-for="for">
+			<div className={styles.voting}>
+				<button onClick={onClick} data-for="for">
 					Vote For This Book
 				</button>
 				<button onClick={onClick}>Vote Against This Book</button>
@@ -113,13 +109,7 @@ export class CurrentClub extends PureComponent<Props> {
 			return null;
 		}
 		const onClick = () => modifyBook({ status: ACTIVE, bookId: book.id, clubId: id });
-		return (
-			<div className="w-25 p-1">
-				<button className="ml-1" onClick={onClick} data-for="for">
-					Select this book
-				</button>
-			</div>
-		);
+		return <button onClick={onClick}>Select this book</button>;
 	}
 
 	renderProposedBooks(): Node {
@@ -130,7 +120,7 @@ export class CurrentClub extends PureComponent<Props> {
 
 		const bookList = proposedBooks.map((book) => {
 			return (
-				<div key={book.isbn}>
+				<div key={book.isbn} className={styles.book}>
 					<Book book={book} />
 					{this.renderVoting(book)}
 					{this.renderAutocraticSelect(book)}
@@ -138,8 +128,16 @@ export class CurrentClub extends PureComponent<Props> {
 			);
 		});
 
+		if (!bookList.size) {
+			return (
+				<Link className={styles.suggestLink} to="/suggest">
+					Suggest a few books for your friends
+				</Link>
+			);
+		}
+
 		return (
-			<div>
+			<div className={styles.list}>
 				<p>Proposed Books:</p>
 				{bookList}
 			</div>
@@ -151,15 +149,12 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderMembers(): Node {
-		const memberList = this.props.club.users.map(({ id, firstName, lastName, role }) => {
-			return (
-				<p key={`member-${id}`} className={role}>
-					{firstName} {lastName}
-				</p>
-			);
+		const memberList = this.props.club.users.map((user) => {
+			return <Member key={`member-${user.id}`} user={user} />;
 		});
+
 		return (
-			<div>
+			<div className={styles.list}>
 				<p>Members:</p>
 				{memberList}
 				{this.renderInvite()}
@@ -168,12 +163,13 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	render(): Node {
+		const { club: { id } } = this.props;
 		return (
-			<div>
+			<div className={styles.container}>
 				{this.renderClubHeader()}
-				{this.renderCurrentBook()}
-				{this.renderProposedBooks()}
-				{this.renderMembers()}
+				{id ? this.renderCurrentBook() : null}
+				{id ? this.renderProposedBooks() : null}
+				{id ? this.renderMembers() : null}
 			</div>
 		);
 	}

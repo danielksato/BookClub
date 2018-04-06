@@ -1,0 +1,25 @@
+@import '../index.scss';
+
+.container {
+    @extend .container;
+    @extend .w-75;
+
+    button {
+        @extend .mt-2;
+    }
+}
+
+.formGroup {
+    @include borderGroup;
+    @extend .form-group;
+
+    input {
+        @include desktop {
+            width: 50%;
+        }
+    }
+
+    p {
+        font-size: $font-size-lg;
+    }
+}

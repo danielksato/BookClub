@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { ClubRecord } from 'reducers/ClubReducer';
+import styles from 'styles/CurrentClub.scss';
 
 type Props = {
 	inviteMember: ({ clubId: number, email: string }) => void,
@@ -25,18 +26,24 @@ export default class Inviter extends PureComponent<Props, State> {
 			email: this.state.value,
 			clubId: this.props.club.id,
 		});
+		this.setState({ value: '' });
 	};
 
 	render(): Node {
 		const { value } = this.state;
 		return (
-			<div>
-				<input id="invite-members" value={this.state.value} onChange={this.onChange} />
+			<form className={styles.invite}>
+				<input
+					id="invite-members"
+					value={this.state.value}
+					onChange={this.onChange}
+					className="form-control"
+				/>
 				<label htmlFor="invite-members">Invite a new group member by email</label>
-				<button className="btn btn-primary" disabled={!value.includes('@')} onClick={this.onSubmit}>
+				<button disabled={!value.includes('@')} onClick={this.onSubmit} type="submit">
 					Invite
 				</button>
-			</div>
+			</form>
 		);
 	}
 }

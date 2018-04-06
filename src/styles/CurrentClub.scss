@@ -1,0 +1,61 @@
+@import '../index.scss';
+
+.container {
+    @extend .container;
+    @extend .mt-3;
+}
+
+
+.suggestLink {
+    color: $gray-900;
+    text-decoration: none;
+
+    &:hover {
+        color: $gray-900;
+
+    }
+}
+
+.list {
+    @include borderGroup;
+
+    p {
+        font-size: $font-size-lg;
+    }
+}
+
+.invite {
+    @extend .form-group;
+    @extend .mt-2;
+
+    input {
+        @extend .form-control;
+        @extend .w-25;
+    }
+
+    button {
+        display: block;
+    }
+}
+
+.book {
+    @include borderGroup;
+    background-color: $gray-200;
+
+    button {
+        @extend .mt-2;
+    }
+}
+
+.activeBook {
+    @extend .list;
+    button {
+        @extend .mt-2;
+    }
+}
+
+.voting {
+    > :not(:last-child) {
+        @extend .mr-2;
+    }
+}

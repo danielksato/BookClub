@@ -11,9 +11,10 @@ Club.prototype.addBookIfNotPresent = function(book) {
 };
 
 module.exports = function(app) {
-	app.get('/club', ({ session: { club } }, res) => {
+	app.get('/club', async ({ session: { club } }, res) => {
 		if (club) {
-			res.json(club);
+			const updatedClub = await Club.findById(club.id);
+			res.json(updatedClub);
 		} else {
 			res.json(null);
 		}

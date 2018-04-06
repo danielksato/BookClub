@@ -8,8 +8,8 @@
         }
     },
     "rules": {
-        "no-console": "error",
-        "no-debugger": "error",
+        "no-console": "warn",
+        "no-debugger": "warn",
         "no-underscore-dangle": "off",
         "no-useless-return": "off",
         "react/jsx-indent": "off",

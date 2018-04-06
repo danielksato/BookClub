@@ -11,5 +11,24 @@ a {
 }
 
 button {
+  @extend .btn;
+  @extend .btn-primary;
   cursor: pointer;
+}
+
+@mixin borderGroup {
+    @extend .mt-2;
+    @extend .p-2;
+    border: 1px solid $gray-400;
+    border-radius: 3px;
+    @content;
+}
+
+$admin: 'admin';
+$invited: 'invited';
+
+@mixin desktop {
+  @include media-breakpoint-up(md) {
+    @content
+  }
 }
