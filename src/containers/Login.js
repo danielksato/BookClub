@@ -2,6 +2,7 @@
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import { login, createUser, loginWithGoogle } from 'actions/UserActions';
+import styles from 'styles/Login.scss';
 
 type Props = {
 	login: (Object) => void,
@@ -97,13 +98,13 @@ export class Login extends PureComponent<Props, State> {
 		const { LOGIN_EMAIL, LOGIN_PASSWORD } = fieldNames;
 		const loginFields = [LOGIN_EMAIL, LOGIN_PASSWORD].map(this.renderFormField);
 		return (
-			<div className="form-group">
+			<form className={styles.formGroup}>
 				<p>Log In</p>
 				{loginFields}
-				<button onClick={this.login} className="btn btn-primary">
+				<button onClick={this.login} type="submit">
 					Log In
 				</button>
-			</div>
+			</form>
 		);
 	}
 
@@ -113,24 +114,22 @@ export class Login extends PureComponent<Props, State> {
 			this.renderFormField
 		);
 		return (
-			<div className="form-group">
+			<form className={styles.formGroup}>
 				<p>Create an Account</p>
 				{createFields}
-				<button onClick={this.create} className="btn btn-primary">
+				<button onClick={this.create} type="submit">
 					Create User
 				</button>
-			</div>
+			</form>
 		);
 	}
 
 	render(): Node {
 		return (
-			<div className="container">
+			<div className={styles.container}>
 				{this.renderLogin()}
 				{this.renderCreateAccount()}
-				<button onClick={this.props.loginWithGoogle} className="btn btn-primary">
-					Login with Google
-				</button>
+				<button onClick={this.props.loginWithGoogle}>Login with Google</button>
 			</div>
 		);
 	}

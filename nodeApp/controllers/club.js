@@ -15,7 +15,7 @@ module.exports = function(app) {
 		if (club) {
 			res.json(club);
 		} else {
-			res.sendStatus(200);
+			res.json(null);
 		}
 	});
 

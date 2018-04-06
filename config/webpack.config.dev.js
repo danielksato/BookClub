@@ -235,7 +235,7 @@ module.exports = {
                     camelCase: true,
                     importLoaders: 1,
                     modules: true,
-                    localIdentName: '[name]_[hash:base64]',
+                    localIdentName: '[name]_[local]',
                   }
               }, {
                   loader: "sass-loader" // compiles Sass to CSS

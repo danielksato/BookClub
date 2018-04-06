@@ -11,6 +11,7 @@ import type BookRecord from 'records/BookRecord';
 import Inviter from 'components/Inviter';
 import getCurrentRole from 'util/GetCurrentRole';
 import { replace } from 'react-router-redux';
+import styles from 'styles/CurrentClub.scss';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
