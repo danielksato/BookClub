@@ -36,9 +36,11 @@ export const createUser = (body: UserResponse): Promise<UserResponse> => {
 };
 
 export const loginWithGoogle = (): Promise<UserResponse> => {
-	return fetch('/api/oauth2', { mode: 'no-cors', credentials: 'include' }).then((res) =>
-		res.json()
-	);
+	return fetch('/api/oauth2', { mode: 'cors', credentials: 'include' })
+		.then((res) => {
+			return res.json();
+		})
+		.catch(() => (window.location.href = '/api/oauth2'));
 };
 
 export const authUser = (): Promise<UserResponse> => {
