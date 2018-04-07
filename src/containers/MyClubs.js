@@ -62,7 +62,7 @@ export class MyClubs extends PureComponent<Props, State> {
 	renderAddtionalClubs(): Node {
 		const { clubs, currentClub } = this.props;
 		const additionalClubs = clubs
-			.filter(({ id, role }: ClubRecord) => id !== currentClub.id && role !== INVITED)
+			.filter(({ id, role }) => id !== currentClub.id && role !== INVITED)
 			.map(({ name, id }) => {
 				return (
 					<div
