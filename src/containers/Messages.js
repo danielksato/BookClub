@@ -74,7 +74,7 @@ export class Messages extends PureComponent<Props, State> {
 	}
 
 	componentWillUnmount(): void {
-		this.ws & this.ws.close();
+		this.ws && this.ws.close();
 	}
 
 	onTypeMessage = (e: SyntheticEvent<HTMLInputElement>): void => {
