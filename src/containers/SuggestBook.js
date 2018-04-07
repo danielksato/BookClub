@@ -89,7 +89,7 @@ export class SuggestBook extends PureComponent<Props, State> {
 	render(): Node {
 		return (
 			<div className={styles.container}>
-				<h2>Suggest a book for your club</h2>
+				<h2>Suggest a book</h2>
 				{this.renderSearch()}
 				{this.renderResultHeading()}
 				{this.renderResults()}

@@ -16,9 +16,12 @@
 
 .searchResult {
     @include borderGroup;
-    @extend .w-50;
     display: block;
     background-color: $gray-200;
+
+    @include desktop {
+        width: 50%;
+    }
 
     button {
         @extend .mt-2;

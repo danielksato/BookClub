@@ -10,7 +10,7 @@ export default class BookRecord extends Record({
 	isbn: '',
 	length: 0,
 	link: '',
-	status: PROPOSED,
+	status: null,
 	thumbnail: '',
 	title: '',
 	updatedAt: '',
@@ -24,7 +24,7 @@ export default class BookRecord extends Record({
 	isbn: string;
 	length: number;
 	link: string;
-	status: string;
+	status: ?string;
 	thumbnail: string;
 	title: string;
 	updatedAt: string;
@@ -35,7 +35,7 @@ export default class BookRecord extends Record({
 	constructor({ selection, votes, ...rest }: BookResponse = {}) {
 		super({
 			...rest,
-			status: selection ? selection.status : PROPOSED,
+			status: selection ? selection.status : null,
 			votesAgainst: votes ? votes.filter(({ inFavor }) => !inFavor).length : 0,
 			votesFor: votes ? votes.filter(({ inFavor }) => inFavor).length : 0,
 			voters: votes ? List(votes.map(({ userId }) => userId)) : new List(),

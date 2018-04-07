@@ -18,7 +18,10 @@
 
 .list {
     @include borderGroup;
-    @extend .w-50;
+    @include desktop {
+        width: 50%;
+    }
+
 
     p {
         font-size: $font-size-lg;
