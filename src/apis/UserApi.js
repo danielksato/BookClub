@@ -36,11 +36,16 @@ export const createUser = (body: UserResponse): Promise<UserResponse> => {
 };
 
 export const loginWithGoogle = (): Promise<UserResponse> => {
-	return fetch('/api/oauth2', { mode: 'cors', credentials: 'include' })
-		.then((res) => {
-			return res.json();
-		})
-		.catch(() => (window.location.href = '/api/oauth2'));
+	return (
+		fetch('/api/oauth2', { mode: 'cors', credentials: 'include' })
+			.then((res) => {
+				return res.json();
+			})
+			// $FlowFixMe it doesn't really matter what the promise resolves with if we redirect
+			.catch(() => {
+				window.location.href = '/api/oauth2';
+			})
+	);
 };
 
 export const authUser = (): Promise<UserResponse> => {
