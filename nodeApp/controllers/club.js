@@ -20,7 +20,8 @@ module.exports = function(app) {
 		}, errorHandler(res));
 	});
 
-	app.post('/club', authedUser, ({ body, user }, res) => {
+	app.post('/club', authedUser, (req, res) => {
+		const { body, user } = req;
 		Club.create({ name: body.name }).then(
 			(club) =>
 				club
