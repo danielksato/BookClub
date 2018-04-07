@@ -16,8 +16,15 @@ passport.use(
 			const { id, name: { familyName, givenName }, emails } = profile;
 
 			const where = emails ? { email: emails[0].value } : { googleId: id };
-			User.findOne({ where }).then(
-				(user) => {
+			User.findOrCreate({
+				where,
+				defaults: {
+					email: emails ? { email: emails[0].value } : '',
+					firstName: givenName,
+					lastName: familyName,
+				},
+			}).then(
+				([user]) => {
 					if (user) {
 						cb(null, user);
 					} else {

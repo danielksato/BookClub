@@ -2,14 +2,6 @@ const { Club, Selection } = require('../models');
 const errorHandler = require('./errorHandler');
 const { invitedClubUser, authedUser } = require('./middleware');
 
-Club.prototype.addBookIfNotPresent = function(book) {
-	return this.hasBook(book).then((hasBook) => {
-		return hasBook
-			? Selection.findAll({ where: { clubId: this.id, bookId: book.id } })
-			: this.addBook(book);
-	});
-};
-
 module.exports = function(app) {
 	app.get('/club', authedUser, async ({ session: { club } }, res) => {
 		if (club) {

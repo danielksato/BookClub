@@ -64,7 +64,7 @@ module.exports = function(app) {
 		const { clubId } = params;
 		Promise.all([Club.findById(clubId), Book.createByISBN(body)])
 			.then(([club, book]) => {
-				return Promise.all([User.findById(user.id), club.addBookIfNotPresent(book)]).then(
+				return Promise.all([User.findById(user.id), club.addBook(book)]).then(
 					([user, [selection]]) => {
 						return Vote.create({
 							bookId: book.id,
