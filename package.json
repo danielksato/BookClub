@@ -132,5 +132,5 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "http://localhost:8080"
+  "homepage": "http://www.book-brunch.com"
 }

@@ -1,0 +1,23 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Authentication": {
+    "Bucket": "elasticbeanstalk-us-east-1-917812706670",
+    "Key": "dockercfg"
+  },
+  "Image": {
+    "Name": "danielksato/book-brunch",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "8080",
+      "HostPort": "80"
+    }
+  ],
+  "Volumes": [
+    {
+      "HostDirectory": "/usr/src/app",
+      "ContainerDirectory": "/usr/src/app"
+    }
+  ]
+}
