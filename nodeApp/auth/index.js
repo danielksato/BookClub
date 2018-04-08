@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const session = require('./session');
 
 const callbackURL = process.env.PRODUCTION
-	? 'http://www.book-brunch.com'
+	? 'http://www.book-brunch.com/api/oauth2/callback'
 	: 'http://dev.book-brunch.com:3000/api/oauth2/callback';
 passport.use(
 	new GoogleStrategy(
