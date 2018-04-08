@@ -1,5 +1,5 @@
 nodeApp/node_modules/*
 registerServiceWorker.js
-config/
-scripts/
+config/*
+scripts/*
 

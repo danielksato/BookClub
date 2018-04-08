@@ -1,9 +1,14 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('database', 'user', 'password', {
+
+let sequelize;
+
+// if (!process.env.PRODUCTION) {
+sequelize = new Sequelize('database', 'user', 'password', {
 	dialect: 'sqlite',
 	storage: 'db/data.sqlite',
 	logging: false,
 });
+// }
 
 const User = sequelize.define(
 	'user',

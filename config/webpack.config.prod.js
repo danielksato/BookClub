@@ -12,6 +12,7 @@ const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -48,7 +49,7 @@ const extractTextPluginCSSOptions = shouldUseRelativeAssetPaths
     { publicPath: Array(cssFilename.split('/').length).join('../') }
   : {};
 
-const extractTextPluginCSSModulesOptions = shouldUseRelativeAssetPaths
+const extractTextPluginSCSSModulesOptions = shouldUseRelativeAssetPaths
   ? // Making sure that the publicPath goes back to to build folder.
   { publicPath: Array(cssModulesFilename.split('/').length).join('../') }
   : {};
@@ -57,7 +58,7 @@ const ExtractTextPluginCSS = new ExtractTextPlugin({
   filename: cssFilename,
 })
 
-const ExtractTextPluginCSSModules = new ExtractTextPlugin({
+const ExtractTextPluginSCSSModules = new ExtractTextPlugin({
   filename: cssModulesFilename,
   ignoreOrder: true,
 })
@@ -165,7 +166,6 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
               compact: true,
             },
           },
@@ -181,50 +181,30 @@ module.exports = {
           // tags. If you use code splitting, however, any async bundles will still
           // use the "style" loader inside the async code so CSS from them won't be
           // in the main CSS file.
-          {
-            test: /\.module.css$/,
-            loader: ExtractTextPluginCSSModules.extract(
-              Object.assign(
-                {
-                  fallback: require.resolve('style-loader'),
-                  use: [
-                    {
-                      loader: require.resolve('css-loader'),
-                      options: {
-                        importLoaders: 1,
-                        modules: true,
-                        localIdentName: '[path]__[name]___[local]',
-                        minimize: true,
-                        sourceMap: shouldUseSourceMap,
-                      },
-                    },
-                    {
-                      loader: require.resolve('postcss-loader'),
-                      options: {
-                        // Necessary for external CSS imports to work
-                        // https://github.com/facebookincubator/create-react-app/issues/2677
-                        ident: 'postcss',
-                        plugins: () => [
-                          require('postcss-flexbugs-fixes'),
-                          autoprefixer({
-                            browsers: [
-                              '>1%',
-                              'last 4 versions',
-                              'Firefox ESR',
-                              'not ie < 9', // React doesn't support IE8 anyway
-                            ],
-                            flexbox: 'no-2009',
-                          }),
-                        ],
-                      },
-                    },
-                  ],
-                },
-                extractTextPluginCSSModulesOptions
-              )
-            ),
-            // Note: this won't work without `ExtractTextPluginCSSModules` in `plugins`.
-          },
+          // {
+          //   test: /\.module.css$/,
+          //   loader: ExtractTextPluginCSSModules.extract(
+          //     Object.assign(
+          //       {
+          //         fallback: require.resolve('style-loader'),
+          //         use: [
+          //           {
+          //             loader: require.resolve('css-loader'),
+          //             options: {
+          //               importLoaders: 1,
+          //               modules: true,
+          //               localIdentName: '[path]__[name]___[local]',
+          //               minimize: true,
+          //               sourceMap: shouldUseSourceMap,
+          //             },
+          //           },
+          //         ],
+          //       },
+          //       extractTextPluginCSSModulesOptions
+          //     )
+          //   ),
+          //   // Note: this won't work without `ExtractTextPluginCSSModules` in `plugins`.
+          // },
           {
             test: /\.css$/,
             exclude: /\.module\.css$/,
@@ -276,21 +256,24 @@ module.exports = {
           {
             test: /\.scss$/,
             include: paths.appSrc,
-            use: [
-              {
-                  loader: "style-loader" // creates style nodes from JS strings
-              }, {
+            loader: ExtractTextPluginSCSSModules.extract(Object.assign({
+              fallback: 'style-loader',
+              use: [
+                {
                   loader: "css-loader",
                   options: {
                     camelCase: true,
                     importLoaders: 1,
                     modules: true,
-                    localIdentName: '[hash:base64]',
+                    minimize: true,
+                    sourceMap: shouldUseSourceMap,
+                    localIdentName: '[name]_[local]',
                   }
-              }, {
-                  loader: "sass-loader" // compiles Sass to CSS
-              }
-            ]
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }
+              ]
+            }, extractTextPluginSCSSModulesOptions))
           },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
@@ -367,7 +350,8 @@ module.exports = {
     // We have two ExtractTextPlugins to allow for different settings for
     // cssmodules and regular css
     ExtractTextPluginCSS,
-    ExtractTextPluginCSSModules,
+    ExtractTextPluginSCSSModules,
+    new OptimizeCssAssetsPlugin(),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.

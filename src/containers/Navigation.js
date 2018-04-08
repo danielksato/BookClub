@@ -1,6 +1,5 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
-import classnames from 'classnames';
 import { connect } from 'react-redux';
 import SuggestBook from 'containers/SuggestBook';
 import Messages from 'containers/Messages';
@@ -15,22 +14,20 @@ const mapDispatchToProps = (dispatch) => ({
 	logout: () => dispatch(logout()),
 });
 
-const mapStateToProps = ({ app: { tabIndex }, user: { id } }) => ({ tabIndex, loggedIn: !!id });
+const mapStateToProps = ({ user: { id } }) => ({ loggedIn: !!id });
 
 type Props = {
 	loggedIn: boolean,
 	logout: () => void,
-	tabIndex: PureComponent<*>,
 };
 
 export class Navigation extends PureComponent<Props> {
 	renderTabs(): Array<Node> {
-		return navTabs.map(({ navString, urlParam }, index) => {
-			const className = classnames(['nav-link', { active: index === this.props.tabIndex }]);
+		return navTabs.map(({ navString, urlParam }) => {
 			const [linkParam] = /^\/\w+/.exec(urlParam);
 			return (
-				<li key={`${navString}-${index}`} className="nav-item">
-					<Link className={className} data-tabindex={index} to={linkParam}>
+				<li key={`nav-${navString}`} className="nav-item">
+					<Link className="nav-link" to={linkParam}>
 						{navString}
 					</Link>
 				</li>
