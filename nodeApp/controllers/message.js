@@ -1,7 +1,7 @@
 const { Message } = require('../models');
 const { activeClubUser } = require('./middleware');
 const errorHandler = require('./errorHandler');
-const sockets = require('../sockets');
+const { sockets } = require('../sockets');
 
 const clubSubscribers = {};
 

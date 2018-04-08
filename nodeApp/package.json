@@ -26,6 +26,7 @@
     "sequelize-cli": "^4.0.0"
   },
   "scripts": {
-    "start": "source ./api_keys && touch db/data.sqlite && nodemon --ignore db"
+    "start": "source ./api_keys && touch db/data.sqlite && nodemon --ignore db",
+    "start:prod": "touch db/data.sqlite && nodemon --ignore db"
   }
 }

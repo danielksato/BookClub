@@ -48,7 +48,7 @@ export class Messages extends PureComponent<Props, State> {
 
 	registerWebSocket = (): void => {
 		const { receiveMessage } = this.props;
-		this.ws = new WebSocket('ws://dev.book-brunch.com:3000/socket/messages');
+		this.ws = new WebSocket(`ws://${window.location.host}/socket/messages`);
 		// $FlowFixMe WebSocket isn't typed
 		this.ws.addEventListener('message', ({ data }) => {
 			receiveMessage(JSON.parse(data));

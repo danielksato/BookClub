@@ -5,12 +5,13 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const session = require('./session');
 
+const port = process.env.PRODUCTION ? 8080 : 3000;
 passport.use(
 	new GoogleStrategy(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: 'http://dev.book-brunch.com:3000/api/oauth2/callback',
+			callbackURL: `http://dev.book-brunch.com:${port}/api/oauth2/callback`,
 		},
 		function(accessToken, refreshToken, profile, cb) {
 			const { id, name: { familyName, givenName }, emails } = profile;
