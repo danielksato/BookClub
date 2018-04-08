@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { searchBook, suggestBook } from 'actions/BookActions';
 import debounce from 'lodash.debounce';
 import Book from 'components/Book';
+import preventDefault from 'util/PreventDefault';
 
 import type BookRecord from 'records/BookRecord';
 import type { List } from 'immutable';
@@ -75,7 +76,7 @@ export class SuggestBook extends PureComponent<Props, State> {
 
 	renderSearch(): Node {
 		return (
-			<form className={styles.searchForm}>
+			<form className={styles.searchForm} onSubmit={preventDefault}>
 				<input
 					className="form-control"
 					id="bookSearch"

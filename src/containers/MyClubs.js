@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { loadClub, createClub } from 'actions/ClubActions';
 import { acceptInvitation } from 'actions/UserActions';
 import { INVITED } from 'constants/AppConstants';
-import preventDefault from 'util/PreventDefault';
 
 import type { List } from 'immutable';
 import { ClubRecord } from 'reducers/ClubReducer';
@@ -50,7 +49,8 @@ export class MyClubs extends PureComponent<Props, State> {
 		this.props.acceptInvitation(clubId);
 	};
 
-	onCreateClub = () => {
+	onCreateClub = (e: SyntheticEvent<*>) => {
+		e.preventDefault;
 		const { name } = this.state;
 		this.props.createClub(new ClubRecord({ name }));
 	};
@@ -118,7 +118,7 @@ export class MyClubs extends PureComponent<Props, State> {
 	renderCreateClub(): Node {
 		const { name } = this.state;
 		return (
-			<form className={styles.createClub} onSubmit={preventDefault}>
+			<form className={styles.createClub} onSubmit={this.onCreateClub}>
 				<input id="create-club" className="form-control" value={name} onChange={this.setName} />
 				<label htmlFor="create-club">Name</label>
 				<button onClick={this.onCreateClub} type="submit">
