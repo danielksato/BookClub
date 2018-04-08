@@ -3,7 +3,8 @@ const app = express();
 const controllers = require('./controllers');
 const auth = require('./auth');
 
-app.use(express.static('public'));
+app.use(express.static('../build'));
+
 app.use(require('cookie-parser')());
 app.use(express.json());
 
