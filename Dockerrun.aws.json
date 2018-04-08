@@ -13,12 +13,6 @@
             "ContainerPort": "8080",
             "HostPort": "80"
         }
-    ],
-    "Volumes": [
-        {
-            "HostDirectory": "/usr/src/app",
-            "ContainerDirectory": "/usr/src/app"
-        }
     ]
 }
     
