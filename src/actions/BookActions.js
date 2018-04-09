@@ -14,6 +14,7 @@ import {
 import { loadClubSuccess } from 'actions/ClubActions';
 import { setGrowler } from 'actions/AppActions';
 import { push } from 'react-router-redux';
+import { CURRENT_CLUB } from '../constants/RouteConstants';
 
 import type BookRecord from 'records/BookRecord';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -50,7 +51,7 @@ export const suggestBook = ({
 		dispatch(_deleteBook(book));
 		suggestBookApi({ book, club }).then((club: ClubResponse) => {
 			dispatch(loadClubSuccess(club));
-			dispatch(push('/club'));
+			dispatch(push(CURRENT_CLUB));
 		}, handleBookError(dispatch));
 	};
 };

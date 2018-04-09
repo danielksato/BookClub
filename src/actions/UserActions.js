@@ -11,9 +11,11 @@ import {
 	acceptInvitation as acceptInvitationApi,
 } from 'apis/UserApi';
 import { authClub as authClubApi } from 'apis/ClubApi';
-import type { UserResponse } from 'apis/UserApi';
 import { loadClubSuccess } from 'actions/ClubActions';
 import { push } from 'react-router-redux';
+import { CURRENT_CLUB } from 'constants/RouteConstants';
+
+import type { UserResponse } from 'apis/UserApi';
 
 const _loadUser: ActionCreator<> = createAction(LOAD_USER);
 const _loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
@@ -44,7 +46,7 @@ export const login = (userData: UserResponse): ThunkAction => {
 		loginApi(userData).then(
 			(user) => {
 				dispatch(_loadUserSuccess(user));
-				dispatch(push('/club'));
+				dispatch(push(CURRENT_CLUB));
 			},
 			(err) => {
 				dispatch(_loadUserFailed(err));
@@ -58,7 +60,7 @@ export const createUser = (userData: UserResponse): ThunkAction => {
 		createUserApi(userData).then(
 			(user) => {
 				dispatch(_loadUserSuccess(user));
-				dispatch(push('/club'));
+				dispatch(push(CURRENT_CLUB));
 			},
 			(err) => dispatch(_loadUserFailed(err))
 		);
@@ -81,7 +83,7 @@ export const authUser = (): ThunkAction => {
 				dispatch(_loadUserSuccess(user));
 				if (club) {
 					dispatch(loadClubSuccess(club));
-					dispatch(push('/club'));
+					// dispatch(push(CURRENT_CLUB));
 				}
 				return user;
 			},
@@ -98,7 +100,7 @@ export const acceptInvitation = (clubId: number): ThunkAction => {
 	return (dispatch) => {
 		acceptInvitationApi(clubId).then((user) => {
 			dispatch(_loadUserSuccess(user));
-			dispatch(push('/club'));
+			dispatch(push(CURRENT_CLUB));
 		});
 	};
 };

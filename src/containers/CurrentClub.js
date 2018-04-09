@@ -14,6 +14,7 @@ import { replace } from 'react-router-redux';
 import styles from 'styles/CurrentClub.scss';
 import { Link } from 'react-router-dom';
 import Member from 'components/Member';
+import { CURRENT_CLUB } from 'constants/RouteConstants';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
@@ -35,7 +36,7 @@ type Props = {
 
 export class CurrentClub extends PureComponent<Props> {
 	static navString = 'Home';
-	static urlParam = '/club/:clubId?';
+	static urlParam = CURRENT_CLUB;
 
 	get currentRole(): ?string {
 		const { club, user } = this.props;
@@ -45,7 +46,7 @@ export class CurrentClub extends PureComponent<Props> {
 	componentDidMount() {
 		const { club: { id }, replace } = this.props;
 		if (id) {
-			replace(`/club/${id}`);
+			replace(`/clubinfo/${id}`);
 		}
 	}
 

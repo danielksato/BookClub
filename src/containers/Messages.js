@@ -3,6 +3,7 @@ import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
 import { getMessages, sendMessage, receiveMessage } from 'actions/MessageActions';
 import preventDefault from 'util/PreventDefault';
+import { MESSAGES } from 'constants/RouteConstants';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -32,7 +33,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export class Messages extends PureComponent<Props, State> {
 	static navString = 'Messages';
-	static urlParam = '/messages';
+	static urlParam = MESSAGES;
 
 	state = { message: '' };
 	ws: $FlowFixMe;
@@ -48,7 +49,7 @@ export class Messages extends PureComponent<Props, State> {
 
 	registerWebSocket = (): void => {
 		const { receiveMessage } = this.props;
-		this.ws = new WebSocket(`ws://${window.location.host}/socket/messages`);
+		this.ws = new WebSocket(`ws://${window.location.hostname}:4040/socket/messages`);
 		// $FlowFixMe WebSocket isn't typed
 		this.ws.addEventListener('message', ({ data }) => {
 			receiveMessage(JSON.parse(data));

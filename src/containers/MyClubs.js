@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { loadClub, createClub } from 'actions/ClubActions';
 import { acceptInvitation } from 'actions/UserActions';
 import { INVITED } from 'constants/AppConstants';
+import { MY_CLUBS } from 'constants/RouteConstants';
 
 import type { List } from 'immutable';
 import { ClubRecord } from 'reducers/ClubReducer';
@@ -31,7 +32,7 @@ const mapDispatchToProps = (dispatch: Function) => {
 
 export class MyClubs extends PureComponent<Props, State> {
 	static navString = 'My Clubs';
-	static urlParam = '/myclubs';
+	static urlParam = MY_CLUBS;
 
 	state = { name: '' };
 

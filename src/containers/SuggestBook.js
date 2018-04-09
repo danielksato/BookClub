@@ -5,6 +5,7 @@ import { searchBook, suggestBook } from 'actions/BookActions';
 import debounce from 'lodash.debounce';
 import Book from 'components/Book';
 import preventDefault from 'util/PreventDefault';
+import { SUGGEST } from 'constants/RouteConstants';
 
 import type BookRecord from 'records/BookRecord';
 import type { List } from 'immutable';
@@ -31,7 +32,7 @@ type State = {
 
 export class SuggestBook extends PureComponent<Props, State> {
 	static navString = 'Suggest a book';
-	static urlParam = '/suggest';
+	static urlParam = SUGGEST;
 
 	state = { search: '' };
 

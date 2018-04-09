@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const controllers = require('./controllers');
 const auth = require('./auth');
-const sockets = require('./sockets');
 const proxy = require('http-proxy-middleware');
+require('./sockets');
 
 if (process.env.PRODUCTION) {
 	app.use(express.static('../build'));
@@ -19,7 +19,6 @@ app.use(express.json());
 
 auth(app);
 controllers(app);
-sockets(app);
 
 if (process.env.PRODUCTION) {
 	app.use('*', (req, res) => {
