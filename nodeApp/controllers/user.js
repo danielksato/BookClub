@@ -69,13 +69,13 @@ module.exports = function(app) {
 
 	app.post('/club/:clubId/invite', activeClubUser, async ({ body: { email }, club, user }, res) => {
 		try {
-			const [newUser] = await User.findOrCreate({ where: { email } });
+			const [newUser, sendMail] = await User.findOrCreate({ where: { email } });
 			const invitation = await Invitation.create({ uuid: uuidv1() });
 			await Promise.all([
 				newUser.addInvitation(invitation),
 				club.addUser(newUser, { through: { role: 'invited' } }),
 			]);
-			inviteMailer({ email });
+			sendMail && inviteMailer({ email });
 			res.json({
 				club: await club.reload(),
 				invitation,
