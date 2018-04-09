@@ -3,6 +3,7 @@ const errorHandler = require('./errorHandler');
 const bcrypt = require('bcrypt');
 const uuidv1 = require('uuid/v1');
 const { activeClubUser } = require('./middleware');
+const inviteMailer = require('../mailer');
 
 User.getMembershipsById = function(id) {
 	return this.findById(id, {
@@ -74,6 +75,7 @@ module.exports = function(app) {
 				newUser.addInvitation(invitation),
 				club.addUser(newUser, { through: { role: 'invited' } }),
 			]);
+			inviteMailer({ email });
 			res.json({
 				club: await club.reload(),
 				invitation,
