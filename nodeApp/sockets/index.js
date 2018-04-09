@@ -5,6 +5,7 @@ const sockets = {};
 
 const wss = new WebSocket.Server({
 	port: 4040,
+	path: '/socket/messages',
 	verifyClient: ({ req }, done) => {
 		sessionParser(req, {}, () => {
 			if (req.session.passport) {
