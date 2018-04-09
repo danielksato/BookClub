@@ -13,7 +13,7 @@ import {
 import { authClub as authClubApi } from 'apis/ClubApi';
 import { loadClubSuccess } from 'actions/ClubActions';
 import { push } from 'react-router-redux';
-import { CURRENT_CLUB } from 'constants/RouteConstants';
+import { CURRENT_CLUB, MY_CLUBS } from 'constants/RouteConstants';
 
 import type { UserResponse } from 'apis/UserApi';
 
@@ -46,7 +46,14 @@ export const login = (userData: UserResponse): ThunkAction => {
 		loginApi(userData).then(
 			(user) => {
 				dispatch(_loadUserSuccess(user));
-				dispatch(push(CURRENT_CLUB));
+				authClubApi().then((club) => {
+					if (club) {
+						dispatch(loadClubSuccess(club));
+						dispatch(push(CURRENT_CLUB));
+					} else {
+						dispatch(push(MY_CLUBS));
+					}
+				});
 			},
 			(err) => {
 				dispatch(_loadUserFailed(err));
@@ -60,7 +67,14 @@ export const createUser = (userData: UserResponse): ThunkAction => {
 		createUserApi(userData).then(
 			(user) => {
 				dispatch(_loadUserSuccess(user));
-				dispatch(push(CURRENT_CLUB));
+				authClubApi().then((club) => {
+					if (club) {
+						dispatch(loadClubSuccess(club));
+						dispatch(push(CURRENT_CLUB));
+					} else {
+						dispatch(push(MY_CLUBS));
+					}
+				});
 			},
 			(err) => dispatch(_loadUserFailed(err))
 		);

@@ -5,7 +5,6 @@ const sockets = {};
 
 const wss = new WebSocket.Server({
 	port: 4040,
-	path: '/socket/messages',
 	verifyClient: ({ req }, done) => {
 		sessionParser(req, {}, () => {
 			if (req.session.passport) {
@@ -21,9 +20,6 @@ const wss = new WebSocket.Server({
 
 wss.on('connection', (ws, req) => {
 	sockets[req.user.id] = ws;
-	ws.on('close', () => {
-		sockets[req.user.id] = null;
-	});
 });
 
 module.exports.sockets = sockets;
