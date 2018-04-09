@@ -4,7 +4,9 @@ const errorHandler = require('./errorHandler');
 const { sockets } = require('../sockets');
 
 const messageClubSubscribers = async ({ club: { users }, message }) => {
-	users.forEach(({ id }) => sockets[id] && sockets[id].send(JSON.stringify(message)));
+	users.forEach(
+		({ id }) => sockets[id] && id !== message.userId && sockets[id].send(JSON.stringify(message))
+	);
 };
 
 module.exports = function(app) {

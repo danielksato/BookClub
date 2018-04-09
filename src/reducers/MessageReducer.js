@@ -40,14 +40,7 @@ export default createReducer(new MessageStateRecord(), {
 	},
 	[SEND_MESSAGE_SUCCESS]: function(state, { payload }) {
 		return state.withMutations((state) => {
-			const newMessage = new MessageRecord(payload);
-			state.update('messages', (messages) => {
-				if (messages.includes(newMessage)) {
-					return messages.push(newMessage);
-				} else {
-					return messages;
-				}
-			});
+			state.update('messages', (messages) => messages.push(new MessageRecord(payload)));
 			state.set('status', DONE);
 		});
 	},
