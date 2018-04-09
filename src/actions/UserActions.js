@@ -44,6 +44,7 @@ export const login = (userData: UserResponse): ThunkAction => {
 		loginApi(userData).then(
 			(user) => {
 				dispatch(_loadUserSuccess(user));
+				dispatch(push('/club'));
 			},
 			(err) => {
 				dispatch(_loadUserFailed(err));
@@ -57,6 +58,7 @@ export const createUser = (userData: UserResponse): ThunkAction => {
 		createUserApi(userData).then(
 			(user) => {
 				dispatch(_loadUserSuccess(user));
+				dispatch(push('/club'));
 			},
 			(err) => dispatch(_loadUserFailed(err))
 		);
@@ -94,6 +96,9 @@ export const authUser = (): ThunkAction => {
 
 export const acceptInvitation = (clubId: number): ThunkAction => {
 	return (dispatch) => {
-		acceptInvitationApi(clubId).then((user) => dispatch(_loadUserSuccess(user)));
+		acceptInvitationApi(clubId).then((user) => {
+			dispatch(_loadUserSuccess(user));
+			dispatch(push('/club'));
+		});
 	};
 };

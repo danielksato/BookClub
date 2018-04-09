@@ -11,13 +11,12 @@ type Props = {
 
 export default class Member extends PureComponent<Props> {
 	render() {
-		const { firstName, lastName, role } = this.props.user;
-		const admin = role === ADMIN ? <span className={styles.role}>({role})</span> : null;
+		const { firstName, lastName, email, role } = this.props.user;
+		const admin = role === ADMIN ? <span>({role})</span> : null;
+		const displayName = firstName ? `${firstName} ${lastName}` : email;
 		return (
 			<div className={styles.container}>
-				<span data-role={role}>
-					{firstName} {lastName}
-				</span>
+				<span data-role={role}>{displayName}</span>
 				{admin}
 			</div>
 		);

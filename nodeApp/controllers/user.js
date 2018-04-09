@@ -28,11 +28,17 @@ module.exports = function(app) {
 		}, errorHandler(res));
 	});
 
+	async function stripPassword(userPromise) {
+		const { get } = await userPromise;
+		const { password, ...rest } = get();
+		return rest;
+	}
+
 	app.post('/user', async ({ body }, res) => {
 		const { email, password, ...rest } = body;
 		try {
 			const hash = await bcrypt.hash(password, 10);
-			const [user, created] = await User.findOrCreate({
+			const [user, created] = await User.scope('withPassword').findOrCreate({
 				where: { email: body.email },
 				defaults: { password: hash, ...rest },
 			});
@@ -40,7 +46,20 @@ module.exports = function(app) {
 				const { password, ...userData } = user.get();
 				res.json(userData);
 			} else {
-				res.sendStatus(403);
+				if (!user.password) {
+					const updatedUser = await user.update({ password: hash, ...rest });
+					const { password, ...userData } = updatedUser.get();
+					res.json(userData);
+				} else if (password) {
+					const passwordValid = await bcrypt.compare(password, user.password);
+					if (passwordValid) {
+						const updatedUser = await user.update(rest);
+						const { password, ...userData } = updatedUser.get();
+						res.json(userData);
+					} else {
+						res.sendStatus(403);
+					}
+				}
 			}
 		} catch (err) {
 			errorHandler(res);

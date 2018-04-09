@@ -30,9 +30,7 @@ export const login = (body: UserResponse): Promise<UserResponse> => {
 };
 
 export const createUser = (body: UserResponse): Promise<UserResponse> => {
-	return sendJSON('/api/user', { body }).then((res) => {
-		return sendJSON('/api/login', { body: { ...body, ...res } });
-	});
+	return sendJSON('/api/user', { body });
 };
 
 export const loginWithGoogle = (): Promise<UserResponse> => {
