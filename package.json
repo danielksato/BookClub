@@ -132,5 +132,5 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "http://www.book-brunch.com"
+  "homepage": "https://www.book-brunch.com"
 }
