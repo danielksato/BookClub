@@ -79,6 +79,7 @@ export const authUser = (): ThunkAction => {
 				dispatch(_loadUserSuccess(user));
 				if (club) {
 					dispatch(loadClubSuccess(club));
+					dispatch(push('/club'));
 				}
 				return user;
 			},

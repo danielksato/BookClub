@@ -1,18 +1,26 @@
-const { Club, Selection } = require('../models');
+const { Club, Selection, User } = require('../models');
 const errorHandler = require('./errorHandler');
-const { invitedClubUser, authedUser } = require('./middleware');
+const { invitedClubUser, authedUser, clubUser } = require('./middleware');
 
 module.exports = function(app) {
-	app.get('/club', authedUser, async ({ session: { club } }, res) => {
+	app.get('/club', authedUser, async ({ session: { club }, user }, res) => {
 		if (club) {
 			const updatedClub = await Club.findById(club.id);
 			res.json(updatedClub);
 		} else {
-			res.json(null);
+			const { clubs } = await User.findById(user.id, {
+				include: [{ model: Club, through: { attributes: ['role'] } }],
+			});
+			const firstActiveClub = clubs.find(({ membership: { role } }) => role !== 'invited');
+			if (firstActiveClub) {
+				res.json(firstActiveClub);
+			} else {
+				res.json(null);
+			}
 		}
 	});
 
-	app.get('/club/:id', authedUser, (req, res) => {
+	app.get('/club/:id', clubUser, (req, res) => {
 		const { id } = req.params;
 		Club.findById(id).then((club) => {
 			req.session.club = club;
