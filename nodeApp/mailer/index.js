@@ -17,11 +17,11 @@ const baseOptions = {
 };
 
 module.exports = function({ email }) {
-	PRODUCTION &&
-		transporter.sendMail({
-			to: email,
-			text:
-				"You've been invite to join BookBrunch. Please create an account at http://www.book-brunch.com.",
-			html: 'You\'ve been invite to join <a href="http://www.book-brunch.com">BookBrunch</a>.',
-		});
+	transporter.sendMail({
+		to: email,
+		text:
+			"You've been invite to join BookBrunch. Please create an account at http://www.book-brunch.com.",
+		html: 'You\'ve been invite to join <a href="http://www.book-brunch.com">BookBrunch</a>.',
+		...baseOptions,
+	});
 };
