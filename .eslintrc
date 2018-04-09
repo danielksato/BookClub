@@ -1,5 +1,5 @@
 {
-    "extends": ["standard-react", "plugin:prettier/recommended", "plugin:flowtype/recommended"],
+    "extends": ["standard", "standard-react", "plugin:prettier/recommended", "plugin:flowtype/recommended"],
     "parser": "babel-eslint",
     "plugins": ["flowtype"],
     "settings": {
@@ -12,6 +12,8 @@
         "no-debugger": "warn",
         "no-underscore-dangle": "off",
         "no-useless-return": "off",
+        "no-path-concat": "off",
+        "prefer-const": "warn",
         "react/jsx-indent": "off",
         "react/jsx-indent-props": "off"
     },
