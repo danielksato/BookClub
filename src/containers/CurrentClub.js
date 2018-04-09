@@ -14,7 +14,7 @@ import { replace } from 'react-router-redux';
 import styles from 'styles/CurrentClub.scss';
 import { Link } from 'react-router-dom';
 import Member from 'components/Member';
-import { CURRENT_CLUB } from 'constants/RouteConstants';
+import { CURRENT_CLUB, MY_CLUBS } from 'constants/RouteConstants';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
@@ -47,6 +47,8 @@ export class CurrentClub extends PureComponent<Props> {
 		const { club: { id }, replace } = this.props;
 		if (id) {
 			replace(`/clubinfo/${id}`);
+		} else {
+			replace(MY_CLUBS);
 		}
 	}
 
