@@ -31,16 +31,12 @@ passport.use(
 				if (!created) {
 					cb(null, user);
 				} else {
-					const newUser = await User.update(
-						Object.assign(
-							{
-								firstName: givenName,
-								lastName: familyName,
-								googleId: id,
-							},
-							where
-						)
-					);
+					const newUser = await user.update({
+						firstName: givenName,
+						lastName: familyName,
+						googleId: id,
+						...where,
+					});
 					cb(null, newUser);
 				}
 			} catch (err) {
