@@ -1,8 +1,7 @@
 @import '../index.scss';
 
 .container {
-    @extend .container;
-    @extend .mt-3;
+    @include topLevel;
     @extend .w-75;
 }
 

@@ -1,7 +1,7 @@
 @import '../index.scss';
 
 .container {
-    @extend .container;
+    @include topLevel;
     @extend .w-75;
 
     button {

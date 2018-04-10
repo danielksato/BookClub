@@ -34,3 +34,10 @@ $invited: 'invited';
 }
 
 $font-size-xs: ($font-size-base * .75);
+
+@mixin topLevel {
+    @extend .container;
+    @extend .mt-3;
+    @extend .mb-3;
+    @content;
+}
