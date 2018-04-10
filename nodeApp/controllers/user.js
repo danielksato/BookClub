@@ -5,16 +5,10 @@ const uuidv1 = require('uuid/v1');
 const { activeClubUser } = require('./middleware');
 const inviteMailer = require('../mailer');
 
-User.getMembershipsById = function(id) {
-	return this.findById(id, {
-		include: [{ model: Club, attributes: ['id', 'name'], through: { attributes: ['role'] } }],
-	});
-};
-
 module.exports = function(app) {
 	app.get('/user', (req, res) => {
 		if (req.user) {
-			User.getMembershipsById(req.user.id).then((user) => {
+			User.findById(req.user.id).then((user) => {
 				res.json(user);
 			});
 		} else {
@@ -24,7 +18,7 @@ module.exports = function(app) {
 
 	app.get('/user/:id', (req, res) => {
 		const { id } = req.params;
-		User.getMembershipsById(id).then((user) => {
+		User.findById(id).then((user) => {
 			res.json(user);
 		}, errorHandler(res));
 	});

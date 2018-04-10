@@ -22,11 +22,6 @@ const User = sequelize.define(
 		password: { type: Sequelize.STRING },
 	},
 	{
-		defaultScope: {
-			attributes: {
-				exclude: ['password'],
-			},
-		},
 		scopes: {
 			withPassword: {},
 		},
@@ -67,6 +62,9 @@ const Club = sequelize.define(
 				},
 			],
 		},
+		scopes: {
+			forUser: {},
+		},
 	}
 );
 
@@ -101,6 +99,17 @@ Message.belongsTo(User);
 Message.belongsTo(Club);
 Club.hasMany(Message);
 User.hasMany(Message);
+
+User.addScope(
+	'defaultScope',
+	{
+		attributes: {
+			exclude: ['password'],
+		},
+		include: [{ model: Club.scope('forUser') }],
+	},
+	{ override: true }
+);
 
 module.exports = {
 	Book,

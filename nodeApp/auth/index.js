@@ -7,7 +7,7 @@ const session = require('./session');
 
 const callbackURL = process.env.PRODUCTION
 	? 'https://www.book-brunch.com/api/oauth2/callback'
-	: 'http://dev.book-brunch.com:3000/api/oauth2/callback';
+	: 'http://dev.book-brunch.com:8080/api/oauth2/callback';
 passport.use(
 	new GoogleStrategy(
 		{
@@ -15,38 +15,37 @@ passport.use(
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 			callbackURL,
 		},
-		function(accessToken, refreshToken, profile, cb) {
-			const { id, name: { familyName, givenName }, emails } = profile;
+		async function(accessToken, refreshToken, profile, cb) {
+			try {
+				const { id, name: { familyName, givenName }, emails } = profile;
 
-			const where = emails ? { email: emails[0].value } : { googleId: id };
-			User.findOrCreate({
-				where,
-				defaults: {
-					email: emails ? { email: emails[0].value } : '',
-					firstName: givenName,
-					lastName: familyName,
-				},
-			}).then(
-				([user]) => {
-					if (user) {
-						cb(null, user);
-					} else {
-						User.create(
-							Object.assign(
-								{
-									firstName: givenName,
-									lastName: familyName,
-									googleId: id,
-								},
-								where
-							)
-						).then((newUser) => cb(null, newUser), (err) => cb(err, null));
-					}
-				},
-				(err) => {
-					return cb(err, null);
+				const where = emails ? { email: emails[0].value } : { googleId: id };
+				const [user, created] = await User.findOrCreate({
+					where,
+					defaults: {
+						email: emails ? { email: emails[0].value } : '',
+						firstName: givenName,
+						lastName: familyName,
+					},
+				});
+				if (!created) {
+					cb(null, user);
+				} else {
+					const newUser = await User.update(
+						Object.assign(
+							{
+								firstName: givenName,
+								lastName: familyName,
+								googleId: id,
+							},
+							where
+						)
+					);
+					cb(null, newUser);
 				}
-			);
+			} catch (err) {
+				return cb(err, null);
+			}
 		}
 	)
 );
