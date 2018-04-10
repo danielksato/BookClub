@@ -1,9 +1,9 @@
 const session = require('express-session');
-const FileStore = require('session-file-store')(session);
+const { db } = require('../models');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
-const store = new FileStore({
-	path: './db/auth',
-});
+const store = new SequelizeStore({ db });
+store.sync();
 
 const sessionParser = session({
 	resave: false,

@@ -40,7 +40,7 @@ export const loginWithGoogle = (): Promise<UserResponse> => {
 				return res.json();
 			})
 			// $FlowFixMe it doesn't really matter what the promise resolves with if we redirect
-			.catch(() => {
+			.catch((err) => {
 				window.location.href = '/api/oauth2';
 			})
 	);

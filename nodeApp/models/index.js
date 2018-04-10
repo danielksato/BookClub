@@ -111,4 +111,5 @@ module.exports = {
 	User,
 	Vote,
 	Message,
+	db: sequelize,
 };

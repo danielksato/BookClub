@@ -87,8 +87,8 @@ module.exports = function(app) {
 		'/oauth2/callback',
 		passport.authenticate('google', {
 			failureRedirect: '/',
-			successRedirect: '/',
-		})
+		}),
+		(req, res) => res.redirect('/')
 	);
 
 	app.post('/login', passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
