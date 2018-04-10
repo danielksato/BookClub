@@ -20,9 +20,9 @@ module.exports = function(app) {
 		}
 	});
 
-	app.get('/club/:id', clubUser, (req, res) => {
-		const { id } = req.params;
-		Club.findById(id).then((club) => {
+	app.get('/club/:clubId', clubUser, (req, res) => {
+		const { clubId } = req.params;
+		Club.findById(clubId).then((club) => {
 			req.session.club = club;
 			res.json(club);
 		}, errorHandler(res));

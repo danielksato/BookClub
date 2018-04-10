@@ -31,6 +31,6 @@ module.exports = {
 	activeClubUser: userRole(['active', 'admin']),
 	adminClubUser: userRole(['admin']),
 	authedUser,
-	clubUser: userRole(['acive', 'admin', 'invited']),
+	clubUser: userRole(['active', 'admin', 'invited']),
 	invitedClubUser: userRole(['invited']),
 };
