@@ -1,5 +1,5 @@
 #!/bin/bash
 
 cd nodeApp
-node db/seedDB.js
+node db/syncDB.js
 yarn start:prod
