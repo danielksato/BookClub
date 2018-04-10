@@ -23,7 +23,7 @@ export class Header extends PureComponent<Props> {
 
 		return (
 			<div className="navbar-collapse">
-				<Navigation />;
+				<Navigation />
 			</div>
 		);
 	}
