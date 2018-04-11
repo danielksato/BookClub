@@ -16,10 +16,6 @@ const dedupeDB = () => {
 		[
 			{
 				Model: User,
-				key: 'googleId',
-			},
-			{
-				Model: User,
 				key: 'email',
 			},
 			{

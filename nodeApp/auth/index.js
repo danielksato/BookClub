@@ -8,12 +8,14 @@ const session = require('./session');
 
 const oauthVerify = async (accessToken, refreshToken, profile, cb) => {
 	try {
-		const { id, name: { familyName, givenName }, emails } = profile;
-		const where = emails ? { email: emails[0].value } : { googleId: id };
+		const { name: { familyName, givenName }, emails } = profile;
+		const email = emails[0].value;
+		if (!email) {
+			throw new Error('no email');
+		}
 		const [user, created] = await User.findOrCreate({
-			where,
+			where: { email },
 			defaults: {
-				email: emails ? emails[0].value : '',
 				firstName: givenName,
 				lastName: familyName,
 			},
@@ -24,8 +26,6 @@ const oauthVerify = async (accessToken, refreshToken, profile, cb) => {
 			const newUser = await user.update({
 				firstName: givenName,
 				lastName: familyName,
-				googleId: id,
-				...where,
 			});
 			cb(null, newUser);
 		}
