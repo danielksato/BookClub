@@ -129,7 +129,7 @@ export class Login extends PureComponent<Props, State> {
 
 	renderFBLogin(): Node {
 		if (location.protocol === 'https:') {
-			return <button onClick={this.props.loginWithFacebook}>Login with Google</button>;
+			return <button onClick={this.props.loginWithFacebook}>Login with Facebook</button>;
 		}
 	}
 

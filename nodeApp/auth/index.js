@@ -52,8 +52,8 @@ passport.use(
 passport.use(
 	new FacebookStrategy(
 		{
-			clientID: process.env.GOOGLE_CLIENT_ID,
-			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			clientID: process.env.FB_APP_ID,
+			clientSecret: process.env.FB_APP_SECRET,
 			callbackURL: 'https://www.book-brunch.com/api/oauth2/facebook/callback',
 		},
 		oauthVerify
@@ -100,7 +100,10 @@ module.exports = function(app) {
 		(req, res) => res.redirect('/')
 	);
 
-	app.get('/oauth2/facebook', passport.authenticate('facebook', { scope: ['profile', 'email'] }));
+	app.get(
+		'/oauth2/facebook',
+		passport.authenticate('facebook', { scope: ['public_profile', 'email'] })
+	);
 	app.get(
 		'/oauth2/facebook/callback',
 		passport.authenticate('facebook', {
