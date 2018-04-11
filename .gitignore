@@ -33,3 +33,7 @@ api_keys
 !.elasticbeanstalk/*.global.yml
 
 Dockerfile
+
+localhost.key
+localhost.cert
+

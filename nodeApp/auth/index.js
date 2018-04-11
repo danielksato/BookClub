@@ -6,10 +6,6 @@ const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const session = require('./session');
 
-const googleCallbackUrl = process.env.PRODUCTION
-	? 'https://www.book-brunch.com/api/oauth2/callback'
-	: 'http://dev.book-brunch.com:8080/api/oauth2/callback';
-
 const oauthVerify = async (accessToken, refreshToken, profile, cb) => {
 	try {
 		const { id, name: { familyName, givenName }, emails } = profile;
@@ -43,7 +39,9 @@ passport.use(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL: googleCallbackUrl,
+			callbackURL: process.env.PRODUCTION
+				? 'https://www.book-brunch.com/api/oauth2/callback'
+				: 'https://dev.book-brunch.com:8080/api/oauth2/callback',
 		},
 		oauthVerify
 	)
@@ -54,7 +52,10 @@ passport.use(
 		{
 			clientID: process.env.FB_APP_ID,
 			clientSecret: process.env.FB_APP_SECRET,
-			callbackURL: 'https://www.book-brunch.com/api/oauth2/facebook/callback',
+			callbackURL: process.env.PRODUCTION
+				? 'https://www.book-brunch.com/api/oauth2/facebook/callback'
+				: 'https://dev.book-brunch.com:8080/api/oauth2/facebook/callback',
+			profileFields: ['id', 'name', 'email'],
 		},
 		oauthVerify
 	)

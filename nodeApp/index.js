@@ -1,3 +1,5 @@
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const app = express();
 const controllers = require('./controllers');
@@ -28,4 +30,17 @@ if (process.env.PRODUCTION) {
 	app.use('*', proxy({ target: 'http://dev.book-brunch.com:3000', changeOrigin: true, ws: true }));
 }
 
-app.listen(8080);
+if (process.env.PRODUCTION) {
+	app.listen(8080);
+} else {
+	const server = https.createServer(
+		{
+			key: fs.readFileSync('./ssl/localhost.key'),
+			cert: fs.readFileSync('./ssl/localhost.cert'),
+			requestCert: false,
+			rejectUnauthorized: false,
+		},
+		app
+	);
+	server.listen(8080);
+}
