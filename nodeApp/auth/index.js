@@ -18,12 +18,11 @@ passport.use(
 		async function(accessToken, refreshToken, profile, cb) {
 			try {
 				const { id, name: { familyName, givenName }, emails } = profile;
-
 				const where = emails ? { email: emails[0].value } : { googleId: id };
 				const [user, created] = await User.findOrCreate({
 					where,
 					defaults: {
-						email: emails ? { email: emails[0].value } : '',
+						email: emails ? emails[0].value : '',
 						firstName: givenName,
 						lastName: familyName,
 					},
@@ -77,7 +76,7 @@ module.exports = function(app) {
 	app.use(passport.initialize());
 	app.use(passportSession);
 
-	app.get('/oauth2', passport.authenticate('google', { scope: ['profile'] }));
+	app.get('/oauth2', passport.authenticate('google', { scope: ['profile', 'email'] }));
 	app.get(
 		'/oauth2/callback',
 		passport.authenticate('google', {

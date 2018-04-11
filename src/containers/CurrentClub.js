@@ -47,8 +47,13 @@ export class CurrentClub extends PureComponent<Props> {
 		const { club: { id }, replace } = this.props;
 		if (id) {
 			replace(`/clubinfo/${id}`);
-		} else {
-			replace(MY_CLUBS);
+		}
+	}
+
+	componentDidUpdate(prevProps: Props) {
+		const { club: { id }, replace } = this.props;
+		if (id !== prevProps.club.id) {
+			replace(`/clubinfo/${id}`);
 		}
 	}
 

@@ -51,9 +51,10 @@ export class MyClubs extends PureComponent<Props, State> {
 	};
 
 	onCreateClub = (e: SyntheticEvent<*>) => {
-		e.preventDefault;
+		e.preventDefault();
 		const { name } = this.state;
 		this.props.createClub(new ClubRecord({ name }));
+		this.setState({ name: '' });
 	};
 
 	renderCurrentClub(): Node {
