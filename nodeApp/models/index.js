@@ -2,20 +2,15 @@ const Sequelize = require('sequelize');
 
 const { RDS_HOSTNAME, RDS_PORT, RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, PRODUCTION } = process.env;
 
-// const sequelize = PRODUCTION
-// 	? new Sequelize(
-// 			`postgres://${RDS_USERNAME}:${RDS_PASSWORD}@${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}`
-// 	  )
-// 	: new Sequelize('database', 'user', 'password', {
-// 			dialect: 'sqlite',
-// 			storage: 'db/data.sqlite',
-// 			logging: false,
-// 	  });
-const sequelize = new Sequelize('database', 'user', 'password', {
-	dialect: 'sqlite',
-	storage: 'db/data.sqlite',
-	logging: false,
-});
+const sequelize = PRODUCTION
+	? new Sequelize(
+			`postgres://${RDS_USERNAME}:${RDS_PASSWORD}@${RDS_HOSTNAME}:${RDS_PORT}/${RDS_DB_NAME}`
+	  )
+	: new Sequelize('database', 'user', 'password', {
+			dialect: 'sqlite',
+			storage: 'db/data.sqlite',
+			logging: false,
+	  });
 
 const User = sequelize.define(
 	'user',

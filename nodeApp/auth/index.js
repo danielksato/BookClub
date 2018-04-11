@@ -91,7 +91,7 @@ module.exports = function(app) {
 	});
 
 	app.put('/logout', (req, res) => {
-		req.logout();
+		req.session.destroy();
 		res.sendStatus(200);
 	});
 };
