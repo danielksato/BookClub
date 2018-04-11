@@ -1,19 +1,21 @@
 // @flow
 import React, { PureComponent, type Node } from 'react';
 import { connect } from 'react-redux';
-import { login, createUser, loginWithGoogle } from 'actions/UserActions';
+import { login, createUser, loginWithGoogle, loginWithFacebook } from 'actions/UserActions';
 import preventDefault from 'util/PreventDefault';
 import styles from 'styles/Login.scss';
 
 type Props = {
 	login: (Object) => void,
 	loginWithGoogle: () => void,
+	loginWithFacebook: () => void,
 	createUser: (Object) => void,
 };
 
 const mapDispatchToProps = {
 	login,
 	loginWithGoogle,
+	loginWithFacebook,
 	createUser,
 };
 
@@ -125,12 +127,19 @@ export class Login extends PureComponent<Props, State> {
 		);
 	}
 
+	renderFBLogin(): Node {
+		if (location.protocol === 'https:') {
+			return <button onClick={this.props.loginWithFacebook}>Login with Google</button>;
+		}
+	}
+
 	render(): Node {
 		return (
 			<div className={styles.container}>
+				<button onClick={this.props.loginWithGoogle}>Login with Google</button>
+				{this.renderFBLogin()}
 				{this.renderLogin()}
 				{this.renderCreateAccount()}
-				<button onClick={this.props.loginWithGoogle}>Login with Google</button>
 			</div>
 		);
 	}

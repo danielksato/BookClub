@@ -1,47 +1,62 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const session = require('./session');
 
-const callbackURL = process.env.PRODUCTION
+const googleCallbackUrl = process.env.PRODUCTION
 	? 'https://www.book-brunch.com/api/oauth2/callback'
 	: 'http://dev.book-brunch.com:8080/api/oauth2/callback';
+
+const oauthVerify = async (accessToken, refreshToken, profile, cb) => {
+	try {
+		const { id, name: { familyName, givenName }, emails } = profile;
+		const where = emails ? { email: emails[0].value } : { googleId: id };
+		const [user, created] = await User.findOrCreate({
+			where,
+			defaults: {
+				email: emails ? emails[0].value : '',
+				firstName: givenName,
+				lastName: familyName,
+			},
+		});
+		if (!created) {
+			cb(null, user);
+		} else {
+			const newUser = await user.update({
+				firstName: givenName,
+				lastName: familyName,
+				googleId: id,
+				...where,
+			});
+			cb(null, newUser);
+		}
+	} catch (err) {
+		return cb(err, null);
+	}
+};
+
 passport.use(
 	new GoogleStrategy(
 		{
 			clientID: process.env.GOOGLE_CLIENT_ID,
 			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-			callbackURL,
+			callbackURL: googleCallbackUrl,
 		},
-		async function(accessToken, refreshToken, profile, cb) {
-			try {
-				const { id, name: { familyName, givenName }, emails } = profile;
-				const where = emails ? { email: emails[0].value } : { googleId: id };
-				const [user, created] = await User.findOrCreate({
-					where,
-					defaults: {
-						email: emails ? emails[0].value : '',
-						firstName: givenName,
-						lastName: familyName,
-					},
-				});
-				if (!created) {
-					cb(null, user);
-				} else {
-					const newUser = await user.update({
-						firstName: givenName,
-						lastName: familyName,
-						googleId: id,
-						...where,
-					});
-					cb(null, newUser);
-				}
-			} catch (err) {
-				return cb(err, null);
-			}
-		}
+		oauthVerify
+	)
+);
+
+passport.use(
+	new FacebookStrategy(
+		{
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: 'https://www.book-brunch.com/api/oauth2/facebook/callback',
+		},
+		oauthVerify
 	)
 );
 
@@ -80,6 +95,15 @@ module.exports = function(app) {
 	app.get(
 		'/oauth2/callback',
 		passport.authenticate('google', {
+			failureRedirect: '/',
+		}),
+		(req, res) => res.redirect('/')
+	);
+
+	app.get('/oauth2/facebook', passport.authenticate('facebook', { scope: ['profile', 'email'] }));
+	app.get(
+		'/oauth2/facebook/callback',
+		passport.authenticate('facebook', {
 			failureRedirect: '/',
 		}),
 		(req, res) => res.redirect('/')

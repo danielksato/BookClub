@@ -46,6 +46,19 @@ export const loginWithGoogle = (): Promise<UserResponse> => {
 	);
 };
 
+export const loginWithFacebook = (): Promise<UserResponse> => {
+	return (
+		fetch('/api/oauth2/facebook', { mode: 'cors', credentials: 'include' })
+			.then((res) => {
+				return res.json();
+			})
+			// $FlowFixMe it doesn't really matter what the promise resolves with if we redirect
+			.catch((err) => {
+				window.location.href = '/api/oauth2/facebook';
+			})
+	);
+};
+
 export const authUser = (): Promise<UserResponse> => {
 	return fetch('/api/user', { credentials: 'include' }).then((res) => res.json());
 };

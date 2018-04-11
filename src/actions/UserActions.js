@@ -6,6 +6,7 @@ import {
 	login as loginApi,
 	createUser as createUserApi,
 	loginWithGoogle as loginWithGoogleApi,
+	loginWithFacebook as loginWithFacebookApi,
 	authUser as authUserApi,
 	logout as logoutApi,
 	acceptInvitation as acceptInvitationApi,
@@ -84,6 +85,15 @@ export const createUser = (userData: UserResponse): ThunkAction => {
 export const loginWithGoogle = (): ThunkAction => {
 	return (dispatch) => {
 		loginWithGoogleApi().then(
+			(user) => dispatch(_loadUserSuccess(user)),
+			(err) => dispatch(_loadUserFailed(err))
+		);
+	};
+};
+
+export const loginWithFacebook = (): ThunkAction => {
+	return (dispatch) => {
+		loginWithFacebookApi().then(
 			(user) => dispatch(_loadUserSuccess(user)),
 			(err) => dispatch(_loadUserFailed(err))
 		);
