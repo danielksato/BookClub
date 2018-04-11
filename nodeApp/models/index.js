@@ -73,7 +73,7 @@ const Membership = sequelize.define('membership', {
 });
 
 const Selection = sequelize.define('selection', {
-	status: { type: Sequelize.ENUM('proposed', 'selected', 'archived'), defaultValue: 'proposed' },
+	status: { type: Sequelize.ENUM('proposed', 'active', 'archived'), defaultValue: 'proposed' },
 });
 
 const Invitation = sequelize.define('invitation', {

@@ -70,8 +70,9 @@ module.exports = function(app) {
 				club.addUser(newUser, { through: { role: 'invited' } }),
 			]);
 			sendMail && inviteMailer({ email });
+			const updatedClub = await club.reload();
 			res.json({
-				club: await club.reload(),
+				club: updatedClub,
 				invitation,
 			});
 		} catch (err) {
