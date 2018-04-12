@@ -1,11 +1,10 @@
 @import '../index.scss';
 
 .container {
-    margin: 1rem auto;
-    @extend .container;
+    @include topLevel;
 
     button {
-        @extend .mt-2
+        margin-top: $spacing-2;
     }
 }
 

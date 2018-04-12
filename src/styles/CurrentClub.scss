@@ -4,7 +4,7 @@
     @include topLevel;
 
     button {
-        @extend .mt-2;
+        margin: $spacing-2 0 0;
     }
 }
 
@@ -37,11 +37,11 @@
 
 .invite {
     @extend .form-group;
-    @extend .mt-2;
+    margin: $spacing-2 0 0;
 
     input {
         @extend .form-control;
-        @extend .w-50;
+        width: 50%;
     }
 
     button {
@@ -54,7 +54,7 @@
     background-color: $gray-200;
 
     button {
-        @extend .mt-2;
+        margin: $spacing-2 0 0;
         display: block;
     }
 }
@@ -62,12 +62,12 @@
 .activeBook {
     @extend .list;
     button {
-        @extend .mt-2;
+        margin: $spacing-2 0 0;
     }
 }
 
 .voting {
     > :not(:last-child) {
-        @extend .mr-2;
+        margin-right: $spacing-2;
     }
 }

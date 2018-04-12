@@ -2,7 +2,7 @@
 
 .container {
     @include topLevel;
-    @extend .w-75;
+    width: 75%;
 }
 
 .history {
@@ -12,10 +12,10 @@
 .messageEntry {
     @include borderGroup;
     @extend .form-group;
-    @extend .mt-2;
+    margin-top: $spacing-2;
 
     button {
-        @extend .mt-2;
+        margin-top: $spacing-2;
         display: block;
 
 
@@ -23,5 +23,5 @@
 }
 
 .message {
-    @extend .mb-1;
+    margin-bottom: $spacing-2;
 }

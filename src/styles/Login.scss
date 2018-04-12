@@ -2,10 +2,10 @@
 
 .container {
     @include topLevel;
-    @extend .w-75;
+    width: 75%;
 
     button {
-        @extend .mt-2;
+        margin-top: $spacing-2;
         display: block;
     }
 }

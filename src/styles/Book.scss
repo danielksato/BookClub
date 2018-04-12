@@ -1,7 +1,7 @@
 @import '../index.scss';
 
 .text {
-    @extend .p-3;
+    padding: 1rem;
     align-self: center;
     display: inline-flex;
     flex-direction: column;
@@ -10,7 +10,7 @@
 
 .link {
     @include borderGroup;
-    @extend .w-100;
+    width: 100%;
     background-color: $white;
     display: inline-flex;
     color: initial;
@@ -28,7 +28,7 @@
 }
 
 .title {
-    @extend .mb-2;
+    margin: 0 0 $spacing-2;
     &:first-child {
         font-size: $font-size-base;
     }

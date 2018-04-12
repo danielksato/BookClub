@@ -1,4 +1,18 @@
-@import './node_modules/bootstrap/scss/bootstrap.scss';
+@import './node_modules/bootstrap/scss/_functions.scss';
+@import './node_modules/bootstrap/scss/_variables.scss';
+@import './node_modules/bootstrap/scss/mixins/_grid.scss';
+@import './node_modules/bootstrap/scss/mixins/_breakpoints.scss';
+@import './node_modules/bootstrap/scss/mixins/_grid-framework.scss';
+@import './node_modules/bootstrap/scss/_grid.scss';
+@import './node_modules/bootstrap/scss/mixins/_transition.scss';
+@import './node_modules/bootstrap/scss/mixins/_buttons.scss';
+@import './node_modules/bootstrap/scss/mixins/_hover.scss';
+@import './node_modules/bootstrap/scss/mixins/_box-shadow.scss';
+@import './node_modules/bootstrap/scss/mixins/_gradients.scss';
+@import './node_modules/bootstrap/scss/_buttons.scss';
+@import './node_modules/bootstrap/scss/mixins/_border-radius.scss';
+@import './node_modules/bootstrap/scss/mixins/_forms.scss';
+@import './node_modules/bootstrap/scss/_forms.scss';
 
 body {
   margin: 0;
@@ -17,8 +31,8 @@ button {
 }
 
 @mixin borderGroup {
-    @extend .mt-2;
-    @extend .p-2;
+    margin: $spacing-2 0 0 0;
+    padding: $spacing-2;
     border: 1px solid $gray-400;
     border-radius: 3px;
     @content;
@@ -37,7 +51,9 @@ $font-size-xs: ($font-size-base * .75);
 
 @mixin topLevel {
     @extend .container;
-    @extend .mt-3;
-    @extend .mb-3;
+    margin: 1rem 0;
     @content;
 }
+
+$spacing-1: ($spacer * .25);
+$spacing-2: ($spacer * .5);

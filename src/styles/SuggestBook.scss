@@ -6,10 +6,10 @@
 
 .searchForm {
     @extend .form-group;
-    @extend .mt-3;
+    margin-top: 1rem;
 
     input {
-        @extend .w-50;
+        width: 50%;
     }
 }
 
@@ -23,7 +23,7 @@
     }
 
     button {
-        @extend .mt-2;
+        margin-top: $spacing-2;
         display: block;
     }
 }

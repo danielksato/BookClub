@@ -8,7 +8,7 @@
     }
 
     span {
-        @extend .mr-1;
+        margin-right: $spacing-1;
         &:not(:first-child) {
             font-size: $font-size-sm;
         }
