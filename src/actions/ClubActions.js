@@ -13,12 +13,15 @@ import {
 	getClub,
 	createClub as createClubApi,
 	inviteMember as inviteMemberApi,
+	removeUser as removeUserApi,
+	deleteClub as deleteClubApi,
 } from 'apis/ClubApi';
 import { push } from 'react-router-redux';
-import { CURRENT_CLUB } from '../constants/RouteConstants';
+import { CURRENT_CLUB, MY_CLUBS } from '../constants/RouteConstants';
+import { authUser } from 'actions/UserActions';
 
 import type { ClubRecord } from 'reducers/ClubReducer';
-import type { ClubResponse } from 'apis/ClubApi';
+import type { ClubResponse, RemoveUserParam } from 'apis/ClubApi';
 
 const _loadClub: ActionCreator<> = createAction(LOAD_CLUB);
 export const loadClubSuccess: ActionCreator<ClubResponse> = createAction(LOAD_CLUB_SUCCESS);
@@ -61,8 +64,25 @@ export const inviteMember = ({ clubId, email }: { clubId: number, email: string 
 		inviteMemberApi({ clubId, email }).then(
 			({ club, invitation: { uuid } }: { club: ClubResponse }) => {
 				dispatch(loadClubSuccess(club));
-				// dispatch(showLinkWithUUID(uuid))
 			}
 		);
+	};
+};
+
+export const removeUser = (param: RemoveUserParam): ThunkAction => {
+	return (dispatch) => {
+		removeUserApi(param).then((club) => {
+			dispatch(loadClubSuccess(club));
+		});
+	};
+};
+
+export const deleteClub = (clubId: string): ThunkAction => {
+	return (dispatch) => {
+		deleteClubApi(clubId).then(() => {
+			dispatch(authUser());
+			dispatch(loadClubSuccess({}));
+			dispatch(push(MY_CLUBS));
+		});
 	};
 };

@@ -2,6 +2,10 @@
 
 .container {
     @include topLevel;
+
+    button {
+        @extend .mt-2;
+    }
 }
 
 

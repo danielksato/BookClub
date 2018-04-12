@@ -2,21 +2,22 @@
 import { createAction, type ThunkAction, type ActionCreator } from 'actions';
 import { LOAD_USER, LOAD_USER_SUCCESS, LOAD_USER_FAILED, LOG_OUT } from 'constants/ActionConstants';
 import {
+	acceptInvitation as acceptInvitationApi,
+	authUser as authUserApi,
+	createUser as createUserApi,
 	getUser,
 	login as loginApi,
-	createUser as createUserApi,
-	loginWithGoogle as loginWithGoogleApi,
 	loginWithFacebook as loginWithFacebookApi,
-	authUser as authUserApi,
+	loginWithGoogle as loginWithGoogleApi,
 	logout as logoutApi,
-	acceptInvitation as acceptInvitationApi,
+	modifyUser as modifyUserApi,
 } from 'apis/UserApi';
 import { authClub as authClubApi } from 'apis/ClubApi';
 import { loadClubSuccess } from 'actions/ClubActions';
 import { push } from 'react-router-redux';
 import { CURRENT_CLUB, MY_CLUBS } from 'constants/RouteConstants';
 
-import type { UserResponse } from 'apis/UserApi';
+import type { UserResponse, ModifyUserParam } from 'apis/UserApi';
 
 const _loadUser: ActionCreator<> = createAction(LOAD_USER);
 const _loadUserSuccess: ActionCreator<UserResponse> = createAction(LOAD_USER_SUCCESS);
@@ -125,6 +126,14 @@ export const acceptInvitation = (clubId: number): ThunkAction => {
 		acceptInvitationApi(clubId).then((user) => {
 			dispatch(_loadUserSuccess(user));
 			dispatch(push(CURRENT_CLUB));
+		});
+	};
+};
+
+export const modifyUser = (param: ModifyUserParam): ThunkAction => {
+	return (dispatch) => {
+		modifyUserApi(param).then((user) => {
+			dispatch(_loadUserSuccess(user));
 		});
 	};
 };

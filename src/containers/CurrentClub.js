@@ -5,7 +5,7 @@ import type { ClubRecord } from 'reducers/ClubReducer';
 import { PROPOSED, ACTIVE, ADMIN, ARCHIVED } from 'constants/AppConstants';
 import Book from 'components/Book';
 import { vote, modifyBook } from 'actions/BookActions';
-import { inviteMember } from 'actions/ClubActions';
+import { inviteMember, deleteClub, removeUser } from 'actions/ClubActions';
 import type { UserRecord } from 'reducers/UserReducer';
 import type BookRecord from 'records/BookRecord';
 import Inviter from 'components/Inviter';
@@ -15,24 +15,31 @@ import styles from 'styles/CurrentClub.scss';
 import { Link } from 'react-router-dom';
 import Member from 'components/Member';
 import { CURRENT_CLUB, MY_CLUBS } from 'constants/RouteConstants';
+import type { RemoveUserParam } from 'apis/ClubApi';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
 const mapDispatchToProps = {
-	vote,
+	deleteClub,
 	inviteMember,
 	modifyBook,
+	removeUser,
 	replace,
+	vote,
 };
 
 type Props = {
 	club: ClubRecord,
-	user: UserRecord,
-	vote: (Object) => void,
+	deleteClub: (number) => void,
 	inviteMember: ({ clubId: number, email: string }) => void,
 	modifyBook: (Object) => void,
+	removeUser: (RemoveUserParam) => void,
 	replace: (string) => void,
+	user: UserRecord,
+	vote: (Object) => void,
 };
+
+type onRemove = ?(number) => void;
 
 export class CurrentClub extends PureComponent<Props> {
 	static navString = 'Home';
@@ -42,6 +49,21 @@ export class CurrentClub extends PureComponent<Props> {
 		const { club, user } = this.props;
 		return getCurrentRole({ club, user });
 	}
+
+	deleteClub = (): void => {
+		const { club: { id }, deleteClub } = this.props;
+		deleteClub(id);
+	};
+
+	getOnRemove = (): onRemove => {
+		const { removeUser, club: { id } } = this.props;
+		if (this.currentRole !== ADMIN) {
+			return null;
+		}
+		return (userId: number) => {
+			this.props.removeUser({ userId, clubId: id });
+		};
+	};
 
 	componentDidMount() {
 		const { club: { id }, replace } = this.props;
@@ -158,7 +180,7 @@ export class CurrentClub extends PureComponent<Props> {
 
 	renderMembers(): Node {
 		const memberList = this.props.club.users.map((user) => {
-			return <Member key={`member-${user.id}`} user={user} />;
+			return <Member key={`member-${user.id}`} user={user} onRemove={this.getOnRemove()} />;
 		});
 
 		return (
@@ -170,6 +192,12 @@ export class CurrentClub extends PureComponent<Props> {
 		);
 	}
 
+	renderDeleteClub(): Node {
+		if (this.currentRole === ADMIN) {
+			return <button onClick={this.deleteClub}>Delete Club</button>;
+		}
+	}
+
 	render(): Node {
 		const { club: { id } } = this.props;
 		return (
@@ -178,6 +206,7 @@ export class CurrentClub extends PureComponent<Props> {
 				{id ? this.renderCurrentBook() : null}
 				{id ? this.renderProposedBooks() : null}
 				{id ? this.renderMembers() : null}
+				{id ? this.renderDeleteClub() : null}
 			</div>
 		);
 	}

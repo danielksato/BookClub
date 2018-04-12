@@ -70,3 +70,11 @@ export const logout = (): Promise<any> => {
 export const acceptInvitation = (clubId: number): Promise<UserResponse> => {
 	return sendJSON(`/api/club/${clubId}/accept`, { method: 'PUT', body: {} });
 };
+
+export type ModifyUserParam = {
+	userId: number,
+	values: UserResponse,
+};
+export const modifyUser = ({ userId, values }: ModifyUserParam): Promise<UserResponse> => {
+	return sendJSON(`/api/user/${userId}`, { body: values });
+};

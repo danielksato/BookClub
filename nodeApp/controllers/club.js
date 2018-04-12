@@ -50,8 +50,28 @@ module.exports = function(app) {
 		res.json(user);
 	});
 
-	app.delete('/club/:clubId', adminClubUser, async ({ params: { clubId } }, res) => {
-		res.sendStatus(202);
+	app.delete('/club/:clubId', adminClubUser, async ({ params: { clubId }, user: { id } }, res) => {
 		await Club.findById(clubId).then((club) => club.destroy());
+		const user = await User.findById(id);
+		res.json(user);
 	});
+
+	app.delete(
+		'/club/:clubId/user/:userId',
+		adminClubUser,
+		async ({ params: { clubId, userId }, session }, res) => {
+			try {
+				let club = await Club.findById(clubId, {
+					include: [{ model: User, through: {}, where: { id: userId } }],
+				});
+				const [user] = club.users;
+				await user.membership.destroy();
+				club = await Club.findById(clubId);
+				session.club = club;
+				res.json(club);
+			} catch (err) {
+				errorHandler(res);
+			}
+		}
+	);
 };

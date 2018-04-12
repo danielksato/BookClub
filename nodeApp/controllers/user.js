@@ -2,7 +2,7 @@ const { User, Club, Invitation } = require('../models');
 const errorHandler = require('./errorHandler');
 const bcrypt = require('bcrypt');
 const uuidv1 = require('uuid/v1');
-const { activeClubUser, adminClubUser } = require('./middleware');
+const { activeClubUser, adminClubUser, authedUser } = require('./middleware');
 const inviteMailer = require('../mailer');
 
 module.exports = function(app) {
@@ -61,6 +61,24 @@ module.exports = function(app) {
 		}
 	});
 
+	app.post(
+		'/user/:userId',
+		authedUser,
+		async ({ body: { password, ...userData }, user: { id }, params: { userId } }, res) => {
+			try {
+				if (parseInt(userId, 10) !== id) {
+					throw new Error('This is not you.');
+				}
+				const hash = await (password ? bcrypt.hash(password, 10) : Promise.resolve(null));
+				const values = hash ? { password: hash, ...userData } : userData;
+				await User.update(values, { where: { id } });
+				res.json(await User.findById(id));
+			} catch (err) {
+				errorHandler(res)(err);
+			}
+		}
+	);
+
 	app.post('/club/:clubId/invite', activeClubUser, async ({ body: { email }, club, user }, res) => {
 		try {
 			const [newUser, sendMail] = await User.findOrCreate({ where: { email } });
@@ -79,21 +97,4 @@ module.exports = function(app) {
 			errorHandler(res);
 		}
 	});
-
-	app.delete(
-		'/club/:clubId/user/:userId',
-		adminClubUser,
-		async ({ params: { clubId, userId } }, res) => {
-			res.sendStatus(202);
-			try {
-				const { users } = await Club.scope('forUser').findById(clubId, {
-					include: [{ model: User, through: {}, where: { id: userId } }],
-				});
-				const [user] = users;
-				await user.membership.destroy();
-			} catch (err) {
-				errorHandler(res);
-			}
-		}
-	);
 };

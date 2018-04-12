@@ -7,8 +7,9 @@ import MyClubs from 'containers/MyClubs';
 import CurrentClub from 'containers/CurrentClub';
 import { logout } from 'actions/UserActions';
 import { Link } from 'react-router-dom';
+import Me from 'containers/Me';
 
-export const navTabs = [CurrentClub, SuggestBook, Messages, MyClubs];
+export const navTabs = [CurrentClub, SuggestBook, Messages, MyClubs, Me];
 
 const mapDispatchToProps = (dispatch) => ({
 	logout: () => dispatch(logout()),

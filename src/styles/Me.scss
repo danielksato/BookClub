@@ -1,0 +1,21 @@
+@import '../index.scss';
+
+.container {
+    margin: 1rem auto;
+    @extend .container;
+
+    button {
+        @extend .mt-2
+    }
+}
+
+.form {
+    @include borderGroup;
+    @extend .form-group;
+
+    input {
+        @include desktop {
+            width: 50%;
+        }
+    }
+}

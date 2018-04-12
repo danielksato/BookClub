@@ -7,10 +7,15 @@ import styles from 'styles/Member.scss';
 
 type Props = {
 	user: UserRecord,
+	onRemove: ?(number) => void,
 };
 
 export default class Member extends PureComponent<Props> {
-	render() {
+	onRemove = (): void => {
+		const { user: { id }, onRemove } = this.props;
+		onRemove && onRemove(id);
+	};
+	renderMember(): Node {
 		const { firstName, lastName, email, role } = this.props.user;
 		const admin = role === ADMIN ? <span>({role})</span> : null;
 		const displayName = firstName ? `${firstName} ${lastName}` : email;
@@ -20,5 +25,10 @@ export default class Member extends PureComponent<Props> {
 				{admin}
 			</div>
 		);
+	}
+
+	render(): Node {
+		const { onRemove } = this.props;
+		return onRemove ? <a onClick={this.onRemove}>{this.renderMember()}</a> : this.renderMember();
 	}
 }

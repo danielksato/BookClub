@@ -3,6 +3,6 @@ module.exports = function(res) {
 		/* eslint-disable no-console */
 		console.log(error);
 		/* eslint-enable no-console */
-		res.status(400).send(error);
+		res.status(400).send(error.toString());
 	};
 };
