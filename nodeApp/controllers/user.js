@@ -2,7 +2,7 @@ const { User, Club, Invitation } = require('../models');
 const errorHandler = require('./errorHandler');
 const bcrypt = require('bcrypt');
 const uuidv1 = require('uuid/v1');
-const { activeClubUser } = require('./middleware');
+const { activeClubUser, adminClubUser } = require('./middleware');
 const inviteMailer = require('../mailer');
 
 module.exports = function(app) {
@@ -79,4 +79,21 @@ module.exports = function(app) {
 			errorHandler(res);
 		}
 	});
+
+	app.delete(
+		'/club/:clubId/user/:userId',
+		adminClubUser,
+		async ({ params: { clubId, userId } }, res) => {
+			res.sendStatus(202);
+			try {
+				const { users } = await Club.scope('forUser').findById(clubId, {
+					include: [{ model: User, through: {}, where: { id: userId } }],
+				});
+				const [user] = users;
+				await user.membership.destroy();
+			} catch (err) {
+				errorHandler(res);
+			}
+		}
+	);
 };

@@ -1,6 +1,6 @@
 const { Club, Selection, User } = require('../models');
 const errorHandler = require('./errorHandler');
-const { invitedClubUser, authedUser, clubUser } = require('./middleware');
+const { invitedClubUser, authedUser, clubUser, adminClubUser } = require('./middleware');
 
 module.exports = function(app) {
 	app.get('/club', authedUser, async ({ session: { club }, user }, res) => {
@@ -48,5 +48,10 @@ module.exports = function(app) {
 		await user.membership.update({ role: 'active' });
 		user = await user.reload();
 		res.json(user);
+	});
+
+	app.delete('/club/:clubId', adminClubUser, async ({ params: { clubId } }, res) => {
+		res.sendStatus(202);
+		await Club.findById(clubId).then((club) => club.destroy());
 	});
 };
