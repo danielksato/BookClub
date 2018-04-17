@@ -6,6 +6,11 @@ import type { UserResponse } from 'apis/UserApi';
 import styles from 'styles/Me.scss';
 import deCamel from 'util/DeCamel';
 import { modifyUser } from 'actions/UserActions';
+import { openModal } from 'actions/ModalActions';
+import { confirmChanges } from 'components/modals';
+
+import type { ModifyUserParam } from 'apis/UserApi';
+import type { OpenModalParams } from 'actions/ModalActions';
 
 type State = {
 	email: string,
@@ -16,12 +21,13 @@ type State = {
 
 type Props = {
 	user: UserRecord,
-	modifyUser: ($FlowFixMe) => null,
+	modifyUser: (ModifyUserParam) => void,
+	openModal: (OpenModalParams) => void,
 };
 
 const mapStateToProps = ({ user }) => ({ user });
 
-const mapDispatchToProps = { modifyUser };
+const mapDispatchToProps = { modifyUser, openModal };
 
 export class Me extends PureComponent<Props, State> {
 	static navString = 'My Profile';
@@ -45,8 +51,12 @@ export class Me extends PureComponent<Props, State> {
 
 	modifyUser = (e: SyntheticEvent<>): void => {
 		e.preventDefault();
-		const { modifyUser, user: { id } } = this.props;
-		modifyUser({ userId: id, values: { ...this.state } });
+		const { modifyUser, user: { id }, openModal } = this.props;
+		openModal(
+			confirmChanges({
+				onConfirm: () => modifyUser({ userId: id, values: { ...this.state } }),
+			})
+		);
 	};
 
 	renderFormFields(): Node {

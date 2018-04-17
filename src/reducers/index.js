@@ -6,6 +6,7 @@ import club from 'reducers/ClubReducer';
 import app from 'reducers/AppReducer';
 import message from 'reducers/MessageReducer';
 import { routerReducer } from 'react-router-redux';
+import modal from 'reducers/ModalReducer';
 
 export default combineReducers({
 	app,
@@ -13,4 +14,5 @@ export default combineReducers({
 	message,
 	user,
 	route: routerReducer,
+	modal,
 });

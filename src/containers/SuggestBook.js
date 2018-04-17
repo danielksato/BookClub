@@ -6,24 +6,29 @@ import debounce from 'lodash.debounce';
 import Book from 'components/Book';
 import preventDefault from 'util/PreventDefault';
 import { SUGGEST } from 'constants/RouteConstants';
+import { openModal } from 'actions/ModalActions';
+import { suggestBook as suggestBookModal } from 'components/modals';
 
 import type BookRecord from 'records/BookRecord';
 import type { List } from 'immutable';
 import type { ClubRecord } from 'reducers/ClubReducer';
+import type { OpenModalParams } from '../actions/ModalActions';
 
 import styles from 'styles/SuggestBook.scss';
 
 const mapStateToProps = ({ app: { books }, club }) => ({ books, club });
-const mapDispatchToProps = (dispatch: Function) => ({
-	searchBook: (search: string) => dispatch(searchBook(search)),
-	suggestBook: ({ book, club }) => dispatch(suggestBook({ book, club })),
-});
+const mapDispatchToProps = {
+	searchBook,
+	suggestBook,
+	openModal,
+};
 
 type Props = {
 	books: List<BookRecord>,
 	club: ClubRecord,
 	searchBook: (search: string) => void,
 	suggestBook: ({ book: BookRecord, club: ClubRecord }) => void,
+	openModal: (OpenModalParams) => void,
 };
 
 type State = {
@@ -42,8 +47,13 @@ export class SuggestBook extends PureComponent<Props, State> {
 	}
 
 	suggestBook = (book: BookRecord) => {
-		const { club } = this.props;
-		this.props.suggestBook({ club, book });
+		const { club, openModal, suggestBook } = this.props;
+		openModal(
+			suggestBookModal({
+				bookName: book.title,
+				onConfirm: () => suggestBook({ club, book }),
+			})
+		);
 	};
 
 	searchBook = (search: string): void => {

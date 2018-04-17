@@ -7,6 +7,7 @@ import rootReducer from 'reducers';
 import Header from 'containers/Header';
 import Main from 'containers/Main';
 import Growler from 'containers/Growler';
+import ConfirmationModal from 'containers/ConfirmationModal';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import createHistory from 'history/createBrowserHistory';
 
@@ -22,6 +23,7 @@ export default class App extends PureComponent<*> {
 						<Growler />
 						<Header />
 						<Main />
+						<ConfirmationModal />
 					</Fragment>
 				</ConnectedRouter>
 			</Provider>

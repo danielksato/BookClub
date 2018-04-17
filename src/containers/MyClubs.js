@@ -5,9 +5,13 @@ import { loadClub, createClub } from 'actions/ClubActions';
 import { acceptInvitation } from 'actions/UserActions';
 import { INVITED } from 'constants/AppConstants';
 import { MY_CLUBS } from 'constants/RouteConstants';
+import { openModal } from 'actions/ModalActions';
+import { createClub as createClubModal } from 'components/modals';
 
 import type { List } from 'immutable';
 import { ClubRecord } from 'reducers/ClubReducer';
+
+import type { OpenModalParams } from 'actions/ModalActions';
 
 import styles from 'styles/MyClubs.scss';
 
@@ -17,17 +21,17 @@ type Props = {
 	loadClub: (id: number) => void,
 	createClub: (club: ClubRecord) => void,
 	acceptInvitation: (clubId: number) => void,
+	openModal: (OpenModalParams) => void,
 };
 
 type State = { name: string };
 
 const mapStateToProps = ({ user, club }) => ({ currentClub: club, clubs: user.clubs });
-const mapDispatchToProps = (dispatch: Function) => {
-	return {
-		loadClub: (...args) => dispatch(loadClub(...args)),
-		createClub: (...args) => dispatch(createClub(...args)),
-		acceptInvitation: (...args) => dispatch(acceptInvitation(...args)),
-	};
+const mapDispatchToProps = {
+	loadClub,
+	createClub,
+	acceptInvitation,
+	openModal,
 };
 
 export class MyClubs extends PureComponent<Props, State> {
@@ -53,8 +57,15 @@ export class MyClubs extends PureComponent<Props, State> {
 	onCreateClub = (e: SyntheticEvent<*>) => {
 		e.preventDefault();
 		const { name } = this.state;
-		this.props.createClub(new ClubRecord({ name }));
-		this.setState({ name: '' });
+		this.props.openModal(
+			createClubModal({
+				clubName: name,
+				onConfirm: () => {
+					this.props.createClub(new ClubRecord({ name }));
+					this.setState({ name: '' });
+				},
+			})
+		);
 	};
 
 	renderCurrentClub(): Node {

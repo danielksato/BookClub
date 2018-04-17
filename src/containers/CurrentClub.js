@@ -15,7 +15,11 @@ import styles from 'styles/CurrentClub.scss';
 import { Link } from 'react-router-dom';
 import Member from 'components/Member';
 import { CURRENT_CLUB, MY_CLUBS } from 'constants/RouteConstants';
+import { openModal } from 'actions/ModalActions';
+import { confirmChanges, deleteClub as deleteClubModal } from 'components/modals';
+
 import type { RemoveUserParam } from 'apis/ClubApi';
+import type { OpenModalParams } from 'actions/ModalActions';
 
 const mapStateToProps = ({ club, user }) => ({ club, user });
 
@@ -26,6 +30,7 @@ const mapDispatchToProps = {
 	removeUser,
 	replace,
 	vote,
+	openModal,
 };
 
 type Props = {
@@ -37,6 +42,7 @@ type Props = {
 	replace: (string) => void,
 	user: UserRecord,
 	vote: (Object) => void,
+	openModal: (OpenModalParams) => void,
 };
 
 type onRemove = ?(number) => void;
@@ -51,17 +57,26 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	deleteClub = (): void => {
-		const { club: { id }, deleteClub } = this.props;
-		deleteClub(id);
+		const { club: { id, name }, deleteClub, openModal } = this.props;
+		openModal(
+			deleteClubModal({
+				clubName: name,
+				onConfirm: () => deleteClub(id),
+			})
+		);
 	};
 
 	getOnRemove = (): onRemove => {
-		const { removeUser, club: { id } } = this.props;
+		const { removeUser, club: { id }, openModal } = this.props;
 		if (this.currentRole !== ADMIN) {
 			return null;
 		}
 		return (userId: number) => {
-			this.props.removeUser({ userId, clubId: id });
+			openModal(
+				confirmChanges({
+					onConfirm: () => removeUser({ userId, clubId: id }),
+				})
+			);
 		};
 	};
 
@@ -134,11 +149,16 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderAutocraticSelect(book: BookRecord): Node {
-		const { club: { id }, modifyBook } = this.props;
+		const { club: { id }, modifyBook, openModal } = this.props;
 		if (this.currentRole !== ADMIN) {
 			return null;
 		}
-		const onClick = () => modifyBook({ status: ACTIVE, bookId: book.id, clubId: id });
+		const onClick = () =>
+			openModal(
+				confirmChanges({
+					onConfirm: () => modifyBook({ status: ACTIVE, bookId: book.id, clubId: id }),
+				})
+			);
 		return <button onClick={onClick}>Select this book</button>;
 	}
 
