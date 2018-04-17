@@ -12,7 +12,10 @@ type Props = {
 
 export default class Member extends PureComponent<Props> {
 	onRemove = (): void => {
-		const { user: { id }, onRemove } = this.props;
+		const {
+			user: { id },
+			onRemove,
+		} = this.props;
 		onRemove && onRemove(id);
 	};
 	renderMember(): Node {

@@ -23,7 +23,10 @@ export class ConfirmationModal extends PureComponent<Props> {
 	};
 
 	render() {
-		const { modal: { isOpen, title, text }, closeModal } = this.props;
+		const {
+			modal: { isOpen, title, text },
+			closeModal,
+		} = this.props;
 		return (
 			<Modal isOpen={isOpen} className={styles.modal} onRequestClose={closeModal}>
 				<h2>{title}</h2>

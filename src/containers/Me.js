@@ -51,7 +51,11 @@ export class Me extends PureComponent<Props, State> {
 
 	modifyUser = (e: SyntheticEvent<>): void => {
 		e.preventDefault();
-		const { modifyUser, user: { id }, openModal } = this.props;
+		const {
+			modifyUser,
+			user: { id },
+			openModal,
+		} = this.props;
 		openModal(
 			confirmChanges({
 				onConfirm: () => modifyUser({ userId: id, values: { ...this.state } }),

@@ -29,14 +29,18 @@ export class Header extends PureComponent<Props> {
 	}
 
 	renderUser(): Node {
-		const { user: { firstName, lastName, id } } = this.props;
+		const {
+			user: { firstName, lastName, id },
+		} = this.props;
 		const userName = id ? `${firstName} ${lastName}` : null;
 
 		return <span className="navbar-text">{userName || 'Log In'}</span>;
 	}
 
 	render(): Node {
-		const { club: { name } } = this.props;
+		const {
+			club: { name },
+		} = this.props;
 		const clubName = name || 'BookBrunch';
 
 		return (

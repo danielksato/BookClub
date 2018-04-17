@@ -39,7 +39,10 @@ export class Messages extends PureComponent<Props, State> {
 	ws: $FlowFixMe;
 
 	getUser = (userId: number): string => {
-		const { user: { id }, club: { users } } = this.props;
+		const {
+			user: { id },
+			club: { users },
+		} = this.props;
 		if (userId === id) {
 			return 'You';
 		}
@@ -57,7 +60,10 @@ export class Messages extends PureComponent<Props, State> {
 	};
 
 	getMessages = (): void => {
-		const { club: { id }, getMessages } = this.props;
+		const {
+			club: { id },
+			getMessages,
+		} = this.props;
 		if (id) {
 			getMessages({ clubId: id });
 			this.registerWebSocket();
@@ -84,13 +90,18 @@ export class Messages extends PureComponent<Props, State> {
 
 	onSendMessage = () => {
 		const { message } = this.state;
-		const { club: { id }, sendMessage } = this.props;
+		const {
+			club: { id },
+			sendMessage,
+		} = this.props;
 		sendMessage({ message, clubId: id });
 		this.setState({ message: '' });
 	};
 
 	renderMessages(): Node {
-		const { message: { messages } } = this.props;
+		const {
+			message: { messages },
+		} = this.props;
 		if (!messages.size) {
 			return <p className={styles.message}>There are no messages yet. Say hello!</p>;
 		}
@@ -122,7 +133,9 @@ export class Messages extends PureComponent<Props, State> {
 	}
 
 	render(): Node {
-		const { club: { name } } = this.props;
+		const {
+			club: { name },
+		} = this.props;
 		return (
 			<div className={styles.container}>
 				<h2>Messages for {name}</h2>

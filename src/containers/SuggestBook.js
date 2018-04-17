@@ -61,13 +61,17 @@ export class SuggestBook extends PureComponent<Props, State> {
 	};
 
 	onChange = (e: SyntheticEvent<HTMLInputElement>): void => {
-		const { currentTarget: { value } } = e;
+		const {
+			currentTarget: { value },
+		} = e;
 		this.setState({ search: value });
 		this.searchBook(value);
 	};
 
 	renderResultHeading(): Node {
-		const { books: { size } } = this.props;
+		const {
+			books: { size },
+		} = this.props;
 		return size ? <h2>Results</h2> : null;
 	}
 

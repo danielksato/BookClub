@@ -57,7 +57,11 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	deleteClub = (): void => {
-		const { club: { id, name }, deleteClub, openModal } = this.props;
+		const {
+			club: { id, name },
+			deleteClub,
+			openModal,
+		} = this.props;
 		openModal(
 			deleteClubModal({
 				clubName: name,
@@ -67,7 +71,11 @@ export class CurrentClub extends PureComponent<Props> {
 	};
 
 	getOnRemove = (): onRemove => {
-		const { removeUser, club: { id }, openModal } = this.props;
+		const {
+			removeUser,
+			club: { id },
+			openModal,
+		} = this.props;
 		if (this.currentRole !== ADMIN) {
 			return null;
 		}
@@ -81,14 +89,20 @@ export class CurrentClub extends PureComponent<Props> {
 	};
 
 	componentDidMount() {
-		const { club: { id }, replace } = this.props;
+		const {
+			club: { id },
+			replace,
+		} = this.props;
 		if (id) {
 			replace(`/clubinfo/${id}`);
 		}
 	}
 
 	componentDidUpdate(prevProps: Props) {
-		const { club: { id }, replace } = this.props;
+		const {
+			club: { id },
+			replace,
+		} = this.props;
 		if (id !== prevProps.club.id) {
 			replace(`/clubinfo/${id}`);
 		}
@@ -99,7 +113,10 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderArchive(book: BookRecord): Node {
-		const { club: { id }, modifyBook } = this.props;
+		const {
+			club: { id },
+			modifyBook,
+		} = this.props;
 		if (this.currentRole !== ADMIN) {
 			return null;
 		}
@@ -124,7 +141,10 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderVoting(book: BookRecord) {
-		const { user: { id }, club } = this.props;
+		const {
+			user: { id },
+			club,
+		} = this.props;
 		const onClick = (e): void => {
 			const inFavor = !!e.target.getAttribute('data-for');
 			this.props.vote({
@@ -149,7 +169,11 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderAutocraticSelect(book: BookRecord): Node {
-		const { club: { id }, modifyBook, openModal } = this.props;
+		const {
+			club: { id },
+			modifyBook,
+			openModal,
+		} = this.props;
 		if (this.currentRole !== ADMIN) {
 			return null;
 		}
@@ -163,7 +187,9 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	renderProposedBooks(): Node {
-		const { club: { books } } = this.props;
+		const {
+			club: { books },
+		} = this.props;
 		const proposedBooks = books.filter(({ status }) => {
 			return status === PROPOSED;
 		});
@@ -219,7 +245,9 @@ export class CurrentClub extends PureComponent<Props> {
 	}
 
 	render(): Node {
-		const { club: { id } } = this.props;
+		const {
+			club: { id },
+		} = this.props;
 		return (
 			<div className={styles.container}>
 				{this.renderClubHeader()}

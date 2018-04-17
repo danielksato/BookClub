@@ -11,7 +11,9 @@ type Props = {
 
 export default class Book extends PureComponent<Props> {
 	renderThumb(): Node {
-		const { book: { image, title } } = this.props;
+		const {
+			book: { image, title },
+		} = this.props;
 		return <img alt={`cover for ${title}`} className="align-self-center" src={image} />;
 	}
 
