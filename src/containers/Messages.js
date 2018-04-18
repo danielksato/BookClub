@@ -4,12 +4,17 @@ import { connect } from 'react-redux';
 import { getMessages, sendMessage, receiveMessage } from 'actions/MessageActions';
 import preventDefault from 'util/PreventDefault';
 import { MESSAGES } from 'constants/RouteConstants';
+import isProduction from 'util/IsProduction';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
 import type { MessageStateRecord } from '../reducers/MessageReducer';
 
 import styles from 'styles/Messages.scss';
+
+const socketUrl = isProduction()
+	? `wss://${window.location.hostname.replace('www', 'api')}:4040/socket/messages`
+	: `wss://${window.location.hostname}:4040/socket/messages`;
 
 type Props = {
 	user: UserRecord,
@@ -52,7 +57,7 @@ export class Messages extends PureComponent<Props, State> {
 
 	registerWebSocket = (): void => {
 		const { receiveMessage } = this.props;
-		this.ws = new WebSocket(`wss://${window.location.hostname}:4040/socket/messages`);
+		this.ws = new WebSocket(socketUrl);
 		// $FlowFixMe WebSocket isn't typed
 		this.ws.addEventListener('message', ({ data }) => {
 			receiveMessage(JSON.parse(data));
