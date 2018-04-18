@@ -127,6 +127,12 @@ export class Login extends PureComponent<Props, State> {
 		);
 	}
 
+	renderGoogleLogin(): Node {
+		if (!navigator.userAgent.includes('FB')) {
+			return <button onClick={this.props.loginWithGoogle}>Login with Google</button>;
+		}
+	}
+
 	renderFBLogin(): Node {
 		if (location.protocol === 'https:') {
 			return <button onClick={this.props.loginWithFacebook}>Login with Facebook</button>;
@@ -136,7 +142,7 @@ export class Login extends PureComponent<Props, State> {
 	render(): Node {
 		return (
 			<div className={styles.container}>
-				<button onClick={this.props.loginWithGoogle}>Login with Google</button>
+				{this.renderGoogleLogin()}
 				{this.renderFBLogin()}
 				{this.renderLogin()}
 				{this.renderCreateAccount()}

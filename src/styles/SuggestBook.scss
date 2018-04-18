@@ -13,8 +13,15 @@
     }
 }
 
+@keyframes slideRight {
+    0% {opacity: 0; margin-left: calc(-3 * #{$spacer})}
+    20% {opacity: 1; margin-left: calc(-2 * #{$spacer})}
+    100% {margin-left: unset}
+}
+
 .searchResult {
     @include borderGroup;
+    animation: slideRight 500ms ease;
     display: block;
     background-color: $gray-200;
 
