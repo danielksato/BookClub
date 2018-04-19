@@ -8,7 +8,10 @@ const session = require('./session');
 
 const oauthVerify = async (accessToken, refreshToken, profile, cb) => {
 	try {
-		const { name: { familyName, givenName }, emails } = profile;
+		const {
+			name: { familyName, givenName },
+			emails,
+		} = profile;
 		const email = emails[0].value;
 		if (!email) {
 			throw new Error('no email');

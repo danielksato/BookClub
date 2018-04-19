@@ -5,6 +5,7 @@ import { getMessages, sendMessage, receiveMessage } from 'actions/MessageActions
 import preventDefault from 'util/PreventDefault';
 import { MESSAGES } from 'constants/RouteConstants';
 import isProduction from 'util/IsProduction';
+import Member from 'components/Member';
 
 import type { UserRecord } from 'reducers/UserReducer';
 import type { ClubRecord } from 'reducers/ClubReducer';
@@ -43,7 +44,7 @@ export class Messages extends PureComponent<Props, State> {
 	state = { message: '' };
 	ws: $FlowFixMe;
 
-	getUser = (userId: number): string => {
+	getUser = (userId: number): Node | string => {
 		const {
 			user: { id },
 			club: { users },
@@ -52,7 +53,7 @@ export class Messages extends PureComponent<Props, State> {
 			return 'You';
 		}
 		const user = users.find(({ id }) => id === userId);
-		return user ? `${user.firstName} ${user.lastName}` : 'Somebody';
+		return user ? <Member user={user} onRemove={null} /> : 'Somebody';
 	};
 
 	registerWebSocket = (): void => {
@@ -112,9 +113,9 @@ export class Messages extends PureComponent<Props, State> {
 		}
 		return messages.map(({ userId, message, id }) => {
 			return (
-				<p key={`message-${id}`} className={styles.message}>
+				<div key={`message-${id}`} className={styles.message}>
 					{this.getUser(userId)}: {message}
-				</p>
+				</div>
 			);
 		});
 	}

@@ -4,9 +4,13 @@ const errorHandler = require('./errorHandler');
 const { sockets } = require('../sockets');
 
 const messageClubSubscribers = async ({ club: { users }, message }) => {
-	users.forEach(
-		({ id }) => sockets[id] && id !== message.userId && sockets[id].send(JSON.stringify(message))
-	);
+	users.forEach(async ({ id }) => {
+		try {
+			sockets[id] && id !== message.userId && (await sockets[id].send(JSON.stringify(message)));
+		} catch (err) {
+			console.log(err);
+		}
+	});
 };
 
 module.exports = function(app) {
@@ -22,7 +26,11 @@ module.exports = function(app) {
 
 	app.post('/club/:clubId/message', activeClubUser, async (req, res) => {
 		try {
-			const { club, user, body: { message } } = req;
+			const {
+				club,
+				user,
+				body: { message },
+			} = req;
 			const clubId = club.id;
 			const userId = user.id;
 			const newMessage = await Message.create({

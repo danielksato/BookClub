@@ -3,6 +3,7 @@
 .container {
     @include topLevel;
     width: 75%;
+    
 }
 
 .history {
@@ -24,4 +25,12 @@
 
 .message {
     margin-bottom: $spacing-2;
+
+    > div {
+        display: inline;
+    }
+
+    :last-child {
+        margin-right: 0;
+    }
 }

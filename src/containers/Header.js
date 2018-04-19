@@ -30,9 +30,9 @@ export class Header extends PureComponent<Props> {
 
 	renderUser(): Node {
 		const {
-			user: { firstName, lastName, id },
+			user: { firstName, lastName, email, id },
 		} = this.props;
-		const userName = id ? `${firstName} ${lastName}` : null;
+		const userName = firstName ? `${firstName} ${lastName}` : email;
 
 		return <span className="navbar-text">{userName || 'Log In'}</span>;
 	}

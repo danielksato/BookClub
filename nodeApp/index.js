@@ -7,10 +7,6 @@ const auth = require('./auth');
 const proxy = require('http-proxy-middleware');
 require('./sockets');
 
-if (process.env.PRODUCTION) {
-	app.use(express.static('../build'));
-}
-
 app.use('/api/*', (req, res) => {
 	req.url = req.baseUrl.replace('/api', '');
 	app.handle(req, res);
