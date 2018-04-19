@@ -6,6 +6,9 @@ const store = new SequelizeStore({ db });
 store.sync();
 
 const sessionParser = session({
+	cookie: {
+		domain: '.book-brunch.com',
+	},
 	resave: false,
 	saveUninitialized: false,
 	secret: new Date().toDateString(),
