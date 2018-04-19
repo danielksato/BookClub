@@ -1,9 +1,10 @@
 const nodeMailer = require('nodemailer');
-const { SMTP_SERVER, SMTP_USER, SMTP_PASSWORD, PRODUCTION } = process.env;
+const { SMTP_SERVER, SMTP_USER, SMTP_PASSWORD, SMTP_PORT, PRODUCTION } = process.env;
 
 const transporter = nodeMailer.createTransport({
 	host: SMTP_SERVER,
-	port: 465,
+	port: SMTP_PORT,
+	name: 'book-brunch.com',
 	secure: true,
 	auth: {
 		user: SMTP_USER,
