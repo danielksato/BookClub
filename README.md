@@ -1,6 +1,6 @@
 ## Book Club
 
-This is a web app for managing a book club. It uses Create React App, eventually on top of a Node/Express/SQLite backend. This is very much a work in progress, begun 20 March 2018.
+This is a web app for managing a book club. It uses Create React App, eventually on top of a Node/Express/Sequelize backend. This is very much a work in progress, but it's deployed at https://www.book-brunch.com/.
 
 ### Running the backend
 
@@ -14,6 +14,11 @@ This is a web app for managing a book club. It uses Create React App, eventually
 1. Ensure `create-react-app` is installed globally (`yarn global add create-react-app`).
 1. Run `yarn` in the base directory.
 1. Start the UI server on port 3000 with `yarn start`.
+
+### The development environment
+
+1. Point dev.book-brunch.com to 127.0.0.1 in /etc/hosts.
+2. For oauth and websockets to work correctly, your local URL in development mode should be https://dev.book-brunch.com:8080.
 
 ### Create React App boilerplate follows
 
